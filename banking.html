@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Agrega una tarjeta de crédito o débito como método de pago en Amari.">
+	<meta name="theme-color" content="#fafaf9">
+	<title>Método de pago | Amari</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+	<style>
+		:root {
+			color-scheme: light;
+			--red: #e11d48;
+			--red-hover: #be123c;
+			--red-dark: #881337;
+			--red-soft: #fff1f2;
+			--ink: #0f172a;
+			--muted: #64748b;
+			--line: #e2e8f0;
+			--paper: #fff;
+			--canvas: #fafaf9;
+			--green: #047857;
+			--shadow: 0 24px 64px rgba(15, 23, 42, .08), 0 3px 12px rgba(15, 23, 42, .04);
+		}
+
+		*, *::before, *::after { box-sizing: border-box; }
+		body {
+			min-width: 320px;
+			min-height: 100vh;
+			margin: 0;
+			color: var(--ink);
+			background-color: var(--canvas);
+			background-image: linear-gradient(rgba(225, 29, 72, .025) 1px, transparent 1px), linear-gradient(90deg, rgba(225, 29, 72, .025) 1px, transparent 1px);
+			background-size: 36px 36px;
+			font-family: 'Plus Jakarta Sans', sans-serif;
+			-webkit-font-smoothing: antialiased;
+		}
+
+		button, input { font: inherit; }
+		.site-header {
+			height: 76px;
+			padding: 0 clamp(20px, 6vw, 88px);
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			border-bottom: 1px solid rgba(226, 232, 240, .8);
+			background: rgba(255, 255, 255, .82);
+		}
+		.brand { display: inline-flex; align-items: center; gap: 10px; color: var(--ink); text-decoration: none; }
+		.brand-mark {
+			width: 36px;
+			height: 36px;
+			display: grid;
+			place-items: center;
+			border-radius: 11px;
+			color: white;
+			background: linear-gradient(145deg, #f43f5e, var(--red-dark));
+			font-size: 18px;
+			font-weight: 800;
+			box-shadow: 0 5px 12px rgba(225, 29, 72, .22);
+		}
+		.brand-name { font-size: 20px; font-weight: 800; letter-spacing: 0; }
+		.secure-label { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 12px; font-weight: 600; }
+		.secure-label svg { color: var(--green); }
+
+		main {
+			width: min(1120px, calc(100% - 48px));
+			margin: 0 auto;
+			padding: 54px 0 72px;
+		}
+		.breadcrumb { display: flex; align-items: center; gap: 10px; margin-bottom: 36px; color: #94a3b8; font-size: 12px; font-weight: 600; }
+		.breadcrumb span:last-child { color: var(--red); }
+		.intro { max-width: 660px; margin-bottom: 32px; animation: rise-in .5s ease both; }
+		.eyebrow { display: flex; align-items: center; gap: 9px; margin-bottom: 12px; color: var(--red); font-size: 11px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; }
+		.eyebrow::before { width: 22px; height: 2px; content: ''; background: var(--red); }
+		h1 { margin: 0; font-size: clamp(30px, 4vw, 42px); line-height: 1.15; letter-spacing: 0; }
+		.intro p { max-width: 540px; margin: 12px 0 0; color: var(--muted); font-size: 14px; line-height: 1.7; }
+
+		.checkout-layout { display: grid; grid-template-columns: minmax(0, 1.04fr) minmax(340px, .96fr); gap: 24px; align-items: start; }
+		.form-panel, .preview-panel { border: 1px solid rgba(226, 232, 240, .9); border-radius: 8px; background: var(--paper); box-shadow: var(--shadow); }
+		.form-panel { padding: clamp(24px, 4vw, 38px); animation: rise-in .55s .08s ease both; }
+		.panel-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 25px; }
+		.panel-heading h2 { margin: 0; font-size: 17px; font-weight: 800; }
+		.panel-heading p { margin: 6px 0 0; color: var(--muted); font-size: 12px; }
+		.step-count { flex-shrink: 0; padding: 6px 9px; border-radius: 5px; color: var(--red); background: var(--red-soft); font-size: 10px; font-weight: 800; letter-spacing: .6px; }
+
+		.method-label { display: block; margin-bottom: 9px; font-size: 12px; font-weight: 700; }
+		.method-switch { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px; border: 1px solid var(--line); border-radius: 7px; background: #f8fafc; }
+		.method-option { min-height: 42px; border: 0; border-radius: 5px; color: var(--muted); background: transparent; font-size: 12px; font-weight: 700; cursor: pointer; transition: color .18s ease, background .18s ease, box-shadow .18s ease; }
+		.method-option[aria-pressed="true"] { color: var(--red-dark); background: white; box-shadow: 0 1px 5px rgba(15, 23, 42, .11); }
+		.method-option:focus-visible, .submit-button:focus-visible, .text-input:focus-visible { outline: 3px solid rgba(225, 29, 72, .25); outline-offset: 2px; }
+
+		.payment-form { display: grid; gap: 17px; margin-top: 25px; }
+		.field { display: grid; gap: 7px; min-width: 0; }
+		.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+		.field-label { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 11px; font-weight: 700; }
+		.field-hint { color: #94a3b8; font-size: 10px; font-weight: 500; }
+		.text-input {
+			width: 100%;
+			height: 46px;
+			padding: 0 13px;
+			border: 1px solid #dbe2ea;
+			border-radius: 6px;
+			outline: 0;
+			color: var(--ink);
+			background: #fff;
+			font-size: 13px;
+			transition: border-color .18s ease, box-shadow .18s ease;
+		}
+		.text-input::placeholder { color: #a0aaba; }
+		.text-input:focus { border-color: var(--red); box-shadow: 0 0 0 3px rgba(225, 29, 72, .1); }
+		.input-with-icon { position: relative; }
+		.input-with-icon .text-input { padding-right: 44px; }
+		.input-suffix { position: absolute; top: 50%; right: 13px; display: grid; place-items: center; color: #94a3b8; transform: translateY(-50%); pointer-events: none; }
+
+		.privacy-note { display: flex; align-items: flex-start; gap: 10px; margin-top: 2px; padding: 12px; border: 1px solid #f1f5f9; border-radius: 6px; background: #fafafa; }
+		.privacy-note svg { flex: 0 0 16px; margin-top: 1px; color: var(--green); }
+		.privacy-note p { margin: 0; color: var(--muted); font-size: 10px; line-height: 1.55; }
+		.submit-button { width: 100%; min-height: 49px; display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 2px; border: 0; border-radius: 6px; color: white; background: linear-gradient(105deg, var(--red), var(--red-hover)); font-size: 13px; font-weight: 800; cursor: pointer; box-shadow: 0 7px 16px rgba(225, 29, 72, .19); transition: transform .18s ease, box-shadow .18s ease; }
+		.submit-button:hover { transform: translateY(-1px); box-shadow: 0 10px 20px rgba(225, 29, 72, .24); }
+		.form-status { min-height: 0; margin: 0; color: var(--green); font-size: 11px; line-height: 1.5; }
+		.form-status:not(:empty) { padding: 10px 12px; border: 1px solid #a7f3d0; border-radius: 5px; background: #ecfdf5; }
+
+		.preview-column { display: grid; gap: 16px; animation: rise-in .6s .16s ease both; }
+		.preview-panel { overflow: hidden; padding: 25px; }
+		.preview-topline { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 18px; }
+		.preview-topline h2 { margin: 0; font-size: 13px; font-weight: 800; }
+		.preview-topline p { margin: 5px 0 0; color: var(--muted); font-size: 10px; }
+		.preview-count { color: #94a3b8; font-size: 10px; font-weight: 700; }
+		.card-scene { perspective: 1000px; }
+		.bank-card { position: relative; width: 100%; aspect-ratio: 1.72; max-height: 245px; overflow: hidden; padding: clamp(19px, 3vw, 27px); border-radius: 9px; color: white; background: linear-gradient(128deg, #9f1239 0%, #e11d48 52%, #f43f5e 100%); box-shadow: 0 18px 35px rgba(136, 19, 55, .25); transition: transform .45s ease; transform-style: preserve-3d; }
+		.bank-card::before, .bank-card::after { position: absolute; content: ''; border: 1px solid rgba(255, 255, 255, .14); border-radius: 50%; pointer-events: none; }
+		.bank-card::before { width: 250px; height: 250px; top: -120px; right: -55px; }
+		.bank-card::after { width: 240px; height: 240px; right: -102px; bottom: -155px; }
+		.card-top, .card-number, .card-bottom { position: relative; z-index: 1; }
+		.card-top { display: flex; justify-content: space-between; align-items: flex-start; }
+		.card-chip { width: 34px; height: 26px; display: grid; place-items: center; border: 1px solid rgba(255, 255, 255, .55); border-radius: 5px; background: linear-gradient(135deg, rgba(255, 255, 255, .45), rgba(255, 255, 255, .13)); }
+		.card-chip span { width: 22px; height: 15px; border: 1px solid rgba(255, 255, 255, .5); border-radius: 3px; }
+		.card-kind { font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+		.card-number { margin-top: clamp(18px, 4vw, 31px); font-size: clamp(16px, 2.2vw, 20px); font-weight: 600; letter-spacing: 1.6px; white-space: nowrap; }
+		.card-bottom { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; margin-top: clamp(15px, 3.5vw, 26px); }
+		.card-caption { display: block; margin-bottom: 4px; color: rgba(255, 255, 255, .66); font-size: 7px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; }
+		.cardholder-preview { display: block; max-width: 220px; overflow: hidden; font-size: 10px; font-weight: 700; letter-spacing: .5px; text-overflow: ellipsis; text-transform: uppercase; white-space: nowrap; }
+		.expiry-preview { font-size: 10px; font-weight: 700; }
+		.card-network { font-size: 19px; font-style: italic; font-weight: 800; letter-spacing: -.5px; }
+		.preview-footnote { display: flex; align-items: center; gap: 7px; margin: 15px 0 0; color: #94a3b8; font-size: 10px; }
+		.preview-footnote svg { flex: 0 0 14px; }
+
+		.trust-strip { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 17px 18px; border: 1px solid #f1f5f9; border-radius: 7px; background: rgba(255, 255, 255, .75); }
+		.trust-item { display: flex; align-items: center; gap: 10px; min-width: 0; }
+		.trust-icon { flex: 0 0 30px; height: 30px; display: grid; place-items: center; border-radius: 6px; color: var(--red); background: var(--red-soft); }
+		.trust-item strong { display: block; font-size: 10px; font-weight: 800; }
+		.trust-item span:last-child { display: block; margin-top: 3px; color: var(--muted); font-size: 9px; }
+		.page-footer { display: flex; justify-content: space-between; gap: 16px; margin-top: 26px; color: #94a3b8; font-size: 10px; }
+		.page-footer a { color: var(--muted); text-decoration: none; }
+		.page-footer a:hover { color: var(--red); }
+		@keyframes rise-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+		@media (max-width: 780px) {
+			main { width: min(600px, calc(100% - 36px)); padding-top: 36px; }
+			.checkout-layout { grid-template-columns: 1fr; }
+			.preview-column { grid-row: 1; }
+			.preview-panel { padding: 20px; }
+			.bank-card { max-width: 440px; margin: 0 auto; }
+		}
+		@media (max-width: 480px) {
+			.site-header { height: 64px; padding: 0 18px; }
+			.secure-label { gap: 5px; font-size: 10px; }
+			main { width: calc(100% - 28px); padding-top: 25px; }
+			.breadcrumb { margin-bottom: 25px; }
+			.intro { margin-bottom: 23px; }
+			.intro p { font-size: 13px; }
+			.form-panel { padding: 22px 18px; }
+			.preview-panel { padding: 17px; }
+			.bank-card { padding: 18px; }
+			.card-number { margin-top: 19px; font-size: clamp(14px, 4vw, 18px); letter-spacing: 1px; }
+			.card-bottom { margin-top: 18px; }
+			.trust-strip { grid-template-columns: 1fr; }
+			.page-footer { flex-wrap: wrap; }
+		}
+		@media (prefers-reduced-motion: reduce) {
+			*, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+		}
+	</style>
+</head>
+<body>
+	<header class="site-header">
+		<a class="brand" href="home.html" aria-label="Amari, inicio">
+			<span class="brand-mark" aria-hidden="true">A</span>
+			<span class="brand-name">amari</span>
+		</a>
+	</header>
+
+	<main>
+		<nav class="breadcrumb" aria-label="Progreso">
+			<span>Cuenta</span><span aria-hidden="true">/</span><span>Método de pago</span>
+		</nav>
+
+		<section class="intro" aria-labelledby="page-title">
+			<div class="eyebrow">Pago</div>
+			<h1 id="page-title">Agrega tu tarjeta</h1>
+			<p>Elige el tipo de tarjeta e ingresa sus datos para continuar. Esta pantalla es una maqueta: la información no se envía ni se guarda.</p>
+		</section>
+
+		<div class="checkout-layout">
+			<section class="form-panel" aria-labelledby="form-title">
+				<div class="panel-heading">
+					<div>
+						<h2 id="form-title">Datos de pago</h2>
+						<p>Completa los datos tal como aparecen en tu tarjeta.</p>
+					</div>
+					<span class="step-count">PASO 01</span>
+				</div>
+
+				<span class="method-label" id="method-label">Tipo de tarjeta</span>
+				<div class="method-switch" role="group" aria-labelledby="method-label">
+					<button class="method-option" type="button" data-kind="Crédito" aria-pressed="true">Crédito</button>
+					<button class="method-option" type="button" data-kind="Débito" aria-pressed="false">Débito</button>
+				</div>
+
+				<form class="payment-form" id="payment-form" novalidate>
+					<div class="field">
+						<label class="field-label" for="cardholder">Nombre del titular</label>
+						<input class="text-input" id="cardholder" name="cardholder" type="text" placeholder="Como aparece en la tarjeta" autocomplete="cc-name" maxlength="50" required>
+					</div>
+					<div class="field">
+						<label class="field-label" for="card-number">Número de tarjeta <span class="field-hint">16 a 19 dígitos</span></label>
+						<div class="input-with-icon">
+							<input class="text-input" id="card-number" name="card-number" type="text" inputmode="numeric" placeholder="0000 0000 0000 0000" autocomplete="cc-number" maxlength="23" aria-describedby="card-number-error" required>
+							<span class="input-suffix" aria-hidden="true">
+								<svg width="22" height="16" viewBox="0 0 22 16" fill="none"><rect x=".5" y=".5" width="21" height="15" rx="2.5" stroke="currentColor"/><path d="M1 5h20" stroke="currentColor"/><path d="M4 11h5" stroke="currentColor" stroke-linecap="round"/></svg>
+							</span>
+						</div>
+					</div>
+					<div class="field-row">
+						<div class="field">
+							<label class="field-label" for="expiry">Caducidad <span class="field-hint">MM/AA</span></label>
+							<input class="text-input" id="expiry" name="expiry" type="text" inputmode="numeric" placeholder="MM/AA" autocomplete="cc-exp" maxlength="5" required>
+						</div>
+						<div class="field">
+							<label class="field-label" for="cvv">CVV <span class="field-hint">3 o 4 dígitos</span></label>
+							<div class="input-with-icon">
+								<input class="text-input" id="cvv" name="cvv" type="password" inputmode="numeric" placeholder="•••" autocomplete="cc-csc" maxlength="4" required>
+								<span class="input-suffix" aria-hidden="true">
+									<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="5" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="19" cy="12" r="1" fill="currentColor"/></svg>
+								</span>
+							</div>
+						</div>
+					</div>
+					<button class="submit-button" type="submit">
+						Validar datos
+						<svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+					</button>
+					<p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+				</form>
+			</section>
+
+			<aside class="preview-column" aria-label="Vista previa y seguridad">
+				<section class="preview-panel" aria-labelledby="preview-title">
+					<div class="preview-topline">
+						<div><h2 id="preview-title">Vista previa</h2><p>Así se mostrará tu tarjeta</p></div>
+						<span class="preview-count">01 / 01</span>
+					</div>
+					<div class="card-scene">
+						<div class="bank-card" aria-label="Vista previa de tarjeta">
+							<div class="card-top">
+								<span class="card-chip" aria-hidden="true"><span></span></span>
+								<span class="card-kind" id="card-kind-preview">Crédito</span>
+							</div>
+							<div class="card-number" id="card-number-preview">•••• &nbsp;•••• &nbsp;•••• &nbsp;••••</div>
+							<div class="card-bottom">
+								<div><span class="card-caption">Titular</span><span class="cardholder-preview" id="cardholder-preview">Tu nombre</span></div>
+								<div><span class="card-caption">Válida hasta</span><span class="expiry-preview" id="expiry-preview">MM/AA</span></div>
+								<span class="card-network" id="card-network" aria-label="Tarjeta">AMARI</span>
+							</div>
+						</div>
+					</div>
+				</section>
+				<div class="trust-strip" aria-label="Información de seguridad">
+					<div class="trust-item">
+						<span class="trust-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M7 10V7a5 5 0 0 1 10 0v3m-11 0h12a2 2 0 0 1 2 2v8H4v-8a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+						<span><strong>Datos privados</strong><span>Sin almacenamiento</span></span>
+					</div>
+					<div class="trust-item">
+						<span class="trust-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 3 5 6v5c0 4.5 3 8 7 10 4-2 7-5.5 7-10V6l-7-3Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+						<span><strong>Validación local</strong><span>Solo formato</span></span>
+					</div>
+				</div>
+			</aside>
+		</div>
+
+		<footer class="page-footer">
+			<span>© 2026 Amari.</span>
+			<a href="register.html">Volver al registro</a>
+		</footer>
+	</main>
+
+	<script>
+		const cardholderInput = document.getElementById('cardholder');
+		const cardNumberInput = document.getElementById('card-number');
+		const expiryInput = document.getElementById('expiry');
+		const cvvInput = document.getElementById('cvv');
+		const statusMessage = document.getElementById('form-status');
+		const paymentForm = document.getElementById('payment-form');
+
+		cardholderInput.addEventListener('input', () => {
+			document.getElementById('cardholder-preview').textContent = cardholderInput.value.trim() || 'Tu nombre';
+			statusMessage.textContent = '';
+		});
+
+		cardNumberInput.addEventListener('input', () => {
+			const digits = cardNumberInput.value.replace(/\D/g, '').slice(0, 19);
+			cardNumberInput.value = digits.replace(/(.{4})/g, '$1 ').trim();
+			const groups = digits.match(/.{1,4}/g) || [];
+			document.getElementById('card-number-preview').textContent = groups.length ? groups.join('  ') : '••••  ••••  ••••  ••••';
+			const network = digits.startsWith('4') ? 'VISA' : (/^(5[1-5]|2[2-7])/.test(digits) ? 'mastercard' : 'AMARI');
+			document.getElementById('card-network').textContent = network;
+			statusMessage.textContent = '';
+		});
+
+		expiryInput.addEventListener('input', () => {
+			const digits = expiryInput.value.replace(/\D/g, '').slice(0, 4);
+			expiryInput.value = digits.length > 2 ? `${digits.slice(0, 2)}/${digits.slice(2)}` : digits;
+			document.getElementById('expiry-preview').textContent = expiryInput.value || 'MM/AA';
+			statusMessage.textContent = '';
+		});
+
+		cvvInput.addEventListener('input', () => {
+			cvvInput.value = cvvInput.value.replace(/\D/g, '').slice(0, 4);
+			statusMessage.textContent = '';
+		});
+
+		document.querySelectorAll('.method-option').forEach((option) => {
+			option.addEventListener('click', () => {
+				document.querySelectorAll('.method-option').forEach((button) => button.setAttribute('aria-pressed', String(button === option)));
+				document.getElementById('card-kind-preview').textContent = option.dataset.kind;
+			});
+		});
+
+		paymentForm.addEventListener('submit', (event) => {
+			event.preventDefault();
+			const digits = cardNumberInput.value.replace(/\D/g, '');
+			const [monthText, yearText] = expiryInput.value.split('/');
+			const month = Number(monthText);
+			const year = Number(`20${yearText}`);
+			const today = new Date();
+			const expiryIsValid = /^\d{2}\/\d{2}$/.test(expiryInput.value) && month >= 1 && month <= 12 && (year > today.getFullYear() || (year === today.getFullYear() && month >= today.getMonth() + 1));
+
+			if (cardholderInput.value.trim().length < 3) {
+				cardholderInput.setCustomValidity('Ingresa el nombre del titular.');
+				cardholderInput.reportValidity();
+				cardholderInput.addEventListener('input', () => cardholderInput.setCustomValidity(''), { once: true });
+				return;
+			}
+			if (digits.length < 16 || digits.length > 19) {
+				cardNumberInput.setCustomValidity('Ingresa entre 16 y 19 dígitos.');
+				cardNumberInput.reportValidity();
+				cardNumberInput.addEventListener('input', () => cardNumberInput.setCustomValidity(''), { once: true });
+				return;
+			}
+			if (!expiryIsValid) {
+				expiryInput.setCustomValidity('Ingresa una fecha válida y vigente en formato MM/AA.');
+				expiryInput.reportValidity();
+				expiryInput.addEventListener('input', () => expiryInput.setCustomValidity(''), { once: true });
+				return;
+			}
+			if (!/^\d{3,4}$/.test(cvvInput.value)) {
+				cvvInput.setCustomValidity('Ingresa un CVV de 3 o 4 dígitos.');
+				cvvInput.reportValidity();
+				cvvInput.addEventListener('input', () => cvvInput.setCustomValidity(''), { once: true });
+				return;
+			}
+
+			statusMessage.textContent = 'Formato válido. En esta maqueta no se procesa ningún pago ni se guardan los datos.';
+		});
+	</script>
+</body>
+</html>
