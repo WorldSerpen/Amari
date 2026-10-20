@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#fafaf9">
+  <meta name="description" content="Visualiza tu ubicación en el mapa de Amari.">
+  <title>Mi ubicación | Amari</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  >
+
+  <style>
+    :root {
+      --primary-red: #e11d48;
+      --primary-red-hover: #be123c;
+      --primary-red-dark: #881337;
+      --primary-red-light: #ffe4e6;
+      --primary-red-glow: rgba(225, 29, 72, 0.25);
+      --red-accent: #f43f5e;
+      --pure-white: #ffffff;
+      --off-white: #f8fafc;
+      --surface-white: #ffffff;
+      --border-light: #f1f5f9;
+      --border-medium: #e2e8f0;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --text-light: #94a3b8;
+      --success-green: #10b981;
+      --shadow-subtle: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+      --shadow-card: 0 20px 40px -15px rgba(225, 29, 72, 0.08), 0 0 20px 0 rgba(0, 0, 0, 0.04);
+      --shadow-glow: 0 10px 25px -5px rgba(225, 29, 72, 0.35);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: var(--text-main);
+      background: var(--off-white);
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      min-width: 320px;
+      height: 100%;
+      margin: 0;
+    }
+
+    body {
+      display: grid;
+      min-height: 100vh;
+      min-height: 100dvh;
+      place-items: center;
+      background:
+        radial-gradient(circle at 12% 18%, rgba(225, 29, 72, 0.07), transparent 28rem),
+        var(--off-white);
+    }
+
+    button, a {
+      font: inherit;
+    }
+
+    .app-shell {
+      position: relative;
+      width: min(100%, 520px);
+      height: min(940px, 100vh);
+      height: min(940px, 100dvh);
+      overflow: hidden;
+      isolation: isolate;
+      background: var(--off-white);
+    }
+
+    .map-stage, #map {
+      position: absolute;
+      inset: 0;
+    }
+
+    .map-preview {
+      position: absolute;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    #map {
+      z-index: 0;
+      background: #e9eef0;
+      visibility: hidden;
+    }
+
+    .map-stage.is-live #map {
+      visibility: visible;
+    }
+
+    .map-stage.is-live .map-preview {
+      display: none;
+    }
+
+    .top-bar {
+      position: absolute;
+      z-index: 500;
+      top: max(16px, env(safe-area-inset-top));
+      right: 18px;
+      left: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      pointer-events: none;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 48px;
+      padding: 6px 15px 6px 7px;
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.96);
+      box-shadow: var(--shadow-card);
+      color: var(--primary-red);
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: -0.4px;
+      text-decoration: none;
+      pointer-events: auto;
+      backdrop-filter: blur(12px);
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 36px;
+      height: 36px;
+      place-items: center;
+      border-radius: 11px;
+      background: linear-gradient(135deg, var(--primary-red), var(--red-accent));
+      box-shadow: 0 4px 10px var(--primary-red-glow);
+      color: var(--pure-white);
+      font-size: 1.1rem;
+      font-weight: 900;
+    }
+
+    .page-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      min-height: 42px;
+      padding: 0 13px;
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.96);
+      box-shadow: var(--shadow-subtle);
+      color: var(--text-main);
+      font-size: 0.82rem;
+      font-weight: 700;
+      pointer-events: auto;
+      backdrop-filter: blur(12px);
+    }
+
+    .page-label svg {
+      width: 17px;
+      height: 17px;
+      color: var(--primary-red);
+    }
+
+    .locate-control {
+      position: absolute;
+      z-index: 500;
+      top: max(82px, calc(env(safe-area-inset-top) + 68px));
+      right: 18px;
+    }
+
+    .leaflet-top.leaflet-right {
+      top: max(140px, calc(env(safe-area-inset-top) + 126px));
+      right: 18px;
+    }
+
+    .locate-button {
+      display: grid;
+      width: 48px;
+      height: 48px;
+      padding: 0;
+      place-items: center;
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      border-radius: 16px;
+      background: var(--pure-white);
+      box-shadow: var(--shadow-card);
+      color: var(--primary-red);
+      cursor: pointer;
+      transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    .locate-button:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .locate-button:focus-visible, .action-button:focus-visible, .brand:focus-visible {
+      outline: 3px solid var(--primary-red-glow);
+      outline-offset: 3px;
+    }
+
+    .locate-button svg {
+      width: 21px;
+      height: 21px;
+    }
+
+    .locate-button:disabled {
+      cursor: wait;
+      opacity: 0.72;
+    }
+
+    .location-card {
+      position: absolute;
+      z-index: 500;
+      right: 14px;
+      bottom: max(16px, env(safe-area-inset-bottom));
+      left: 14px;
+      padding: 20px 18px 16px;
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.97);
+      box-shadow: var(--shadow-card);
+      backdrop-filter: blur(16px);
+    }
+
+    .card-heading {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .location-icon {
+      display: grid;
+      width: 44px;
+      height: 44px;
+      flex: 0 0 auto;
+      place-items: center;
+      border-radius: 14px;
+      background: var(--primary-red-light);
+      color: var(--primary-red);
+    }
+
+    .location-icon svg {
+      width: 21px;
+      height: 21px;
+    }
+
+    .card-copy {
+      min-width: 0;
+      padding-top: 1px;
+    }
+
+    .card-title {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+    }
+
+    .location-status {
+      margin: 4px 0 0;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      line-height: 1.45;
+    }
+
+    .location-status[data-state="success"] {
+      color: #047857;
+    }
+
+    .location-status[data-state="error"] {
+      color: var(--primary-red-hover);
+    }
+
+    .action-button {
+      display: flex;
+      width: 100%;
+      min-height: 52px;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      border: 0;
+      border-radius: 15px;
+      background: linear-gradient(135deg, var(--primary-red), var(--primary-red-hover));
+      box-shadow: var(--shadow-glow);
+      color: var(--pure-white);
+      font-size: 0.93rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 180ms ease, box-shadow 180ms ease, opacity 180ms ease;
+    }
+
+    .action-button:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-glowElevated, 0 14px 28px -6px rgba(225, 29, 72, 0.45));
+    }
+
+    .action-button:disabled {
+      cursor: wait;
+      opacity: 0.75;
+      transform: none;
+    }
+
+    .action-button svg {
+      width: 19px;
+      height: 19px;
+    }
+
+    .privacy-note {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      margin: 12px 0 0;
+      color: var(--text-light);
+      font-size: 0.68rem;
+      text-align: center;
+    }
+
+    .privacy-note svg {
+      width: 13px;
+      height: 13px;
+      flex: 0 0 auto;
+    }
+
+    .user-location-marker {
+      display: grid;
+      width: 30px;
+      height: 30px;
+      place-items: center;
+      border: 3px solid var(--pure-white);
+      border-radius: 50%;
+      background: var(--primary-red);
+      box-shadow: 0 3px 12px rgba(136, 19, 55, 0.4);
+    }
+
+    .user-location-marker::after {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--pure-white);
+      content: "";
+    }
+
+    .leaflet-control-attribution {
+      margin-right: 8px !important;
+      border-radius: 6px 6px 0 0;
+      background: rgba(255, 255, 255, 0.84) !important;
+      font-size: 9px !important;
+    }
+
+    @media (min-width: 600px) {
+      .app-shell {
+        height: min(900px, calc(100dvh - 48px));
+        border: 8px solid var(--pure-white);
+        border-radius: 34px;
+        box-shadow: 0 24px 80px rgba(15, 23, 42, 0.16);
+      }
+
+      .top-bar {
+        top: 20px;
+      }
+
+      .locate-control {
+        top: 86px;
+      }
+
+      .leaflet-top.leaflet-right {
+        top: 144px;
+      }
+
+      .location-card {
+        right: 18px;
+        bottom: 18px;
+        left: 18px;
+        padding: 22px 20px 17px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app-shell" aria-label="Mapa de Amari">
+    <section class="map-stage" aria-label="Mapa interactivo">
+      <div id="map" role="application" aria-label="Mapa interactivo de OpenStreetMap"></div>
+      <img
+        class="map-preview"
+        src="assets/LocationImage.png"
+        alt="Vista de referencia del mapa en la zona de la Universidad de Colima"
+      >
+    </section>
+
+    <header class="top-bar">
+      <a class="brand" href="home.html" aria-label="Amari, ir al inicio">
+        <span class="brand-mark" aria-hidden="true">A</span>
+        <span>amari</span>
+      </a>
+      <div class="page-label">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+          <circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="1.8"/>
+        </svg>
+        Mi ubicación
+      </div>
+    </header>
+
+    <div class="locate-control">
+      <button class="locate-button" id="locate-map-button" type="button" aria-label="Centrar mapa en mi ubicación" title="Centrar en mi ubicación">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="12" cy="12" r="7.5" stroke="currentColor" stroke-width="1.8"/>
+          <circle cx="12" cy="12" r="2.5" stroke="currentColor" stroke-width="1.8"/>
+          <path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <section class="location-card" aria-labelledby="location-title">
+      <div class="card-heading">
+        <span class="location-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+            <circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="1.8"/>
+          </svg>
+        </span>
+        <div class="card-copy">
+          <h1 class="card-title" id="location-title">Encuentra tu ubicación</h1>
+          <p class="location-status" id="location-status" role="status" aria-live="polite">
+            Vista de referencia. Activa tu ubicación para mostrar tu posición actual.
+          </p>
+        </div>
+      </div>
+
+      <button class="action-button" id="locate-button" type="button">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="12" cy="12" r="7.5" stroke="currentColor" stroke-width="1.8"/>
+          <circle cx="12" cy="12" r="2.5" stroke="currentColor" stroke-width="1.8"/>
+          <path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        Usar mi ubicación
+      </button>
+      <p class="privacy-note">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <rect x="5" y="10" width="14" height="11" rx="2" stroke="currentColor" stroke-width="1.7"/>
+          <path d="M8 10V7a4 4 0 1 1 8 0v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+        </svg>
+        Tu ubicación solo se usa para mostrarte en el mapa.
+      </p>
+    </section>
+  </main>
+
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+  ></script>
+  <script type="module">
+    import amariTheme from './assets/theme.js';
+
+    amariTheme.applyToDOM();
+
+    const status = document.getElementById('location-status');
+    const locateButton = document.getElementById('locate-button');
+    const locateMapButton = document.getElementById('locate-map-button');
+    const mapStage = document.querySelector('.map-stage');
+    const map = L.map('map', { zoomControl: false }).setView([20, 0], 2);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+
+    L.control.zoom({ position: 'topright' }).addTo(map);
+
+    const locationIcon = L.divIcon({
+      className: '',
+      html: '<span class="user-location-marker" aria-hidden="true"></span>',
+      iconSize: [30, 30],
+      iconAnchor: [15, 15]
+    });
+
+    let locationMarker;
+    let accuracyCircle;
+
+    function setStatus(message, state = 'default') {
+      status.textContent = message;
+      status.dataset.state = state;
+    }
+
+    function locateUser() {
+      if (!navigator.geolocation) {
+        setStatus('Tu navegador no permite consultar la ubicación. Prueba con otro navegador.', 'error');
+        return;
+      }
+
+      locateButton.disabled = true;
+      locateMapButton.disabled = true;
+      setStatus('Buscando tu ubicación…');
+
+      navigator.geolocation.getCurrentPosition(
+        ({ coords }) => {
+          const position = [coords.latitude, coords.longitude];
+
+          if (locationMarker) map.removeLayer(locationMarker);
+          if (accuracyCircle) map.removeLayer(accuracyCircle);
+
+          locationMarker = L.marker(position, { icon: locationIcon, title: 'Tu ubicación' })
+            .addTo(map)
+            .bindPopup('Estás aquí');
+          accuracyCircle = L.circle(position, {
+            radius: coords.accuracy,
+            color: '#e11d48',
+            fillColor: '#f43f5e',
+            fillOpacity: 0.12,
+            weight: 1
+          }).addTo(map);
+
+          mapStage.classList.add('is-live');
+          requestAnimationFrame(() => map.invalidateSize());
+          map.setView(position, 16);
+          setStatus(`Ubicación detectada · precisión aproximada de ${Math.round(coords.accuracy)} m.`, 'success');
+          locateButton.disabled = false;
+          locateMapButton.disabled = false;
+        },
+        (error) => {
+          const messages = {
+            1: 'No se concedió permiso para acceder a tu ubicación. Puedes habilitarlo en los ajustes del navegador.',
+            2: 'No pudimos determinar tu ubicación. Comprueba la señal y vuelve a intentarlo.',
+            3: 'La búsqueda de ubicación tardó demasiado. Inténtalo de nuevo.'
+          };
+
+          setStatus(messages[error.code] || 'No pudimos obtener tu ubicación. Inténtalo de nuevo.', 'error');
+          locateButton.disabled = false;
+          locateMapButton.disabled = false;
+        },
+        { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+      );
+    }
+
+    locateButton.addEventListener('click', locateUser);
+    locateMapButton.addEventListener('click', locateUser);
+  </script>
+</body>
+</html>
