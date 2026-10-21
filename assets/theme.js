@@ -73,17 +73,19 @@ const amariTheme = {
   applyToDOM() {
     if (typeof document === 'undefined') return;
     const root = document.documentElement;
-    const { primary, white, neutral, status, shadows } = this.colors;
+    const { primary, white, neutral, status, gradients, shadows } = this.colors;
 
     root.style.setProperty('--primary-red', primary.red);
     root.style.setProperty('--primary-red-hover', primary.hover);
     root.style.setProperty('--primary-red-dark', primary.dark);
     root.style.setProperty('--primary-red-light', primary.light);
     root.style.setProperty('--primary-red-glow', primary.glow);
+    root.style.setProperty('--primary-red-glow-strong', primary.glowStrong);
     root.style.setProperty('--red-accent', primary.accent);
 
     root.style.setProperty('--pure-white', white.pure);
     root.style.setProperty('--off-white', white.offWhite);
+    root.style.setProperty('--app-background', white.background);
     root.style.setProperty('--surface-white', white.surface);
 
     root.style.setProperty('--text-main', neutral.textMain);
@@ -91,14 +93,22 @@ const amariTheme = {
     root.style.setProperty('--text-light', neutral.textLight);
     root.style.setProperty('--border-light', neutral.borderLight);
     root.style.setProperty('--border-medium', neutral.borderMedium);
+    root.style.setProperty('--border-hover', neutral.borderHover);
 
     root.style.setProperty('--success-green', status.success);
     root.style.setProperty('--warning-amber', status.warning);
     root.style.setProperty('--danger-red', status.danger);
+    root.style.setProperty('--info-blue', status.info);
+
+    root.style.setProperty('--gradient-primary', gradients.primary);
+    root.style.setProperty('--gradient-hero', gradients.hero);
+    root.style.setProperty('--gradient-accent', gradients.accent);
+    root.style.setProperty('--gradient-glass', gradients.glass);
 
     root.style.setProperty('--shadow-subtle', shadows.subtle);
     root.style.setProperty('--shadow-card', shadows.card);
     root.style.setProperty('--shadow-glow', shadows.glow);
+    root.style.setProperty('--shadow-glow-elevated', shadows.glowElevated);
   }
 };
 

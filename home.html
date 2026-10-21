@@ -64,29 +64,27 @@
       font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
 
-    .brand-logo-white {
+    .brand-logo-image {
       display: inline-flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       text-decoration: none;
-      color: var(--pure-white);
-      font-size: 1.75rem;
-      font-weight: 800;
-      letter-spacing: -0.5px;
     }
 
-    .logo-badge-white {
-      width: 42px;
-      height: 42px;
-      background: var(--pure-white);
-      color: var(--primary-red);
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .brand-logo-image img {
+      display: block;
+      width: 62px;
+      height: 62px;
+      border-radius: 8px;
+      object-fit: contain;
+    }
+
+    .brand-logo-name {
+      color: var(--pure-white);
+      font-size: 1.4rem;
       font-weight: 900;
-      font-size: 1.3rem;
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
     }
 
     .shadow-red-600\/30 {
@@ -120,9 +118,9 @@
     
     <!-- Encabezado AMARI (Rojo y Blanco) -->
     <header class="bg-red-600 text-white p-5 shadow-md flex items-center justify-between relative">
-      <a href="home.html" class="brand-logo-white" aria-label="Ir a Inicio de Amari">
-        <div class="logo-badge-white">A</div>
-        <span>Amari</span>
+      <a href="home.html" class="brand-logo-image" aria-label="Ir a Inicio de Amari">
+        <img src="assets/logoamari.png" alt="Logotipo de AMARI">
+        <span class="brand-logo-name">AMARI</span>
       </a>
       <span class="bg-red-700 text-red-100 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider border border-red-500">
         Servicio
