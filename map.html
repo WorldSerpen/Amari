@@ -85,13 +85,161 @@
       inset: 0;
     }
 
+    .map-stage {
+      container-type: size;
+    }
+
     .map-preview {
       position: absolute;
       z-index: 1;
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
       object-position: center;
+      background: #e9eef0;
+    }
+
+    .mechanic-markers {
+      position: absolute;
+      z-index: 2;
+      top: 50%;
+      left: 50%;
+      width: min(100%, 56.470588dvh);
+      aspect-ratio: 768 / 1360;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    @supports (width: 1cqh) {
+      .mechanic-markers {
+        width: min(100cqw, 56.470588cqh);
+      }
+    }
+
+    .mechanic-marker {
+      position: absolute;
+      display: grid;
+      width: clamp(28px, 5.73%, 56px);
+      aspect-ratio: 1;
+      padding: 0;
+      place-items: center;
+      transform: translate(-50%, -50%);
+      border: 3px solid var(--pure-white);
+      border-radius: 50%;
+      background: var(--primary-red);
+      box-shadow: 0 3px 12px rgba(136, 19, 55, 0.4);
+      color: var(--pure-white);
+      cursor: pointer;
+      pointer-events: auto;
+      transition: transform 160ms ease, background-color 160ms ease;
+    }
+
+    .mechanic-marker:hover,
+    .mechanic-marker[aria-pressed="true"] {
+      transform: translate(-50%, -50%) scale(1.1);
+      background: var(--primary-red-hover);
+    }
+
+    .mechanic-marker:focus-visible {
+      outline: 3px solid var(--pure-white);
+      outline-offset: 3px;
+    }
+
+    .mechanic-marker svg {
+      width: 55%;
+      height: 55%;
+    }
+
+    .mechanic-confirmation {
+      width: min(420px, calc(100% - 32px));
+      max-width: none;
+      padding: 28px;
+      border: 1px solid var(--border-medium);
+      border-radius: 24px;
+      background: var(--pure-white);
+      box-shadow: 0 24px 80px rgba(15, 23, 42, 0.24);
+      color: var(--text-main);
+      text-align: center;
+    }
+
+    .mechanic-confirmation::backdrop {
+      background: rgba(15, 23, 42, 0.48);
+      backdrop-filter: blur(3px);
+    }
+
+    .mechanic-confirmation-icon {
+      display: grid;
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 16px;
+      place-items: center;
+      border-radius: 18px;
+      background: var(--primary-red-light);
+      color: var(--primary-red);
+    }
+
+    .mechanic-confirmation-icon svg {
+      width: 27px;
+      height: 27px;
+    }
+
+    .mechanic-confirmation-title {
+      margin: 0;
+      font-size: 1.2rem;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+    }
+
+    .mechanic-confirmation-copy {
+      margin: 8px 0 24px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .mechanic-confirmation-actions {
+      display: flex;
+      flex-direction: column-reverse;
+      gap: 10px;
+    }
+
+    .mechanic-confirmation-button {
+      min-height: 48px;
+      padding: 0 18px;
+      border: 0;
+      border-radius: 14px;
+      font: inherit;
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .mechanic-confirmation-button:focus-visible {
+      outline: 3px solid var(--primary-red-glow);
+      outline-offset: 3px;
+    }
+
+    .mechanic-confirmation-button--confirm {
+      background: linear-gradient(135deg, var(--primary-red), var(--primary-red-hover));
+      box-shadow: var(--shadow-glow);
+      color: var(--pure-white);
+    }
+
+    .mechanic-confirmation-button--cancel {
+      border: 1px solid var(--border-medium);
+      background: var(--pure-white);
+      color: var(--text-main);
+    }
+
+    @media (min-width: 480px) {
+      .mechanic-confirmation-actions {
+        flex-direction: row;
+        justify-content: center;
+      }
+
+      .mechanic-confirmation-button {
+        min-width: 140px;
+      }
     }
 
     #map {
@@ -105,6 +253,10 @@
     }
 
     .map-stage.is-live .map-preview {
+      display: none;
+    }
+
+    .map-stage.is-live .mechanic-markers {
       display: none;
     }
 
@@ -392,6 +544,45 @@
       }
     }
 
+    @media (min-width: 768px) {
+      body {
+        display: block;
+      }
+
+      .app-shell {
+        width: 100%;
+        height: 100vh;
+        height: 100dvh;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+      }
+
+      .top-bar {
+        top: max(24px, env(safe-area-inset-top));
+        right: clamp(24px, 4vw, 64px);
+        left: clamp(24px, 4vw, 64px);
+      }
+
+      .locate-control {
+        top: max(92px, calc(env(safe-area-inset-top) + 80px));
+        right: clamp(24px, 4vw, 64px);
+      }
+
+      .leaflet-top.leaflet-right {
+        top: max(150px, calc(env(safe-area-inset-top) + 138px));
+        right: clamp(24px, 4vw, 64px);
+      }
+
+      .location-card {
+        right: auto;
+        bottom: max(28px, env(safe-area-inset-bottom));
+        left: clamp(24px, 4vw, 64px);
+        width: min(390px, calc(100% - 48px));
+        padding: 22px 20px 17px;
+      }
+    }
+
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after {
         scroll-behavior: auto !important;
@@ -406,9 +597,35 @@
       <div id="map" role="application" aria-label="Mapa interactivo de OpenStreetMap"></div>
       <img
         class="map-preview"
-        src="assets/LocationImage.png"
+        src="assets/LocationImage.jpg"
         alt="Vista de referencia del mapa en la zona de la Universidad de Colima"
       >
+      <div class="mechanic-markers" aria-label="Mecánicos en el mapa">
+        <button class="mechanic-marker" type="button" style="left: 43.49%; top: 29.41%;" aria-label="Seleccionar mecánico 1" aria-pressed="false">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M3 14.5 4.5 9h15l1.5 5.5v4h-2v-2H5v2H3v-4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+            <path d="m6 9 1.5-3h9L18 9M6 12h3m6 0h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <button class="mechanic-marker" type="button" style="left: 93.88%; top: 20.37%;" aria-label="Seleccionar mecánico 2" aria-pressed="false">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M3 14.5 4.5 9h15l1.5 5.5v4h-2v-2H5v2H3v-4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+            <path d="m6 9 1.5-3h9L18 9M6 12h3m6 0h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <button class="mechanic-marker" type="button" style="left: 47.27%; top: 68.01%;" aria-label="Seleccionar mecánico 3" aria-pressed="false">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M3 14.5 4.5 9h15l1.5 5.5v4h-2v-2H5v2H3v-4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+            <path d="m6 9 1.5-3h9L18 9M6 12h3m6 0h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <button class="mechanic-marker" type="button" style="left: 66.02%; top: 68.16%;" aria-label="Seleccionar mecánico 4" aria-pressed="false">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M3 14.5 4.5 9h15l1.5 5.5v4h-2v-2H5v2H3v-4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+            <path d="m6 9 1.5-3h9L18 9M6 12h3m6 0h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
     </section>
 
     <header class="top-bar">
@@ -468,6 +685,62 @@
       </p>
     </section>
   </main>
+
+  <dialog class="mechanic-confirmation" id="mechanic-confirmation" aria-labelledby="mechanic-confirmation-title" aria-describedby="mechanic-confirmation-copy">
+    <span class="mechanic-confirmation-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+        <circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="1.8"/>
+      </svg>
+    </span>
+    <h2 class="mechanic-confirmation-title" id="mechanic-confirmation-title">Confirmar mecánico</h2>
+    <p class="mechanic-confirmation-copy" id="mechanic-confirmation-copy">¿Confirmas la selección de este mecánico?</p>
+    <div class="mechanic-confirmation-actions">
+      <button class="mechanic-confirmation-button mechanic-confirmation-button--cancel" id="cancel-mechanic-button" type="button">
+        Cancelar
+      </button>
+      <button class="mechanic-confirmation-button mechanic-confirmation-button--confirm" id="confirm-mechanic-button" type="button" autofocus>
+        Confirmar
+      </button>
+    </div>
+  </dialog>
+
+  <script>
+    const mechanicMarkers = [...document.querySelectorAll('.mechanic-marker')];
+    const mechanicConfirmation = document.getElementById('mechanic-confirmation');
+    const confirmMechanicButton = document.getElementById('confirm-mechanic-button');
+    const cancelMechanicButton = document.getElementById('cancel-mechanic-button');
+    let selectedMechanic;
+
+    mechanicMarkers.forEach((marker) => {
+      marker.addEventListener('click', () => {
+        selectedMechanic = marker;
+        mechanicMarkers.forEach((item) => item.setAttribute('aria-pressed', String(item === marker)));
+        mechanicConfirmation.showModal();
+      });
+    });
+
+    confirmMechanicButton.addEventListener('click', () => {
+      mechanicConfirmation.close('confirmed');
+    });
+
+    cancelMechanicButton.addEventListener('click', () => {
+      mechanicConfirmation.close('cancelled');
+    });
+
+    mechanicConfirmation.addEventListener('click', (event) => {
+      if (event.target === mechanicConfirmation) mechanicConfirmation.close('cancelled');
+    });
+
+    mechanicConfirmation.addEventListener('close', () => {
+      if (mechanicConfirmation.returnValue !== 'confirmed') {
+        selectedMechanic?.setAttribute('aria-pressed', 'false');
+      }
+      selectedMechanic?.focus();
+      selectedMechanic = undefined;
+    });
+
+  </script>
 
   <script
     src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
