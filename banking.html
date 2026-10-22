@@ -122,6 +122,43 @@
 		.submit-button:hover { transform: translateY(-1px); box-shadow: 0 10px 20px rgba(225, 29, 72, .24); }
 		.form-status { min-height: 0; margin: 0; color: var(--green); font-size: 11px; line-height: 1.5; }
 		.form-status:not(:empty) { padding: 10px 12px; border: 1px solid #a7f3d0; border-radius: 5px; background: #ecfdf5; }
+		.validation-indicator { display: flex; align-items: center; gap: 9px; color: var(--red); font-size: 11px; font-weight: 700; }
+		.validation-indicator[data-valid="true"] { color: var(--green); }
+		.validation-symbol { width: 22px; height: 22px; display: grid; place-items: center; flex: 0 0 22px; border: 1px solid currentColor; border-radius: 50%; font-size: 14px; }
+		.workflow-steps { display: flex; align-items: center; gap: 12px; margin: -16px 0 28px; color: #94a3b8; font-size: 11px; font-weight: 700; }
+		.workflow-step { display: inline-flex; align-items: center; gap: 7px; }
+		.workflow-step span { width: 23px; height: 23px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 50%; background: white; }
+		.workflow-step[aria-current="step"] { color: var(--red); }
+		.workflow-step[aria-current="step"] span { border-color: var(--red); color: white; background: var(--red); }
+		.workflow-divider { width: 34px; height: 1px; background: var(--line); }
+		.receipt-dialog { width: min(640px, calc(100% - 32px)); max-height: min(88vh, 860px); padding: 0; border: 0; border-radius: 8px; overflow: auto; background: transparent; box-shadow: none; }
+		.receipt-dialog[open] { animation: rise-in .3s ease both; }
+		.receipt-dialog::backdrop { background: rgba(15, 23, 42, .58); backdrop-filter: blur(4px); }
+		.receipt-panel { overflow: hidden; border: 1px solid rgba(226, 232, 240, .9); border-radius: 8px; background: white; box-shadow: var(--shadow); animation: rise-in .45s ease both; }
+		.receipt-head { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 26px 30px; border-bottom: 1px solid var(--line); }
+		.receipt-brand { display: flex; align-items: center; gap: 11px; }
+		.receipt-brand .brand-mark { flex: 0 0 36px; }
+		.receipt-brand strong { display: block; font-size: 16px; font-weight: 800; }
+		.receipt-brand small { display: block; margin-top: 3px; color: var(--muted); font-size: 10px; }
+		.receipt-status { display: inline-flex; align-items: center; gap: 7px; color: var(--green); font-size: 11px; font-weight: 800; }
+		.receipt-status span { width: 22px; height: 22px; display: grid; place-items: center; border-radius: 50%; color: white; background: var(--green); font-size: 14px; }
+		.receipt-body { padding: 30px; }
+		.receipt-title-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 24px; }
+		.receipt-title-row h2 { margin: 0; font-size: 22px; }
+		.receipt-title-row p { margin: 6px 0 0; color: var(--muted); font-size: 12px; }
+		.receipt-badge { flex: 0 0 auto; padding: 7px 9px; border: 1px solid #fed7aa; border-radius: 5px; color: #9a3412; background: #fff7ed; font-size: 9px; font-weight: 800; letter-spacing: .5px; }
+		.receipt-meta { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; padding: 18px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+		.receipt-meta span, .receipt-line span { display: block; color: var(--muted); font-size: 10px; }
+		.receipt-meta strong { display: block; margin-top: 5px; overflow-wrap: anywhere; font-size: 11px; }
+		.receipt-lines { display: grid; gap: 14px; padding: 22px 0; border-bottom: 1px solid var(--line); }
+		.receipt-line { display: flex; justify-content: space-between; gap: 16px; font-size: 12px; }
+		.receipt-line strong { text-align: right; }
+		.receipt-total { display: flex; align-items: center; justify-content: space-between; padding: 18px 0 4px; font-size: 13px; font-weight: 800; }
+		.receipt-total strong { color: var(--red-dark); font-size: 20px; }
+		.receipt-notice { margin: 20px 0 0; padding: 13px 15px; border-left: 3px solid var(--red); color: var(--muted); background: #fff7f8; font-size: 10px; line-height: 1.6; }
+		.receipt-actions { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; margin-top: 22px; }
+		.receipt-actions button { min-height: 42px; padding: 0 15px; border: 1px solid var(--line); border-radius: 6px; color: var(--ink); background: white; font-size: 11px; font-weight: 700; cursor: pointer; }
+		.receipt-actions .print-button { border-color: var(--red); color: white; background: var(--red); }
 
 		.preview-column { display: grid; gap: 16px; animation: rise-in .6s .16s ease both; }
 		.preview-panel { overflow: hidden; padding: 25px; }
@@ -179,6 +216,20 @@
 			.card-bottom { margin-top: 18px; }
 			.trust-strip { grid-template-columns: 1fr; }
 			.page-footer { flex-wrap: wrap; }
+			.workflow-steps { margin-top: -9px; }
+			.receipt-head, .receipt-body { padding: 21px 18px; }
+			.receipt-meta { grid-template-columns: 1fr 1fr; }
+			.receipt-title-row { flex-direction: column; }
+		}
+		@media print {
+			body { min-width: 0; background: white; }
+			body * { visibility: hidden; }
+			#receipt-dialog, #receipt-dialog * { visibility: visible; }
+			#receipt-dialog { position: absolute; inset: 0; width: 100%; max-height: none; margin: 0; overflow: visible; }
+			#receipt-dialog::backdrop { display: none; }
+			.receipt-panel { border: 0; box-shadow: none; }
+			.receipt-panel { animation: none; }
+			.receipt-actions { display: none !important; }
 		}
 		@media (prefers-reduced-motion: reduce) {
 			*, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
@@ -195,16 +246,21 @@
 
 	<main>
 		<nav class="breadcrumb" aria-label="Progreso">
-			<span>Cuenta</span><span aria-hidden="true">/</span><span>Método de pago</span>
+			<span>Cuenta</span><span aria-hidden="true">/</span><span id="breadcrumb-current">Método de pago</span>
+		</nav>
+		<nav class="workflow-steps" aria-label="Pasos de pago">
+			<span class="workflow-step" id="step-payment" aria-current="step"><span>1</span> Datos de tarjeta</span>
+			<span class="workflow-divider" aria-hidden="true"></span>
+			<span class="workflow-step" id="step-receipt"><span>2</span> Comprobante</span>
 		</nav>
 
 		<section class="intro" aria-labelledby="page-title">
 			<div class="eyebrow">Pago</div>
 			<h1 id="page-title">Agrega tu tarjeta</h1>
-			<p>Elige el tipo de tarjeta e ingresa sus datos para continuar. Esta pantalla es una maqueta: la información no se envía ni se guarda.</p>
+			<p id="intro-copy">Elige el tipo de tarjeta e ingresa sus datos para continuar. Esta pantalla es una simulación: no se contacta a un banco ni se guarda la información.</p>
 		</section>
 
-		<div class="checkout-layout">
+		<div class="checkout-layout" id="checkout-view">
 			<section class="form-panel" aria-labelledby="form-title">
 				<div class="panel-heading">
 					<div>
@@ -249,8 +305,12 @@
 							</div>
 						</div>
 					</div>
+					<div class="validation-indicator" id="validation-indicator" data-valid="false" role="status" aria-live="polite">
+						<span class="validation-symbol" id="validation-symbol" aria-hidden="true">×</span>
+						<span id="validation-copy">Completa correctamente todos los datos</span>
+					</div>
 					<button class="submit-button" type="submit">
-						Validar datos
+						Validar y continuar
 						<svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
 					</button>
 					<p class="form-status" id="form-status" role="status" aria-live="polite"></p>
@@ -291,6 +351,38 @@
 			</aside>
 		</div>
 
+		<dialog class="receipt-dialog" id="receipt-dialog" aria-labelledby="receipt-title">
+			<section class="receipt-panel" id="receipt-view">
+			<div class="receipt-head">
+				<div class="receipt-brand"><span class="brand-mark" aria-hidden="true">A</span><span><strong>amari</strong><small>Comprobante de operación</small></span></div>
+				<div class="receipt-status"><span aria-hidden="true">✓</span> Simulación completada</div>
+			</div>
+			<div class="receipt-body">
+				<div class="receipt-title-row">
+					<div><h2 id="receipt-title">Recibo de pago</h2><p>Resumen de la operación de demostración</p></div>
+					<span class="receipt-badge">NO FISCAL · DEMOSTRACIÓN</span>
+				</div>
+				<div class="receipt-meta">
+					<div><span>Referencia</span><strong id="receipt-reference">AMA-00000000</strong></div>
+					<div><span>Fecha</span><strong id="receipt-date">-</strong></div>
+					<div><span>Estado</span><strong>Simulado, sin cargo</strong></div>
+				</div>
+				<div class="receipt-lines">
+					<div class="receipt-line"><span>Concepto</span><strong>Servicio Amari (importe de muestra)</strong></div>
+					<div class="receipt-line"><span>Método</span><strong id="receipt-method">Tarjeta de crédito</strong></div>
+					<div class="receipt-line"><span>Tarjeta</span><strong id="receipt-card">•••• •••• •••• 0000</strong></div>
+					<div class="receipt-line"><span>Titular</span><strong id="receipt-holder">-</strong></div>
+				</div>
+				<div class="receipt-total"><span>Total de demostración</span><strong>$1,000.00 MXN</strong></div>
+				<p class="receipt-notice">Este recibo es únicamente una maqueta visual. No se realizó una autorización bancaria, no se procesó ningún pago y no es una factura fiscal.</p>
+				<div class="receipt-actions">
+					<button type="button" id="back-to-payment">Volver al formulario</button>
+					<button class="print-button" type="button" id="print-receipt">Imprimir comprobante</button>
+				</div>
+			</div>
+			</section>
+		</dialog>
+
 		<footer class="page-footer">
 			<span>© 2026 Amari.</span>
 			<a href="register.html">Volver al registro</a>
@@ -304,20 +396,46 @@
 		const cvvInput = document.getElementById('cvv');
 		const statusMessage = document.getElementById('form-status');
 		const paymentForm = document.getElementById('payment-form');
+		const validationIndicator = document.getElementById('validation-indicator');
+		const validationCopy = document.getElementById('validation-copy');
+		const receiptDialog = document.getElementById('receipt-dialog');
+		const cardFields = [cardholderInput, cardNumberInput, expiryInput, cvvInput];
+
+		function isExpiryValid(value) {
+			const [monthText, yearText] = value.split('/');
+			const month = Number(monthText);
+			const year = Number(`20${yearText}`);
+			const today = new Date();
+			return /^\d{2}\/\d{2}$/.test(value) && month >= 1 && month <= 12 && (year > today.getFullYear() || (year === today.getFullYear() && month >= today.getMonth() + 1));
+		}
+
+		function fieldsAreValid() {
+			const digits = cardNumberInput.value.replace(/\D/g, '');
+			return cardholderInput.value.trim().length >= 3 && digits.length >= 16 && digits.length <= 19 && isExpiryValid(expiryInput.value) && /^\d{3,4}$/.test(cvvInput.value);
+		}
+
+		function updateValidationIndicator() {
+			const valid = fieldsAreValid();
+			validationIndicator.dataset.valid = String(valid);
+			document.getElementById('validation-symbol').textContent = valid ? '✓' : '×';
+			validationCopy.textContent = valid ? 'Datos completos y con formato válido' : 'Completa correctamente todos los datos';
+		}
 
 		cardholderInput.addEventListener('input', () => {
 			document.getElementById('cardholder-preview').textContent = cardholderInput.value.trim() || 'Tu nombre';
 			statusMessage.textContent = '';
+			updateValidationIndicator();
 		});
 
 		cardNumberInput.addEventListener('input', () => {
 			const digits = cardNumberInput.value.replace(/\D/g, '').slice(0, 19);
 			cardNumberInput.value = digits.replace(/(.{4})/g, '$1 ').trim();
 			const groups = digits.match(/.{1,4}/g) || [];
-			document.getElementById('card-number-preview').textContent = groups.length ? groups.join('  ') : '••••  ••••  ••••  ••••';
+			document.getElementById('card-number-preview').textContent = digits.length ? `••••  ••••  ••••  ${digits.slice(-4).padStart(4, '•')}` : '••••  ••••  ••••  ••••';
 			const network = digits.startsWith('4') ? 'VISA' : (/^(5[1-5]|2[2-7])/.test(digits) ? 'mastercard' : 'AMARI');
 			document.getElementById('card-network').textContent = network;
 			statusMessage.textContent = '';
+			updateValidationIndicator();
 		});
 
 		expiryInput.addEventListener('input', () => {
@@ -325,11 +443,13 @@
 			expiryInput.value = digits.length > 2 ? `${digits.slice(0, 2)}/${digits.slice(2)}` : digits;
 			document.getElementById('expiry-preview').textContent = expiryInput.value || 'MM/AA';
 			statusMessage.textContent = '';
+			updateValidationIndicator();
 		});
 
 		cvvInput.addEventListener('input', () => {
 			cvvInput.value = cvvInput.value.replace(/\D/g, '').slice(0, 4);
 			statusMessage.textContent = '';
+			updateValidationIndicator();
 		});
 
 		document.querySelectorAll('.method-option').forEach((option) => {
@@ -342,11 +462,7 @@
 		paymentForm.addEventListener('submit', (event) => {
 			event.preventDefault();
 			const digits = cardNumberInput.value.replace(/\D/g, '');
-			const [monthText, yearText] = expiryInput.value.split('/');
-			const month = Number(monthText);
-			const year = Number(`20${yearText}`);
-			const today = new Date();
-			const expiryIsValid = /^\d{2}\/\d{2}$/.test(expiryInput.value) && month >= 1 && month <= 12 && (year > today.getFullYear() || (year === today.getFullYear() && month >= today.getMonth() + 1));
+			const expiryIsValid = isExpiryValid(expiryInput.value);
 
 			if (cardholderInput.value.trim().length < 3) {
 				cardholderInput.setCustomValidity('Ingresa el nombre del titular.');
@@ -373,8 +489,40 @@
 				return;
 			}
 
-			statusMessage.textContent = 'Formato válido. En esta maqueta no se procesa ningún pago ni se guardan los datos.';
+			updateValidationIndicator();
+			const now = new Date();
+			const reference = `AMA-${now.getTime().toString().slice(-8)}`;
+			const selectedMethod = document.querySelector('.method-option[aria-pressed="true"]').dataset.kind;
+			document.getElementById('receipt-reference').textContent = reference;
+			document.getElementById('receipt-date').textContent = new Intl.DateTimeFormat('es-MX', { dateStyle: 'medium', timeStyle: 'short' }).format(now);
+			document.getElementById('receipt-method').textContent = `Tarjeta de ${selectedMethod.toLowerCase()}`;
+			document.getElementById('receipt-card').textContent = `•••• •••• •••• ${digits.slice(-4)}`;
+			document.getElementById('receipt-holder').textContent = cardholderInput.value.trim();
+			cardFields.forEach((field) => { field.value = ''; field.setCustomValidity(''); });
+			document.getElementById('cardholder-preview').textContent = 'Tu nombre';
+			document.getElementById('card-number-preview').textContent = '••••  ••••  ••••  ••••';
+			document.getElementById('expiry-preview').textContent = 'MM/AA';
+			document.getElementById('card-network').textContent = 'AMARI';
+			statusMessage.textContent = '';
+			updateValidationIndicator();
+			receiptDialog.showModal();
+			document.getElementById('step-payment').removeAttribute('aria-current');
+			document.getElementById('step-receipt').setAttribute('aria-current', 'step');
+			document.getElementById('breadcrumb-current').textContent = 'Comprobante';
 		});
+
+		document.getElementById('back-to-payment').addEventListener('click', () => {
+			receiptDialog.close();
+		});
+
+		receiptDialog.addEventListener('close', () => {
+			document.getElementById('step-receipt').removeAttribute('aria-current');
+			document.getElementById('step-payment').setAttribute('aria-current', 'step');
+			document.getElementById('breadcrumb-current').textContent = 'Método de pago';
+		});
+
+		document.getElementById('print-receipt').addEventListener('click', () => window.print());
+		updateValidationIndicator();
 	</script>
 </body>
 </html>
