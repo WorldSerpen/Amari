@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Crea tu cuenta en Amari. Regístrate de forma rápida y segura en la plataforma de servicios financieros modernos y confiables.">
-  <meta name="keywords" content="Amari, crear cuenta, registro, banca digital, finanzas, registrarse">
-  <meta name="author" content="Amari Finanzas">
-  <title>Crear Cuenta | Amari</title>
+  <meta name="description" content="Regístrate en Amari como usuario conductor o especialista mecánico certificado. Únete a la plataforma líder de servicios y auxilio vial.">
+  <meta name="keywords" content="Amari, registro, crear cuenta, registro mecanico, auxilio vial, conductor, taller mecanico, banca digital">
+  <meta name="author" content="Amari">
+  <title>Registro | Amari</title>
 
   <!-- Google Fonts: Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,7 +15,7 @@
 
   <style>
     /* ==========================================================================
-       VARIABLES DE COLOR Y DISEÑO (TEMA ROJO Y BLANCO)
+       VARIABLES DE COLOR Y DISEÑO (SISTEMA AMARI ROJO Y BLANCO)
        ========================================================================== */
     :root {
       --primary-red: #e11d48;
@@ -23,6 +23,7 @@
       --primary-red-dark: #881337;
       --primary-red-light: #ffe4e6;
       --primary-red-glow: rgba(225, 29, 72, 0.25);
+      --primary-red-glow-strong: rgba(225, 29, 72, 0.45);
       --red-accent: #f43f5e;
       --pure-white: #ffffff;
       --off-white: #f8fafc;
@@ -35,6 +36,7 @@
       --text-muted: #64748b;
       --text-light: #94a3b8;
       --success-green: #10b981;
+      --success-light: #ecfdf5;
       --warning-amber: #f59e0b;
       --danger-red: #e11d48;
       --radius-sm: 8px;
@@ -43,6 +45,7 @@
       --shadow-subtle: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
       --shadow-card: 0 20px 40px -15px rgba(225, 29, 72, 0.08), 0 0 20px 0 rgba(0, 0, 0, 0.04);
       --shadow-glow: 0 10px 25px -5px rgba(225, 29, 72, 0.35);
+      --shadow-glow-elevated: 0 14px 28px -6px rgba(225, 29, 72, 0.45);
       --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
       --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
@@ -60,7 +63,7 @@
       background-image: 
         radial-gradient(at 10% 20%, rgba(225, 29, 72, 0.07) 0px, transparent 50%),
         radial-gradient(at 90% 80%, rgba(244, 63, 94, 0.06) 0px, transparent 50%),
-        radial-gradient(at 50% 50%, rgba(255, 228, 230, 0.4) 0px, transparent 80%);
+        radial-gradient(at 50% 50%, rgba(255, 228, 230, 0.45) 0px, transparent 80%);
       color: var(--text-main);
       min-height: 100vh;
       display: flex;
@@ -77,12 +80,14 @@
       width: 100%;
     }
 
-    /* Lado Izquierdo: Hero Informativo */
+    /* ==========================================================================
+       PANEL HERO IZQUIERDO (TEMA ROJO & BLANCO CON LOGOTIPO AMARI)
+       ========================================================================== */
     .hero-side {
       display: none;
       flex: 1.1;
       background: linear-gradient(145deg, #be123c 0%, #e11d48 50%, #9f1239 100%);
-      padding: 4rem 3.5rem;
+      padding: 3.5rem 3.5rem;
       position: relative;
       overflow: hidden;
       color: var(--pure-white);
@@ -93,10 +98,13 @@
     @media (min-width: 1024px) {
       .hero-side {
         display: flex;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow-y: auto;
       }
     }
 
-    /* Patrón decorativo y luces en Hero */
     .hero-decor-circle-1 {
       position: absolute;
       top: -120px;
@@ -104,7 +112,7 @@
       width: 420px;
       height: 420px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 70%);
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 70%);
       pointer-events: none;
     }
 
@@ -115,14 +123,14 @@
       width: 500px;
       height: 500px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(0, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+      background: radial-gradient(circle, rgba(0, 0, 0, 0.22) 0%, rgba(0, 0, 0, 0) 70%);
       pointer-events: none;
     }
 
     .hero-pattern {
       position: absolute;
       inset: 0;
-      background-image: radial-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px);
+      background-image: radial-gradient(rgba(255, 255, 255, 0.16) 1px, transparent 1px);
       background-size: 28px 28px;
       opacity: 0.35;
       pointer-events: none;
@@ -133,36 +141,65 @@
       z-index: 2;
     }
 
-    .brand-logo-white {
+    .brand-logo-hero {
       display: inline-flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
       text-decoration: none;
       color: var(--pure-white);
-      font-size: 1.75rem;
-      font-weight: 800;
-      letter-spacing: -0.5px;
+      transition: transform var(--transition-fast);
     }
 
-    .logo-badge-white {
-      width: 42px;
-      height: 42px;
+    .brand-logo-hero:hover {
+      transform: translateY(-2px);
+    }
+
+    .logo-image-wrap {
+      width: 52px;
+      height: 52px;
       background: var(--pure-white);
-      color: var(--primary-red);
-      border-radius: 12px;
+      border-radius: 14px;
+      padding: 4px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: 900;
-      font-size: 1.3rem;
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .logo-image-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 10px;
+    }
+
+    .brand-logo-text-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-logo-title {
+      font-size: 1.85rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      line-height: 1.1;
+      color: var(--pure-white);
+    }
+
+    .brand-logo-tagline {
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #ffe4e6;
+      font-weight: 700;
     }
 
     .hero-content {
       position: relative;
       z-index: 2;
-      max-width: 520px;
-      margin: auto 0;
+      max-width: 540px;
+      margin: 2rem 0;
+      transition: all 0.3s ease;
     }
 
     .hero-tag {
@@ -170,13 +207,14 @@
       align-items: center;
       gap: 8px;
       background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(8px);
+      backdrop-filter: blur(10px);
       padding: 6px 14px;
       border-radius: 30px;
       font-size: 0.85rem;
-      font-weight: 600;
-      margin-bottom: 1.5rem;
-      border: 1px solid rgba(255, 255, 255, 0.25);
+      font-weight: 700;
+      margin-bottom: 1.25rem;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      letter-spacing: 0.3px;
     }
 
     .hero-title {
@@ -190,56 +228,67 @@
     .hero-title span {
       color: #ffe4e6;
       text-decoration: underline;
-      text-decoration-color: rgba(255, 255, 255, 0.4);
+      text-decoration-color: rgba(255, 255, 255, 0.45);
       text-underline-offset: 6px;
     }
 
     .hero-description {
-      font-size: 1.1rem;
-      color: rgba(255, 255, 255, 0.9);
+      font-size: 1.05rem;
+      color: rgba(255, 255, 255, 0.92);
       line-height: 1.6;
-      margin-bottom: 2.5rem;
+      margin-bottom: 2rem;
     }
 
     .features-list {
       display: flex;
       flex-direction: column;
-      gap: 1.2rem;
+      gap: 1rem;
     }
 
     .feature-item {
       display: flex;
       align-items: center;
       gap: 14px;
-      background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(12px);
       padding: 12px 18px;
       border-radius: 14px;
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.18);
       transition: transform var(--transition-fast), background var(--transition-fast);
     }
 
     .feature-item:hover {
       transform: translateX(6px);
-      background: rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.16);
     }
 
     .feature-icon-box {
-      width: 36px;
-      height: 36px;
+      width: 40px;
+      height: 40px;
       background: var(--pure-white);
       color: var(--primary-red);
-      border-radius: 10px;
+      border-radius: 11px;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
     }
 
-    .feature-text {
+    .feature-texts {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .feature-title {
       font-size: 0.95rem;
-      font-weight: 600;
+      font-weight: 700;
       color: var(--pure-white);
+    }
+
+    .feature-sub {
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.82);
     }
 
     .hero-footer {
@@ -248,39 +297,42 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-top: 2rem;
+      padding-top: 1.5rem;
       border-top: 1px solid rgba(255, 255, 255, 0.2);
       font-size: 0.85rem;
-      color: rgba(255, 255, 255, 0.8);
+      color: rgba(255, 255, 255, 0.82);
     }
 
-    /* Lado Derecho: Formulario de Registro */
+    /* ==========================================================================
+       PANEL DERECHO: FORMULARIO UNIFICADO CON SELECTOR SUPERIOR
+       ========================================================================== */
     .form-side {
-      flex: 1;
+      flex: 1.25;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: flex-start;
       align-items: center;
-      padding: 2.5rem 1.5rem;
+      padding: 3rem 1.5rem;
       position: relative;
+      overflow-y: auto;
     }
 
     .form-wrapper {
       width: 100%;
-      max-width: 500px;
+      max-width: 650px;
       background: var(--surface-white);
-      padding: 3rem 2.75rem;
+      padding: 2.75rem 2.5rem;
       border-radius: var(--radius-lg);
       box-shadow: var(--shadow-card);
       border: 1px solid var(--border-medium);
       position: relative;
-      animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      animation: fadeIn 0.45s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     @keyframes fadeIn {
       from {
         opacity: 0;
-        transform: translateY(16px);
+        transform: translateY(18px);
       }
       to {
         opacity: 1;
@@ -288,20 +340,13 @@
       }
     }
 
-    /* Encabezado del Formulario */
-    .form-header {
-      margin-bottom: 2rem;
-      text-align: left;
-    }
-
+    /* Logotipo móvil */
     .brand-mobile {
       display: inline-flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       text-decoration: none;
-      color: var(--primary-red);
-      font-size: 1.5rem;
-      font-weight: 800;
+      color: var(--text-main);
       margin-bottom: 1.5rem;
     }
 
@@ -311,52 +356,215 @@
       }
     }
 
-    .brand-badge-red {
-      width: 36px;
-      height: 36px;
-      background: linear-gradient(135deg, var(--primary-red), var(--red-accent));
-      color: var(--pure-white);
-      border-radius: 10px;
+    .brand-mobile-logo-wrap {
+      width: 44px;
+      height: 44px;
+      background: var(--pure-white);
+      border-radius: 12px;
+      padding: 3px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: 900;
-      font-size: 1.1rem;
-      box-shadow: 0 4px 10px var(--primary-red-glow);
+      box-shadow: 0 4px 12px rgba(225, 29, 72, 0.15);
+      border: 1px solid var(--border-medium);
+    }
+
+    .brand-mobile-logo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .brand-mobile-text-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-mobile-title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.1;
+    }
+
+    .brand-mobile-subtitle {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--primary-red);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* ==========================================================================
+       SELECTOR SUPERIOR DE ROL (USUARIO vs MECÁNICO)
+       ========================================================================== */
+    .top-role-selector-container {
+      margin-bottom: 2rem;
+    }
+
+    .top-role-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .top-role-switcher {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      background: var(--off-white);
+      padding: 6px;
+      border-radius: 16px;
+      border: 1.5px solid var(--border-medium);
+    }
+
+    .role-tab-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      position: relative;
+      user-select: none;
+    }
+
+    .role-tab-btn:hover:not(.active) {
+      color: var(--text-main);
+      background: rgba(0, 0, 0, 0.03);
+    }
+
+    .role-tab-btn.active {
+      background: var(--primary-red);
+      color: var(--pure-white);
+      box-shadow: 0 4px 14px var(--primary-red-glow);
+    }
+
+    .role-tab-icon {
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .role-tab-badge {
+      display: none;
+      font-size: 0.7rem;
+      padding: 2px 7px;
+      border-radius: 20px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    @media (min-width: 480px) {
+      .role-tab-badge {
+        display: inline-block;
+      }
+    }
+
+    .role-tab-btn.active .role-tab-badge {
+      background: rgba(255, 255, 255, 0.25);
+      color: var(--pure-white);
+    }
+
+    .role-tab-btn:not(.active) .role-tab-badge {
+      background: var(--border-medium);
+      color: var(--text-muted);
+    }
+
+    /* Encabezado dinámico del formulario */
+    .form-header {
+      margin-bottom: 2rem;
+      text-align: left;
     }
 
     .badge-sub {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
       font-size: 0.75rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 1px;
       color: var(--primary-red);
       background-color: var(--primary-red-light);
-      padding: 4px 10px;
-      border-radius: 6px;
-      margin-bottom: 0.6rem;
+      padding: 5px 12px;
+      border-radius: 8px;
+      margin-bottom: 0.65rem;
     }
 
     .form-title {
-      font-size: 2rem;
+      font-size: 2.1rem;
       font-weight: 800;
       color: var(--text-main);
       letter-spacing: -0.5px;
       line-height: 1.2;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.4rem;
     }
 
     .form-subtitle {
       color: var(--text-muted);
       font-size: 0.95rem;
+      line-height: 1.5;
     }
 
-    /* Formulario y Campos */
+    /* Formulario y campos */
     .register-form {
       display: flex;
       flex-direction: column;
       gap: 1.25rem;
+    }
+
+    .form-section-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--text-main);
+      padding-bottom: 0.6rem;
+      margin-top: 1rem;
+      margin-bottom: 0.75rem;
+      border-bottom: 1.5px solid var(--border-light);
+    }
+
+    .section-number {
+      width: 24px;
+      height: 24px;
+      background: var(--primary-red);
+      color: var(--pure-white);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
+
+    .form-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    @media (min-width: 640px) {
+      .form-grid-2 {
+        grid-template-columns: 1fr 1fr;
+      }
     }
 
     .form-group {
@@ -375,6 +583,11 @@
       align-items: center;
     }
 
+    .required-star {
+      color: var(--primary-red);
+      margin-left: 2px;
+    }
+
     .input-wrapper {
       position: relative;
       display: flex;
@@ -390,12 +603,13 @@
       justify-content: center;
       pointer-events: none;
       transition: color var(--transition-fast);
+      z-index: 2;
     }
 
-    .form-input {
+    .form-input, .form-select {
       width: 100%;
       height: 50px;
-      padding: 0 46px 0 44px;
+      padding: 0 44px 0 44px;
       background-color: var(--off-white);
       border: 1.5px solid var(--border-medium);
       border-radius: var(--radius-md);
@@ -406,12 +620,21 @@
       transition: all var(--transition-fast);
     }
 
-    .form-input:hover {
-      border-color: #cbd5e1;
+    .form-select {
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 42px;
+    }
+
+    .form-input:hover, .form-select:hover {
+      border-color: var(--border-hover);
       background-color: #fdfdfd;
     }
 
-    .form-input:focus {
+    .form-input:focus, .form-select:focus {
       background-color: var(--pure-white);
       border-color: var(--primary-red);
       box-shadow: 0 0 0 4px var(--primary-red-glow);
@@ -422,7 +645,7 @@
       color: var(--primary-red);
     }
 
-    /* Botón para mostrar/ocultar contraseña */
+    /* Botón para alternar visibilidad de contraseña */
     .toggle-password {
       position: absolute;
       right: 14px;
@@ -433,9 +656,10 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 4px;
+      padding: 6px;
       border-radius: 6px;
       transition: color var(--transition-fast), background var(--transition-fast);
+      z-index: 2;
     }
 
     .toggle-password:hover {
@@ -454,7 +678,9 @@
       font-weight: 500;
     }
 
-    .form-group.has-error .form-input {
+    .form-group.has-error .form-input,
+    .form-group.has-error .form-select,
+    .form-group.has-error .file-dropzone {
       border-color: var(--danger-red);
       background-color: #fff1f2;
     }
@@ -463,11 +689,12 @@
       display: flex;
     }
 
-    .form-group.has-success .form-input {
+    .form-group.has-success .form-input,
+    .form-group.has-success .form-select {
       border-color: var(--success-green);
     }
 
-    /* Medidor de Fortaleza de Contraseña */
+    /* Medidor de fortaleza de contraseña */
     .password-strength-container {
       margin-top: 4px;
       display: flex;
@@ -505,7 +732,6 @@
       font-weight: 600;
     }
 
-    /* Indicador de coincidencia */
     .match-status {
       font-size: 0.78rem;
       font-weight: 500;
@@ -525,7 +751,223 @@
       color: var(--danger-red);
     }
 
-    /* Casilla de términos y condiciones */
+    /* ==========================================================================
+       CAMPOS EXCLUSIVOS DE MECÁNICOS (CON TRANSICIÓN FLUIDA)
+       ========================================================================== */
+    .mechanic-exclusive-section {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .mechanic-exclusive-section.hidden-section {
+      display: none;
+    }
+
+    /* Tarjetas de Selección de Acreditación */
+    .radio-card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 10px;
+      margin-top: 2px;
+    }
+
+    .radio-card {
+      position: relative;
+      cursor: pointer;
+      border: 1.5px solid var(--border-medium);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      background-color: var(--off-white);
+      transition: all var(--transition-fast);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .radio-card input {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .radio-card:hover {
+      border-color: var(--border-hover);
+      background-color: #fcfcfc;
+    }
+
+    .radio-card.active,
+    .radio-card:has(input:checked) {
+      border-color: var(--primary-red);
+      background-color: #fff1f2;
+      box-shadow: 0 0 0 2px var(--primary-red-glow);
+    }
+
+    .radio-card-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .radio-card-icon {
+      color: var(--primary-red);
+      display: flex;
+      align-items: center;
+    }
+
+    .radio-card-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .radio-card-desc {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      line-height: 1.3;
+    }
+
+    /* Dropzones para subida de archivos */
+    .file-dropzone {
+      border: 2px dashed var(--border-medium);
+      border-radius: var(--radius-md);
+      padding: 20px 16px;
+      background-color: var(--off-white);
+      text-align: center;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .file-dropzone:hover,
+    .file-dropzone.dragover {
+      border-color: var(--primary-red);
+      background-color: #fff1f2;
+      box-shadow: 0 0 0 4px var(--primary-red-glow);
+    }
+
+    .file-dropzone input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+      z-index: 3;
+    }
+
+    .dropzone-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--primary-red-light);
+      color: var(--primary-red);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform var(--transition-fast);
+    }
+
+    .file-dropzone:hover .dropzone-icon {
+      transform: scale(1.08);
+    }
+
+    .dropzone-text {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .dropzone-text span {
+      color: var(--primary-red);
+      text-decoration: underline;
+    }
+
+    .dropzone-hint {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .file-preview-card {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      background: var(--pure-white);
+      border: 1.5px solid var(--border-medium);
+      border-radius: var(--radius-md);
+      margin-top: 8px;
+    }
+
+    .file-preview-card.has-file {
+      display: flex;
+    }
+
+    .file-preview-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      overflow: hidden;
+    }
+
+    .file-type-icon {
+      width: 34px;
+      height: 34px;
+      background: var(--success-light);
+      color: var(--success-green);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .file-details {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .file-name {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 280px;
+    }
+
+    .file-size {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .btn-remove-file {
+      background: none;
+      border: none;
+      color: var(--text-light);
+      cursor: pointer;
+      padding: 6px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition-fast);
+    }
+
+    .btn-remove-file:hover {
+      background: #fee2e2;
+      color: var(--danger-red);
+    }
+
+    /* Términos y Condiciones */
     .terms-group {
       display: flex;
       align-items: flex-start;
@@ -607,12 +1049,12 @@
     /* Botón de Enviar */
     .btn-submit {
       width: 100%;
-      height: 52px;
+      height: 54px;
       background: linear-gradient(135deg, var(--primary-red) 0%, #be123c 100%);
       color: var(--pure-white);
       border: none;
       border-radius: var(--radius-md);
-      font-size: 1rem;
+      font-size: 1.02rem;
       font-weight: 700;
       font-family: inherit;
       cursor: pointer;
@@ -622,7 +1064,7 @@
       gap: 10px;
       box-shadow: var(--shadow-glow);
       transition: all var(--transition-normal);
-      margin-top: 0.75rem;
+      margin-top: 1rem;
       position: relative;
       overflow: hidden;
     }
@@ -641,7 +1083,7 @@
     .btn-submit:hover {
       background: linear-gradient(135deg, var(--red-accent) 0%, var(--primary-red) 100%);
       transform: translateY(-2px);
-      box-shadow: 0 14px 28px -6px rgba(225, 29, 72, 0.45);
+      box-shadow: var(--shadow-glow-elevated);
     }
 
     .btn-submit:hover::after {
@@ -654,16 +1096,15 @@
     }
 
     .btn-submit:disabled {
-      opacity: 0.7;
+      opacity: 0.75;
       cursor: not-allowed;
       transform: none;
     }
 
-    /* Spinner de Carga */
     .spinner {
       display: none;
-      width: 20px;
-      height: 20px;
+      width: 22px;
+      height: 22px;
       border: 2.5px solid rgba(255, 255, 255, 0.3);
       border-radius: 50%;
       border-top-color: var(--pure-white);
@@ -674,7 +1115,7 @@
       to { transform: rotate(360deg); }
     }
 
-    /* Pie del formulario / Enlace a Login */
+    /* Pie del formulario */
     .form-footer {
       text-align: center;
       margin-top: 1.75rem;
@@ -695,12 +1136,12 @@
       text-decoration: underline;
     }
 
-    /* Modal de Éxito */
+    /* Modal de Confirmación y Éxito */
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(15, 23, 42, 0.6);
-      backdrop-filter: blur(4px);
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(6px);
       display: none;
       align-items: center;
       justify-content: center;
@@ -718,9 +1159,9 @@
     .success-modal {
       background: var(--pure-white);
       width: 100%;
-      max-width: 440px;
+      max-width: 480px;
       border-radius: var(--radius-lg);
-      padding: 2.5rem 2rem;
+      padding: 2.75rem 2.25rem;
       text-align: center;
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
       border: 1px solid var(--border-light);
@@ -733,8 +1174,8 @@
     }
 
     .success-icon-wrap {
-      width: 72px;
-      height: 72px;
+      width: 76px;
+      height: 76px;
       background: var(--primary-red-light);
       border-radius: 50%;
       display: flex;
@@ -742,10 +1183,11 @@
       justify-content: center;
       margin: 0 auto 1.5rem;
       color: var(--primary-red);
+      box-shadow: 0 8px 20px var(--primary-red-glow);
     }
 
     .modal-title {
-      font-size: 1.5rem;
+      font-size: 1.6rem;
       font-weight: 800;
       color: var(--text-main);
       margin-bottom: 0.75rem;
@@ -754,8 +1196,48 @@
     .modal-desc {
       font-size: 0.95rem;
       color: var(--text-muted);
-      line-height: 1.5;
+      line-height: 1.55;
+      margin-bottom: 1.5rem;
+    }
+
+    .verification-steps-card {
+      background: var(--off-white);
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      text-align: left;
       margin-bottom: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .verif-step-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.85rem;
+      color: var(--text-main);
+    }
+
+    .verif-step-badge {
+      width: 22px;
+      height: 22px;
+      background: var(--primary-red);
+      color: var(--pure-white);
+      border-radius: 50%;
+      font-size: 0.75rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .modal-btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
 
     .modal-btn {
@@ -773,6 +1255,7 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      box-shadow: var(--shadow-glow);
     }
 
     .modal-btn:hover {
@@ -783,92 +1266,123 @@
 <body>
 
   <main class="app-container">
-    <!-- PANEL HERO IZQUIERDO (ENFOCADO EN ROJO Y BLANCO) -->
+    
+    <!-- ==========================================================================
+         PANEL HERO IZQUIERDO (DINÁMICO SEGÚN ROL SELECCIONADO)
+         ========================================================================== -->
     <aside class="hero-side">
       <div class="hero-pattern"></div>
       <div class="hero-decor-circle-1"></div>
       <div class="hero-decor-circle-2"></div>
 
+      <!-- Logotipo Oficial Amari con Imagen -->
       <header class="hero-header">
-        <a href="home.html" class="brand-logo-white" id="brand-link-hero" aria-label="Ir a Inicio de Amari">
-          <div class="logo-badge-white">A</div>
-          <span>Amari</span>
+        <a href="home.html" class="brand-logo-hero" id="brand-link-hero" aria-label="Ir a Inicio de Amari">
+          <div class="logo-image-wrap">
+            <img src="assets/logoamari.png" alt="Logotipo Oficial de AMARI">
+          </div>
+          <div class="brand-logo-text-group">
+            <span class="brand-logo-title">AMARI</span>
+            <span class="brand-logo-tagline" id="hero-brand-tagline">Plataforma Integral</span>
+          </div>
         </a>
       </header>
 
-      <section class="hero-content">
-        <div class="hero-tag">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Contenido Hero Dinámico para Usuario o Mecánico -->
+      <section class="hero-content" id="hero-content-box">
+        <div class="hero-tag" id="hero-badge">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
           </svg>
-          Plataforma Financiera Inteligente
+          <span id="hero-tag-text">Plataforma Financiera & Auxilio Vial</span>
         </div>
-        <h2 class="hero-title">El poder de tus finanzas en <span>un solo lugar</span></h2>
-        <p class="hero-description">
-          Abre tu cuenta hoy mismo y disfruta de transferencias instantáneas, seguridad biométrica de nivel bancario y control total en tiempo real.
+
+        <h2 class="hero-title" id="hero-title">El poder de tu tranquilidad en <span>un solo lugar</span></h2>
+
+        <p class="hero-description" id="hero-description">
+          Abre tu cuenta hoy mismo y disfruta de asistencia vial en tiempo real, transferencias instantáneas, seguridad de nivel bancario y control total de tus servicios.
         </p>
 
-        <div class="features-list">
-          <div class="feature-item">
-            <div class="feature-icon-box">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-              </svg>
-            </div>
-            <span class="feature-text">Protección de datos cifrada y garantizada</span>
-          </div>
-
-          <div class="feature-item">
-            <div class="feature-icon-box">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-              </svg>
-            </div>
-            <span class="feature-text">Operaciones bancarias al instante sin comisiones ocultas</span>
-          </div>
-
-          <div class="feature-item">
-            <div class="feature-icon-box">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="2" y="5" width="20" height="14" rx="2"></rect>
-                <line x1="2" y1="10" x2="22" y2="10"></line>
-              </svg>
-            </div>
-            <span class="feature-text">Tarjeta virtual activa desde el primer minuto</span>
-          </div>
+        <!-- Lista de Beneficios Dinámica -->
+        <div class="features-list" id="hero-features-list">
+          <!-- Renderizado dinámico desde JavaScript según el tab -->
         </div>
       </section>
 
+      <!-- Pie de página Hero -->
       <footer class="hero-footer">
-        <span>© 2026 Amari Inc. Todos los derechos reservados.</span>
-        <span>Soporte 24/7 en español</span>
+        <span id="hero-footer-copy">© 2026 Amari Inc. • Plataforma Conectada</span>
+        <span id="hero-footer-status">Soporte 24/7 en español</span>
       </footer>
     </aside>
 
-    <!-- PANEL DERECHO: FORMULARIO DE CREAR CUENTA -->
+    <!-- ==========================================================================
+         PANEL DERECHO: FORMULARIO CON SELECTOR SUPERIOR DE ROL
+         ========================================================================== -->
     <section class="form-side">
       <div class="form-wrapper">
-        
-        <!-- Logotipo móvil -->
+
+        <!-- Logotipo móvil con imagen -->
         <a href="home.html" class="brand-mobile" id="brand-link-mobile" aria-label="Ir a Inicio de Amari">
-          <div class="brand-badge-red">A</div>
-          <span>Amari</span>
+          <div class="brand-mobile-logo-wrap">
+            <img src="assets/logoamari.png" alt="Logotipo AMARI">
+          </div>
+          <div class="brand-mobile-text-group">
+            <span class="brand-mobile-title">AMARI</span>
+            <span class="brand-mobile-subtitle" id="mobile-subtitle-tag">Registro de Cuenta</span>
+          </div>
         </a>
+
+        <!-- ======================================================================
+             SELECTOR SUPERIOR: ELIGE ENTRE USUARIO O MECÁNICO
+             ====================================================================== -->
+        <div class="top-role-selector-container">
+          <span class="top-role-label">Selecciona el tipo de cuenta:</span>
+          <div class="top-role-switcher" role="tablist" aria-label="Tipo de registro">
+            
+            <button type="button" class="role-tab-btn active" id="tab-btn-user" role="tab" aria-selected="true" aria-controls="form-content">
+              <span class="role-tab-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </span>
+              <span>Usuario / Conductor</span>
+              <span class="role-tab-badge">Cliente</span>
+            </button>
+
+            <button type="button" class="role-tab-btn" id="tab-btn-mech" role="tab" aria-selected="false" aria-controls="form-content">
+              <span class="role-tab-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+                </svg>
+              </span>
+              <span>Mecánico Especialista</span>
+              <span class="role-tab-badge">Pro</span>
+            </button>
+
+          </div>
+        </div>
 
         <!-- Encabezado del Formulario -->
         <header class="form-header">
-          <span class="badge-sub">Registro Seguro</span>
-          <h1 class="form-title">Crear una cuenta</h1>
-          <p class="form-subtitle">Ingresa tus datos personales para comenzar con Amari.</p>
+          <span class="badge-sub" id="form-badge-text">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+            <span id="badge-label">Registro de Conductor</span>
+          </span>
+          <h1 class="form-title" id="form-title">Crear una cuenta</h1>
+          <p class="form-subtitle" id="form-subtitle">Ingresa tus datos personales para acceder a todos los servicios de Amari.</p>
         </header>
 
-        <!-- Formulario -->
+        <!-- Formulario Principal -->
         <form id="registro-form" class="register-form" novalidate>
 
-          <!-- Campo: Nombre -->
+          <!-- SECCIÓN: DATOS DE ACCESO Y CONTACTO -->
           <div class="form-group" id="group-nombre">
             <label for="nombre" class="form-label">
-              <span>Nombre completo</span>
+              <span>Nombre completo <span class="required-star">*</span></span>
             </label>
             <div class="input-wrapper">
               <div class="input-icon">
@@ -882,7 +1396,7 @@
                 id="nombre" 
                 name="nombre" 
                 class="form-input" 
-                placeholder="Ej. Juan Pérez" 
+                placeholder="Ej. Juan Roberto Pérez" 
                 required 
                 autocomplete="name"
               >
@@ -893,38 +1407,67 @@
             </div>
           </div>
 
-          <!-- Campo: Correo Electrónico -->
-          <div class="form-group" id="group-email">
-            <label for="correo" class="form-label">
-              <span>Correo electrónico</span>
-            </label>
-            <div class="input-wrapper">
-              <div class="input-icon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                  <polyline points="22,6 12,13 2,6"></polyline>
-                </svg>
+          <!-- Correo y Teléfono (el teléfono se muestra o enfoca según rol) -->
+          <div class="form-grid-2">
+            <!-- Correo Electrónico -->
+            <div class="form-group" id="group-email">
+              <label for="correo" class="form-label">
+                <span>Correo electrónico <span class="required-star">*</span></span>
+              </label>
+              <div class="input-wrapper">
+                <div class="input-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                    <polyline points="22,6 12,13 2,6"></polyline>
+                  </svg>
+                </div>
+                <input 
+                  type="email" 
+                  id="correo" 
+                  name="correo" 
+                  class="form-input" 
+                  placeholder="ejemplo@correo.com" 
+                  required 
+                  autocomplete="email"
+                >
               </div>
-              <input 
-                type="email" 
-                id="correo" 
-                name="correo" 
-                class="form-input" 
-                placeholder="ejemplo@correo.com" 
-                required 
-                autocomplete="email"
-              >
+              <div class="field-error" id="error-correo">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                <span>Ingresa una dirección de correo válida.</span>
+              </div>
             </div>
-            <div class="field-error" id="error-correo">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-              <span>Ingresa una dirección de correo electrónico válida.</span>
+
+            <!-- Teléfono (Requerido para mecánicos, opcional/activo para contacto) -->
+            <div class="form-group" id="group-telefono">
+              <label for="telefono" class="form-label">
+                <span id="label-telefono">Teléfono celular <span class="required-star" id="telefono-star">*</span></span>
+              </label>
+              <div class="input-wrapper">
+                <div class="input-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                  </svg>
+                </div>
+                <input 
+                  type="tel" 
+                  id="telefono" 
+                  name="telefono" 
+                  class="form-input" 
+                  placeholder="Ej. +52 55 1234 5678" 
+                  autocomplete="tel"
+                >
+              </div>
+              <div class="field-error" id="error-telefono">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                <span>Ingresa un número telefónico de contacto válido (mínimo 8 dígitos).</span>
+              </div>
             </div>
           </div>
 
-          <!-- Campo: Contraseña -->
+          <!-- Contraseña -->
           <div class="form-group" id="group-password">
             <label for="contrasena" class="form-label">
-              <span>Contraseña</span>
+              <span>Contraseña <span class="required-star">*</span></span>
             </label>
             <div class="input-wrapper">
               <div class="input-icon">
@@ -950,7 +1493,7 @@
               </button>
             </div>
 
-            <!-- Medidor de seguridad -->
+            <!-- Medidor de fortaleza de contraseña -->
             <div class="password-strength-container" id="strength-container" style="display: none;">
               <div class="strength-meter">
                 <div class="strength-bar" id="bar-1"></div>
@@ -970,10 +1513,10 @@
             </div>
           </div>
 
-          <!-- Campo: Confirmar Contraseña -->
+          <!-- Confirmar Contraseña -->
           <div class="form-group" id="group-confirm-password">
             <label for="confirmar-contrasena" class="form-label">
-              <span>Confirmar contraseña</span>
+              <span>Confirmar contraseña <span class="required-star">*</span></span>
             </label>
             <div class="input-wrapper">
               <div class="input-icon">
@@ -1007,7 +1550,291 @@
             </div>
           </div>
 
-          <!-- Términos y Condiciones -->
+          <!-- ==================================================================
+               SECCIÓN ESPECÍFICA DE MECÁNICO: IDENTIFICACIÓN Y ACREDITACIÓN
+               ================================================================== -->
+          <div class="mechanic-exclusive-section hidden-section" id="mechanic-fields">
+
+            <!-- SECCIÓN 2: IDENTIFICACIÓN OFICIAL -->
+            <div class="form-section-title">
+              <span class="section-number">2</span>
+              <span>Verificación de Identidad Oficial</span>
+            </div>
+
+            <div class="form-grid-2">
+              <!-- Tipo de Documento -->
+              <div class="form-group" id="group-id-type">
+                <label for="tipo-id" class="form-label">
+                  <span>Tipo de documento <span class="required-star">*</span></span>
+                </label>
+                <div class="input-wrapper">
+                  <div class="input-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="4" width="18" height="16" rx="3"></rect>
+                      <line x1="7" y1="8" x2="17" y2="8"></line>
+                      <line x1="7" y1="12" x2="13" y2="12"></line>
+                    </svg>
+                  </div>
+                  <select id="tipo-id" name="tipo-id" class="form-select">
+                    <option value="" disabled selected>Selecciona tu documento</option>
+                    <option value="ine">Cédula de Identidad / INE / DNI</option>
+                    <option value="pasaporte">Pasaporte Oficial</option>
+                    <option value="licencia">Licencia de Conducir Vigente</option>
+                  </select>
+                </div>
+                <div class="field-error" id="error-tipo-id">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                  <span>Selecciona el tipo de identificación oficial.</span>
+                </div>
+              </div>
+
+              <!-- Número de Identificación -->
+              <div class="form-group" id="group-id-number">
+                <label for="numero-id" class="form-label">
+                  <span>Número de documento <span class="required-star">*</span></span>
+                </label>
+                <div class="input-wrapper">
+                  <div class="input-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <line x1="4" y1="9" x2="20" y2="9"></line>
+                      <line x1="4" y1="15" x2="20" y2="15"></line>
+                      <line x1="10" y1="3" x2="8" y2="21"></line>
+                      <line x1="16" y1="3" x2="14" y2="21"></line>
+                    </svg>
+                  </div>
+                  <input 
+                    type="text" 
+                    id="numero-id" 
+                    name="numero-id" 
+                    class="form-input" 
+                    placeholder="Ej. 1234567890"
+                  >
+                </div>
+                <div class="field-error" id="error-numero-id">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                  <span>Ingresa un número de documento válido.</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Subida de Archivo: ID Oficial -->
+            <div class="form-group" id="group-id-file">
+              <label class="form-label">
+                <span>Adjunta tu identificación oficial (Frente y Reverso) <span class="required-star">*</span></span>
+              </label>
+              
+              <div class="file-dropzone" id="dropzone-id">
+                <input type="file" id="archivo-id" name="archivo-id" accept=".pdf,.png,.jpg,.jpeg">
+                <div class="dropzone-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                  </svg>
+                </div>
+                <div class="dropzone-text">
+                  Arrastra tu documento aquí o <span>explora en tu equipo</span>
+                </div>
+                <div class="dropzone-hint">
+                  Formatos permitidos: PDF, JPG, PNG (Máx. 5 MB)
+                </div>
+              </div>
+
+              <!-- Vista previa de archivo ID -->
+              <div class="file-preview-card" id="preview-id-card">
+                <div class="file-preview-info">
+                  <div class="file-type-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                      <polyline points="14 2 14 8 20 8"></polyline>
+                    </svg>
+                  </div>
+                  <div class="file-details">
+                    <span class="file-name" id="preview-id-name">documento_identidad.pdf</span>
+                    <span class="file-size" id="preview-id-size">1.8 MB • Verificado</span>
+                  </div>
+                </div>
+                <button type="button" class="btn-remove-file" id="btn-remove-id" aria-label="Eliminar documento de identidad">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </button>
+              </div>
+
+              <div class="field-error" id="error-archivo-id">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                <span>Debes adjuntar el archivo de tu identificación oficial.</span>
+              </div>
+            </div>
+
+            <!-- SECCIÓN 3: COMPROBANTE DE OFICIO MECÁNICO -->
+            <div class="form-section-title">
+              <span class="section-number">3</span>
+              <span>Comprobante de Oficio o Titulación Mecánica</span>
+            </div>
+
+            <!-- Selector de tipo de comprobante (Certificación / Título / Trabajo) -->
+            <div class="form-group" id="group-proof-type">
+              <label class="form-label">
+                <span>Tipo de acreditación que presentarás <span class="required-star">*</span></span>
+              </label>
+              <div class="radio-card-grid">
+                
+                <label class="radio-card active" id="card-cert">
+                  <input type="radio" name="tipo_acreditacion" value="certificacion" checked>
+                  <div class="radio-card-header">
+                    <div class="radio-card-icon">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="8" r="7"></circle>
+                        <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                      </svg>
+                    </div>
+                    <span class="radio-card-title">Certificación Técnica</span>
+                  </div>
+                  <span class="radio-card-desc">Certificado técnico o aval laboral (ASE, CONOCER, etc.).</span>
+                </label>
+
+                <label class="radio-card" id="card-titulo">
+                  <input type="radio" name="tipo_acreditacion" value="titulo">
+                  <div class="radio-card-header">
+                    <div class="radio-card-icon">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                        <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+                      </svg>
+                    </div>
+                    <span class="radio-card-title">Título Académico</span>
+                  </div>
+                  <span class="radio-card-desc">Título universitario o técnico en mecánica / ingeniería automotriz.</span>
+                </label>
+
+                <label class="radio-card" id="card-constancia">
+                  <input type="radio" name="tipo_acreditacion" value="trabajo">
+                  <div class="radio-card-header">
+                    <div class="radio-card-icon">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                      </svg>
+                    </div>
+                    <span class="radio-card-title">Constancia Laboral</span>
+                  </div>
+                  <span class="radio-card-desc">Carta o constancia laboral emitida por taller o concesionaria.</span>
+                </label>
+
+              </div>
+            </div>
+
+            <!-- Especialidad y Experiencia en Rejilla -->
+            <div class="form-grid-2">
+              <div class="form-group" id="group-specialty">
+                <label for="especialidad" class="form-label">
+                  <span>Especialidad principal <span class="required-star">*</span></span>
+                </label>
+                <div class="input-wrapper">
+                  <div class="input-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                    </svg>
+                  </div>
+                  <select id="especialidad" name="especialidad" class="form-select">
+                    <option value="" disabled selected>Elige tu especialidad</option>
+                    <option value="mecanica_general">Mecánica General y Motores</option>
+                    <option value="electricidad_obd">Electricidad y Diagnóstico OBD</option>
+                    <option value="frenos_suspension">Frenos, Dirección y Suspensión</option>
+                    <option value="transmisiones">Transmisiones Manuales / Automáticas</option>
+                    <option value="diesel">Mecánica Diésel y Utilitarios</option>
+                    <option value="hibridos_electricos">Vehículos Híbridos y Eléctricos</option>
+                  </select>
+                </div>
+                <div class="field-error" id="error-especialidad">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                  <span>Por favor selecciona tu especialidad principal.</span>
+                </div>
+              </div>
+
+              <div class="form-group" id="group-experience">
+                <label for="experiencia" class="form-label">
+                  <span>Años de experiencia <span class="required-star">*</span></span>
+                </label>
+                <div class="input-wrapper">
+                  <div class="input-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <polyline points="12 6 12 12 14 14"></polyline>
+                    </svg>
+                  </div>
+                  <select id="experiencia" name="experiencia" class="form-select">
+                    <option value="" disabled selected>Experiencia comprobable</option>
+                    <option value="1-2">1 a 2 años de experiencia</option>
+                    <option value="3-5">3 a 5 años de experiencia</option>
+                    <option value="6-10">6 a 10 años de experiencia</option>
+                    <option value="mas-10">Más de 10 años de trayectoria</option>
+                  </select>
+                </div>
+                <div class="field-error" id="error-experiencia">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                  <span>Indica tus años de experiencia comprobable.</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Subida de Archivo: Acreditación de Mecánico -->
+            <div class="form-group" id="group-proof-file">
+              <label class="form-label">
+                <span id="proof-file-label">Subir archivo de Certificación Técnica <span class="required-star">*</span></span>
+              </label>
+
+              <div class="file-dropzone" id="dropzone-proof">
+                <input type="file" id="archivo-comprobante" name="archivo-comprobante" accept=".pdf,.png,.jpg,.jpeg">
+                <div class="dropzone-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                  </svg>
+                </div>
+                <div class="dropzone-text">
+                  Arrastra tu comprobante aquí o <span>haz clic para examinar</span>
+                </div>
+                <div class="dropzone-hint" id="proof-dropzone-hint">
+                  Certificado oficial, Título universitario o Carta de Taller (PDF, JPG, PNG - Máx. 10 MB)
+                </div>
+              </div>
+
+              <!-- Vista previa comprobante -->
+              <div class="file-preview-card" id="preview-proof-card">
+                <div class="file-preview-info">
+                  <div class="file-type-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  </div>
+                  <div class="file-details">
+                    <span class="file-name" id="preview-proof-name">acreditacion_mecanico.pdf</span>
+                    <span class="file-size" id="preview-proof-size">2.4 MB • Listo para validación</span>
+                  </div>
+                </div>
+                <button type="button" class="btn-remove-file" id="btn-remove-proof" aria-label="Eliminar comprobante">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </button>
+              </div>
+
+              <div class="field-error" id="error-archivo-comprobante">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                <span>Es obligatorio adjuntar el comprobante que acredite tu oficio o titulación como mecánico.</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- TÉRMINOS Y CONDICIONES (DINÁMICO) -->
           <div class="terms-group">
             <div class="custom-checkbox">
               <input type="checkbox" id="terminos" name="terminos" required>
@@ -1017,18 +1844,18 @@
                 </svg>
               </div>
             </div>
-            <label for="terminos" class="terms-text">
+            <label for="terminos" class="terms-text" id="terms-text-label">
               Acepto los <a href="#" class="terms-link">Términos de Servicio</a> y la <a href="#" class="terms-link">Política de Privacidad</a> de Amari.
             </label>
           </div>
-          <div class="field-error" id="error-terminos" style="margin-top: -8px;">
+          <div class="field-error" id="error-terminos" style="margin-top: -6px;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
             <span>Debes aceptar los términos y condiciones para continuar.</span>
           </div>
 
           <!-- Botón de Registro -->
           <button type="submit" id="btn-submit" class="btn-submit">
-            <span class="btn-text">Crear Cuenta</span>
+            <span class="btn-text" id="submit-btn-text">Crear Cuenta de Usuario</span>
             <div class="spinner" id="btn-spinner"></div>
             <svg id="btn-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -1038,9 +1865,9 @@
 
         </form>
 
-        <!-- Pie: Ya tengo una cuenta -->
+        <!-- Pie de Formulario: Ya tengo una cuenta -->
         <footer class="form-footer">
-          <span>¿Ya tienes una cuenta?</span>
+          <span>¿Ya tienes una cuenta registrada?</span>
           <a href="home.html" id="link-login">Inicia sesión aquí</a>
         </footer>
 
@@ -1048,35 +1875,238 @@
     </section>
   </main>
 
-  <!-- MODAL DE ÉXITO TRAS EL REGISTRO -->
+  <!-- ==========================================================================
+       MODAL DE CONFIRMACIÓN / ÉXITO TRAS EL REGISTRO
+       ========================================================================== -->
   <div class="modal-backdrop" id="modal-exito" role="dialog" aria-modal="true" aria-labelledby="modal-titulo">
     <div class="success-modal">
       <div class="success-icon-wrap">
-        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
           <polyline points="22 4 12 14.01 9 11.01"></polyline>
         </svg>
       </div>
+
       <h2 class="modal-title" id="modal-titulo">¡Bienvenido a Amari!</h2>
+      
       <p class="modal-desc" id="modal-mensaje">
-        Tu cuenta ha sido creada exitosamente. Te hemos enviado un enlace de confirmación a tu correo electrónico.
+        Tu registro ha sido completado exitosamente. Te hemos enviado un correo de bienvenida.
       </p>
-      <a href="banking.html" class="modal-btn" id="modal-continue-btn">
-        Ir a mi Panel Bancario
-      </a>
+
+      <!-- Pasos adicionales para mecánicos (solo visibles en modo mecánico) -->
+      <div class="verification-steps-card" id="modal-mechanic-steps" style="display: none;">
+        <div class="verif-step-row">
+          <span class="verif-step-badge">1</span>
+          <span><strong>Revisión documental:</strong> Nuestro equipo técnico coteja tu identidad y acreditación (en 12 a 24 horas).</span>
+        </div>
+        <div class="verif-step-row">
+          <span class="verif-step-badge">2</span>
+          <span><strong>Activación de cuenta:</strong> Recibirás un correo con tus credenciales y acceso al panel de solicitudes de auxilio.</span>
+        </div>
+      </div>
+
+      <div class="modal-btn-group">
+        <a href="home.html" class="modal-btn" id="modal-continue-btn">
+          Ir a la Plataforma Amari
+        </a>
+      </div>
     </div>
   </div>
 
-  <!-- LÓGICA JAVASCRIPT DEL FORMULARIO -->
+  <!-- APLICACIÓN DINÁMICA DEL TEMA OFICIAL AMARI -->
   <script type="module">
     import amariTheme from './assets/theme.js';
     amariTheme.applyToDOM();
   </script>
+
+  <!-- LÓGICA DE CONTROL, TOGGLE DE ROL Y VALIDACIONES -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      // Estado actual: 'user' o 'mechanic'
+      let currentRole = 'user';
+
+      // Selector de pestañas superiores
+      const tabBtnUser = document.getElementById('tab-btn-user');
+      const tabBtnMech = document.getElementById('tab-btn-mech');
+      const mechanicFields = document.getElementById('mechanic-fields');
+
+      // Elementos Hero Dinámicos
+      const heroBrandTagline = document.getElementById('hero-brand-tagline');
+      const heroTagText = document.getElementById('hero-tag-text');
+      const heroTitle = document.getElementById('hero-title');
+      const heroDescription = document.getElementById('hero-description');
+      const heroFeaturesList = document.getElementById('hero-features-list');
+      const heroFooterCopy = document.getElementById('hero-footer-copy');
+
+      // Elementos de Formulario Dinámicos
+      const mobileSubtitleTag = document.getElementById('mobile-subtitle-tag');
+      const badgeLabel = document.getElementById('badge-label');
+      const formTitle = document.getElementById('form-title');
+      const formSubtitle = document.getElementById('form-subtitle');
+      const telefonoStar = document.getElementById('telefono-star');
+      const termsTextLabel = document.getElementById('terms-text-label');
+      const submitBtnText = document.getElementById('submit-btn-text');
+      const modalMechanicSteps = document.getElementById('modal-mechanic-steps');
+
+      // Contenidos específicos para cada rol
+      const roleHeroConfig = {
+        user: {
+          tagline: 'Plataforma Integral',
+          tag: 'Plataforma Financiera & Auxilio Vial',
+          title: 'El poder de tu tranquilidad en <span>un solo lugar</span>',
+          description: 'Abre tu cuenta hoy mismo y disfruta de asistencia vial en tiempo real, transferencias instantáneas, seguridad de nivel bancario y control total de tus servicios.',
+          footerCopy: '© 2026 Amari Inc. • Plataforma Conectada',
+          features: [
+            {
+              icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>`,
+              title: 'Protección y seguridad garantizada',
+              sub: 'Cifrado de datos de alta seguridad en todas tus transacciones y solicitudes.'
+            },
+            {
+              icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>`,
+              title: 'Auxilio vial geolocalizado en minutos',
+              sub: 'Solicita mecánicos certificados con solo un toque desde tu posición exacta.'
+            },
+            {
+              icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>`,
+              title: 'Tarjeta virtual y pagos sin comisiones',
+              sub: 'Paga únicamente por el servicio recibido sin intermediarios ni costos ocultos.'
+            }
+          ]
+        },
+        mechanic: {
+          tagline: 'Red de Mecánicos Pro',
+          tag: 'Comunidad de Especialistas Automotrices',
+          title: 'Monetiza tu experiencia mecánica con <span>Amari</span>',
+          description: 'Únete a nuestra plataforma integral. Conecta con miles de conductores que requieren diagnóstico, auxilio vial y reparaciones mecánicas en tiempo real.',
+          footerCopy: '© 2026 Amari Inc. • Red de Especialistas',
+          features: [
+            {
+              icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><polygon points="12 6 12 12 16 14"></polygon></svg>`,
+              title: 'Solicitudes cercanas en tiempo real',
+              sub: 'Recibe alertas de averías viales geolocalizadas cerca de tu taller o posición.'
+            },
+            {
+              icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>`,
+              title: 'Pagos 100% seguros y garantizados',
+              sub: 'Cobros automáticos a través de Amari Banking directo a tu cuenta bancaria.'
+            },
+            {
+              icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>`,
+              title: 'Insignia de Mecánico Verificado',
+              sub: 'Gana reputación y confianza de clientes con tu titulación y certificaciones avaladas.'
+            }
+          ]
+        }
+      };
+
+      // Función para renderizar lista de features en Hero
+      function renderHeroFeatures(features) {
+        heroFeaturesList.innerHTML = features.map(feat => `
+          <div class="feature-item">
+            <div class="feature-icon-box">
+              ${feat.icon}
+            </div>
+            <div class="feature-texts">
+              <span class="feature-title">${feat.title}</span>
+              <span class="feature-sub">${feat.sub}</span>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // Función para cambiar de rol (Usuario vs Mecánico)
+      function setRole(role) {
+        currentRole = role;
+
+        if (role === 'user') {
+          tabBtnUser.classList.add('active');
+          tabBtnUser.setAttribute('aria-selected', 'true');
+          tabBtnMech.classList.remove('active');
+          tabBtnMech.setAttribute('aria-selected', 'false');
+
+          // Ocultar sección de mecánicos
+          mechanicFields.classList.add('hidden-section');
+
+          // Textos del formulario para usuario
+          badgeLabel.textContent = 'Registro de Conductor';
+          formTitle.textContent = 'Crear una cuenta';
+          formSubtitle.textContent = 'Ingresa tus datos personales para acceder a todos los servicios de Amari.';
+          mobileSubtitleTag.textContent = 'Registro de Conductor';
+          telefonoStar.style.display = 'none';
+          termsTextLabel.innerHTML = 'Acepto los <a href="#" class="terms-link">Términos de Servicio</a> y la <a href="#" class="terms-link">Política de Privacidad</a> de Amari.';
+          submitBtnText.textContent = 'Crear Cuenta de Usuario';
+
+          // Actualizar Hero
+          const config = roleHeroConfig.user;
+          heroBrandTagline.textContent = config.tagline;
+          heroTagText.textContent = config.tag;
+          heroTitle.innerHTML = config.title;
+          heroDescription.textContent = config.description;
+          heroFooterCopy.textContent = config.footerCopy;
+          renderHeroFeatures(config.features);
+
+          // Limpiar errores específicos de mecánico si existían
+          ['group-id-type', 'group-id-number', 'group-id-file', 'group-specialty', 'group-experience', 'group-proof-file', 'group-telefono'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.classList.remove('has-error');
+          });
+
+          // Actualizar URL hash de forma limpia
+          history.replaceState(null, null, '#usuario');
+        } else {
+          tabBtnMech.classList.add('active');
+          tabBtnMech.setAttribute('aria-selected', 'true');
+          tabBtnUser.classList.remove('active');
+          tabBtnUser.setAttribute('aria-selected', 'false');
+
+          // Mostrar sección de mecánicos
+          mechanicFields.classList.remove('hidden-section');
+
+          // Textos del formulario para mecánico
+          badgeLabel.textContent = 'Alta de Especialista Mecánico';
+          formTitle.textContent = 'Registro de Mecánico';
+          formSubtitle.textContent = 'Ingresa tus datos personales, verificación de identidad y comprobante de oficio para unirte a la red.';
+          mobileSubtitleTag.textContent = 'Mecánicos Pro';
+          telefonoStar.style.display = 'inline';
+          termsTextLabel.innerHTML = 'Acepto los <a href="#" class="terms-link">Términos para Especialistas Mecánicos</a>, el <a href="#" class="terms-link">Código de Seguridad</a> y autorizo la verificación de mis documentos en Amari.';
+          submitBtnText.textContent = 'Solicitar Registro de Mecánico';
+
+          // Actualizar Hero
+          const config = roleHeroConfig.mechanic;
+          heroBrandTagline.textContent = config.tagline;
+          heroTagText.textContent = config.tag;
+          heroTitle.innerHTML = config.title;
+          heroDescription.textContent = config.description;
+          heroFooterCopy.textContent = config.footerCopy;
+          renderHeroFeatures(config.features);
+
+          history.replaceState(null, null, '#mecanico');
+        }
+      }
+
+      // Event Listeners para los Tabs
+      tabBtnUser.addEventListener('click', () => setRole('user'));
+      tabBtnMech.addEventListener('click', () => setRole('mechanic'));
+
+      // Detección automática por URL hash o query string
+      const hash = window.location.hash.toLowerCase();
+      const urlParams = new URLSearchParams(window.location.search);
+      const roleParam = urlParams.get('role') || urlParams.get('tipo');
+
+      if (hash === '#mecanico' || hash === '#mech' || hash === '#mechanic' || roleParam === 'mech' || roleParam === 'mecanico') {
+        setRole('mechanic');
+      } else {
+        setRole('user');
+      }
+
+      // ======================================================================
+      // ELEMENTOS Y EVENTOS COMUNES DEL FORMULARIO
+      // ======================================================================
       const form = document.getElementById('registro-form');
       const nombreInput = document.getElementById('nombre');
       const correoInput = document.getElementById('correo');
+      const telefonoInput = document.getElementById('telefono');
       const passwordInput = document.getElementById('contrasena');
       const confirmPasswordInput = document.getElementById('confirmar-contrasena');
       const terminosInput = document.getElementById('terminos');
@@ -1084,31 +2114,20 @@
       const togglePwdBtn = document.getElementById('toggle-pwd-btn');
       const toggleConfirmPwdBtn = document.getElementById('toggle-confirm-pwd-btn');
 
-      const strengthContainer = document.getElementById('strength-container');
-      const strengthLabel = document.getElementById('strength-label');
-      const bars = [
-        document.getElementById('bar-1'),
-        document.getElementById('bar-2'),
-        document.getElementById('bar-3'),
-        document.getElementById('bar-4')
-      ];
-
-      const matchStatus = document.getElementById('match-status');
       const submitBtn = document.getElementById('btn-submit');
-      const btnText = submitBtn.querySelector('.btn-text');
       const btnSpinner = document.getElementById('btn-spinner');
       const btnArrow = document.getElementById('btn-arrow');
 
       const modalExito = document.getElementById('modal-exito');
+      const modalTitulo = document.getElementById('modal-titulo');
       const modalMensaje = document.getElementById('modal-mensaje');
 
-      // Alternar visualización de contraseñas
+      // Toggle contraseñas
       function setupPasswordToggle(btn, input) {
         btn.addEventListener('click', () => {
           const isPassword = input.type === 'password';
           input.type = isPassword ? 'text' : 'password';
 
-          // Cambiar ícono SVG
           btn.innerHTML = isPassword ? `
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
@@ -1116,7 +2135,7 @@
             </svg>
           ` : `
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path>
               <circle cx="12" cy="12" r="3"></circle>
             </svg>
           `;
@@ -1127,6 +2146,16 @@
       setupPasswordToggle(toggleConfirmPwdBtn, confirmPasswordInput);
 
       // Evaluación de seguridad de la contraseña
+      const strengthContainer = document.getElementById('strength-container');
+      const strengthLabel = document.getElementById('strength-label');
+      const bars = [
+        document.getElementById('bar-1'),
+        document.getElementById('bar-2'),
+        document.getElementById('bar-3'),
+        document.getElementById('bar-4')
+      ];
+      const matchStatus = document.getElementById('match-status');
+
       function evaluatePasswordStrength(pass) {
         let score = 0;
         if (!pass) return 0;
@@ -1143,9 +2172,7 @@
           strengthContainer.style.display = 'flex';
           const score = evaluatePasswordStrength(pass);
 
-          // Resetear colores
           bars.forEach(b => b.style.backgroundColor = '#e2e8f0');
-
           const colors = ['#e11d48', '#f59e0b', '#3b82f6', '#10b981'];
           const labels = ['Muy débil', 'Débil', 'Aceptable', '¡Muy segura!'];
 
@@ -1158,11 +2185,9 @@
         } else {
           strengthContainer.style.display = 'none';
         }
-
         checkPasswordMatch();
       });
 
-      // Verificación de coincidencia de contraseñas
       function checkPasswordMatch() {
         const pass = passwordInput.value;
         const confirm = confirmPasswordInput.value;
@@ -1192,7 +2217,127 @@
 
       confirmPasswordInput.addEventListener('input', checkPasswordMatch);
 
-      // Validaciones individuales
+      // ======================================================================
+      // CONTROL DE CAMPOS Y ARCHIVOS DE MECÁNICOS
+      // ======================================================================
+      const tipoIdSelect = document.getElementById('tipo-id');
+      const numeroIdInput = document.getElementById('numero-id');
+      const dropzoneId = document.getElementById('dropzone-id');
+      const archivoIdInput = document.getElementById('archivo-id');
+      const previewIdCard = document.getElementById('preview-id-card');
+      const previewIdName = document.getElementById('preview-id-name');
+      const previewIdSize = document.getElementById('preview-id-size');
+      const btnRemoveId = document.getElementById('btn-remove-id');
+
+      const radioCards = document.querySelectorAll('.radio-card');
+      const radioInputs = document.querySelectorAll('input[name="tipo_acreditacion"]');
+      const especialidadSelect = document.getElementById('especialidad');
+      const experienciaSelect = document.getElementById('experiencia');
+      const proofFileLabel = document.getElementById('proof-file-label');
+      const dropzoneProof = document.getElementById('dropzone-proof');
+      const archivoComprobanteInput = document.getElementById('archivo-comprobante');
+      const previewProofCard = document.getElementById('preview-proof-card');
+      const previewProofName = document.getElementById('preview-proof-name');
+      const previewProofSize = document.getElementById('preview-proof-size');
+      const btnRemoveProof = document.getElementById('btn-remove-proof');
+
+      radioInputs.forEach(radio => {
+        radio.addEventListener('change', (e) => {
+          radioCards.forEach(card => card.classList.remove('active'));
+          const parentCard = e.target.closest('.radio-card');
+          if (parentCard) parentCard.classList.add('active');
+
+          if (e.target.value === 'certificacion') {
+            proofFileLabel.innerHTML = 'Subir archivo de Certificación Técnica <span class="required-star">*</span>';
+          } else if (e.target.value === 'titulo') {
+            proofFileLabel.innerHTML = 'Subir archivo de Título Académico <span class="required-star">*</span>';
+          } else {
+            proofFileLabel.innerHTML = 'Subir Constancia Laboral / Carta de Taller <span class="required-star">*</span>';
+          }
+        });
+      });
+
+      function formatBytes(bytes) {
+        if (!bytes || bytes === 0) return '0 KB';
+        const k = 1024;
+        const dm = 1;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+      }
+
+      function setupDropzone(dropzone, input, previewCard, nameEl, sizeEl, btnRemove, errorGroupId, errorElId) {
+        ['dragenter', 'dragover'].forEach(eventName => {
+          dropzone.addEventListener(eventName, (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dropzone.classList.add('dragover');
+          }, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+          dropzone.addEventListener(eventName, (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dropzone.classList.remove('dragover');
+          }, false);
+        });
+
+        dropzone.addEventListener('drop', (e) => {
+          const dt = e.dataTransfer;
+          const files = dt.files;
+          if (files && files.length > 0) {
+            input.files = files;
+            displayFileInfo(files[0]);
+          }
+        });
+
+        input.addEventListener('change', () => {
+          if (input.files && input.files[0]) {
+            displayFileInfo(input.files[0]);
+          }
+        });
+
+        function displayFileInfo(file) {
+          nameEl.textContent = file.name;
+          sizeEl.textContent = `${formatBytes(file.size)} • Listo para validar`;
+          previewCard.classList.add('has-file');
+          dropzone.style.display = 'none';
+          setError(errorGroupId, errorElId, false);
+        }
+
+        btnRemove.addEventListener('click', () => {
+          input.value = '';
+          previewCard.classList.remove('has-file');
+          dropzone.style.display = 'flex';
+        });
+      }
+
+      setupDropzone(
+        dropzoneId, 
+        archivoIdInput, 
+        previewIdCard, 
+        previewIdName, 
+        previewIdSize, 
+        btnRemoveId, 
+        'group-id-file', 
+        'error-archivo-id'
+      );
+
+      setupDropzone(
+        dropzoneProof, 
+        archivoComprobanteInput, 
+        previewProofCard, 
+        previewProofName, 
+        previewProofSize, 
+        btnRemoveProof, 
+        'group-proof-file', 
+        'error-archivo-comprobante'
+      );
+
+      // ======================================================================
+      // VALIDACIONES Y ENVÍO DEL FORMULARIO
+      // ======================================================================
       function validateEmail(email) {
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
       }
@@ -1200,16 +2345,17 @@
       function setError(groupId, errorId, isError) {
         const group = document.getElementById(groupId);
         const error = document.getElementById(errorId);
-        if (isError) {
-          group.classList.add('has-error');
-          error.style.display = 'flex';
-        } else {
-          group.classList.remove('has-error');
-          error.style.display = 'none';
+        if (group && error) {
+          if (isError) {
+            group.classList.add('has-error');
+            error.style.display = 'flex';
+          } else {
+            group.classList.remove('has-error');
+            error.style.display = 'none';
+          }
         }
       }
 
-      // Eventos 'blur' para validación en tiempo real
       nombreInput.addEventListener('blur', () => {
         setError('group-nombre', 'error-nombre', nombreInput.value.trim().length < 3);
       });
@@ -1222,15 +2368,52 @@
         setError('group-password', 'error-contrasena', passwordInput.value.length < 8);
       });
 
-      // Manejo del envío del formulario
+      telefonoInput.addEventListener('blur', () => {
+        if (currentRole === 'mechanic') {
+          const cleanPhone = telefonoInput.value.replace(/[^0-9]/g, '');
+          setError('group-telefono', 'error-telefono', cleanPhone.length < 8);
+        } else if (telefonoInput.value.trim().length > 0) {
+          const cleanPhone = telefonoInput.value.replace(/[^0-9]/g, '');
+          setError('group-telefono', 'error-telefono', cleanPhone.length < 8);
+        } else {
+          setError('group-telefono', 'error-telefono', false);
+        }
+      });
+
+      tipoIdSelect.addEventListener('change', () => {
+        if (currentRole === 'mechanic') {
+          setError('group-id-type', 'error-tipo-id', !tipoIdSelect.value);
+        }
+      });
+
+      numeroIdInput.addEventListener('blur', () => {
+        if (currentRole === 'mechanic') {
+          setError('group-id-number', 'error-numero-id', numeroIdInput.value.trim().length < 4);
+        }
+      });
+
+      especialidadSelect.addEventListener('change', () => {
+        if (currentRole === 'mechanic') {
+          setError('group-specialty', 'error-especialidad', !especialidadSelect.value);
+        }
+      });
+
+      experienciaSelect.addEventListener('change', () => {
+        if (currentRole === 'mechanic') {
+          setError('group-experience', 'error-experiencia', !experienciaSelect.value);
+        }
+      });
+
+      // Submit
       form.addEventListener('submit', (e) => {
         e.preventDefault();
 
+        // Validaciones comunes
         const nombreValido = nombreInput.value.trim().length >= 3;
         const correoValido = validateEmail(correoInput.value.trim());
         const passwordValido = passwordInput.value.length >= 8;
         const confirmValido = passwordInput.value === confirmPasswordInput.value && confirmPasswordInput.value.length > 0;
-        const terminosValido = terminosInput.checked;
+        const terminosValidos = terminosInput.checked;
 
         setError('group-nombre', 'error-nombre', !nombreValido);
         setError('group-email', 'error-correo', !correoValido);
@@ -1238,29 +2421,89 @@
         setError('group-confirm-password', 'error-confirmar-contrasena', !confirmValido);
 
         const errorTerminos = document.getElementById('error-terminos');
-        if (!terminosValido) {
+        if (!terminosValidos) {
           errorTerminos.style.display = 'flex';
         } else {
           errorTerminos.style.display = 'none';
         }
 
-        if (nombreValido && correoValido && passwordValido && confirmValido && terminosValido) {
-          // Estado de carga en el botón
+        let todoValido = false;
+
+        if (currentRole === 'user') {
+          // Teléfono es opcional para usuario
+          const telValue = telefonoInput.value.trim();
+          const telValido = telValue.length === 0 || telValue.replace(/[^0-9]/g, '').length >= 8;
+          setError('group-telefono', 'error-telefono', !telValido);
+
+          todoValido = nombreValido && correoValido && passwordValido && confirmValido && telValido && terminosValidos;
+        } else {
+          // Para mecánico se validan teléfono obligatorio + identificación + acreditación
+          const telValido = telefonoInput.value.replace(/[^0-9]/g, '').length >= 8;
+          const tipoIdValido = Boolean(tipoIdSelect.value);
+          const numeroIdValido = numeroIdInput.value.trim().length >= 4;
+          const archivoIdValido = archivoIdInput.files && archivoIdInput.files.length > 0;
+          const especialidadValida = Boolean(especialidadSelect.value);
+          const experienciaValida = Boolean(experienciaSelect.value);
+          const archivoProofValido = archivoComprobanteInput.files && archivoComprobanteInput.files.length > 0;
+
+          setError('group-telefono', 'error-telefono', !telValido);
+          setError('group-id-type', 'error-tipo-id', !tipoIdValido);
+          setError('group-id-number', 'error-numero-id', !numeroIdValido);
+          setError('group-id-file', 'error-archivo-id', !archivoIdValido);
+          setError('group-specialty', 'error-especialidad', !especialidadValida);
+          setError('group-experience', 'error-experiencia', !experienciaValida);
+          setError('group-proof-file', 'error-archivo-comprobante', !archivoProofValido);
+
+          todoValido = nombreValido && correoValido && telValido && 
+                       passwordValido && confirmValido && tipoIdValido && 
+                       numeroIdValido && archivoIdValido && especialidadValida && 
+                       experienciaValida && archivoProofValido && terminosValidos;
+        }
+
+        if (todoValido) {
           submitBtn.disabled = true;
-          btnText.textContent = 'Creando cuenta...';
+          const btnOldText = submitBtnText.textContent;
+          submitBtnText.textContent = currentRole === 'user' ? 'Creando cuenta...' : 'Enviando documentación...';
           btnSpinner.style.display = 'block';
           btnArrow.style.display = 'none';
 
-          // Simulación de registro exitoso
           setTimeout(() => {
             submitBtn.disabled = false;
-            btnText.textContent = 'Crear Cuenta';
+            submitBtnText.textContent = btnOldText;
             btnSpinner.style.display = 'none';
             btnArrow.style.display = 'block';
 
-            modalMensaje.textContent = `¡Felicidades ${nombreInput.value.trim()}! Tu cuenta en Amari ha sido creada correctamente con el correo ${correoInput.value.trim()}.`;
+            if (currentRole === 'user') {
+              modalTitulo.textContent = '¡Bienvenido a Amari!';
+              modalMensaje.innerHTML = `
+                ¡Felicidades <strong>${nombreInput.value.trim()}</strong>! Tu cuenta de usuario ha sido creada correctamente con el correo <strong>${correoInput.value.trim()}</strong>.<br><br>
+                Ya puedes acceder a todos nuestros servicios de auxilio vial y finanzas digitales.
+              `;
+              modalMechanicSteps.style.display = 'none';
+            } else {
+              const selectedProofRadio = document.querySelector('input[name="tipo_acreditacion"]:checked');
+              let proofTypeName = 'Certificación Técnica';
+              if (selectedProofRadio && selectedProofRadio.value === 'titulo') {
+                proofTypeName = 'Título Académico';
+              } else if (selectedProofRadio && selectedProofRadio.value === 'trabajo') {
+                proofTypeName = 'Constancia Laboral de Taller';
+              }
+
+              modalTitulo.textContent = '¡Solicitud de Mecánico Recibida!';
+              modalMensaje.innerHTML = `
+                ¡Enhorabuena <strong>${nombreInput.value.trim()}</strong>! Tu postulación para registrarte como mecánico especialista en <strong>Amari</strong> ha sido enviada con éxito.<br><br>
+                Registramos tu <strong>identificación oficial</strong> (${numeroIdInput.value.trim()}) y tu <strong>comprobante de ${proofTypeName}</strong>.
+              `;
+              modalMechanicSteps.style.display = 'flex';
+            }
+
             modalExito.classList.add('show');
-          }, 1200);
+          }, 1300);
+        } else {
+          const primerError = document.querySelector('.has-error');
+          if (primerError) {
+            primerError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
         }
       });
     });
