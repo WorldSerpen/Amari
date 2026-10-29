@@ -207,6 +207,35 @@
       line-height: 1.55;
     }
 
+    .finish-service {
+      width: 100%;
+      min-height: 48px;
+      margin-top: 16px;
+      border: 0;
+      border-radius: 13px;
+      color: #fff;
+      background: linear-gradient(105deg, var(--red), var(--red-hover));
+      font: inherit;
+      font-size: .8rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .finish-service:focus-visible,
+    .review-fallback a:focus-visible {
+      outline: 3px solid rgba(225, 29, 72, .3);
+      outline-offset: 3px;
+    }
+
+    .review-fallback {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: .75rem;
+      line-height: 1.5;
+    }
+
+    .review-fallback a { color: var(--red-dark); font-weight: 800; }
+
     @media (max-width: 380px) {
       body { padding: 14px; }
       .top-bar { padding: 15px 17px; }
@@ -267,9 +296,39 @@
       </div>
 
       <p class="tip">Mientras llega, mantén la calma y enciende las luces intermitentes si estás en la vía.</p>
+      <button class="finish-service" id="finish-service-button" type="button">
+        Finalizar servicio y calificar al mecánico
+      </button>
+      <p class="review-fallback" id="review-fallback" role="status" hidden>
+        El navegador bloqueó la ventana emergente.
+        <a id="open-review-link" href="review.html" target="_blank" rel="noopener">Abrir calificación</a>
+      </p>
     </section>
   </main>
   <script>
+    const reviewUrl = 'review.html?mechanic=' + encodeURIComponent('Carlos Ramírez');
+
+    document.getElementById('finish-service-button').addEventListener('click', () => {
+      document.getElementById('confirmation-title').textContent = '¡Servicio finalizado con éxito!';
+      document.querySelector('.eyebrow').textContent = 'Servicio finalizado';
+      document.querySelector('.intro').textContent = 'La asistencia de Carlos Ramírez concluyó. Gracias por confiar en AMARI.';
+      document.querySelector('.arrival').textContent = 'Finalizado';
+
+      const reviewWindow = window.open(
+        reviewUrl,
+        'amari-service-review',
+        'popup=yes,width=500,height=720,resizable=yes,scrollbars=yes'
+      );
+
+      if (reviewWindow) {
+        reviewWindow.focus();
+        return;
+      }
+
+      document.getElementById('open-review-link').href = reviewUrl;
+      document.getElementById('review-fallback').hidden = false;
+    });
+
     window.setTimeout(() => {
       document.getElementById('searching').hidden = true;
       document.getElementById('confirmation').hidden = false;

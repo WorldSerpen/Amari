@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#fafaf9">
+  <meta name="description" content="Califica el servicio de tu mecánico AMARI.">
+  <title>Calificar servicio | AMARI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+      --red: #e11d48;
+      --red-dark: #881337;
+      --red-soft: #fff1f2;
+      --ink: #0f172a;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --paper: #fff;
+      --canvas: #fafaf9;
+      --green: #047857;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: var(--ink);
+      background: var(--canvas);
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    button, textarea { font: inherit; }
+
+    body {
+      display: grid;
+      min-width: 320px;
+      min-height: 100vh;
+      min-height: 100dvh;
+      margin: 0;
+      padding: 24px;
+      place-items: center;
+      background: radial-gradient(circle at 12% 18%, rgba(225, 29, 72, .07), transparent 28rem), var(--canvas);
+    }
+
+    .page-card {
+      width: min(100%, 460px);
+      padding: 28px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: var(--paper);
+      box-shadow: 0 20px 40px -15px rgba(225, 29, 72, .12);
+      text-align: center;
+    }
+
+    .brand {
+      margin: 0 0 25px;
+      color: var(--red-dark);
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+    }
+
+    .page-card h1 { margin: 0; font-size: 1.45rem; }
+    .page-card p { color: var(--muted); line-height: 1.6; }
+
+    .open-review, .submit-button, .close-button {
+      min-height: 46px;
+      padding: 0 18px;
+      border: 0;
+      border-radius: 12px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .open-review, .submit-button {
+      color: white;
+      background: linear-gradient(105deg, var(--red), #be123c);
+    }
+
+    button:focus-visible, textarea:focus-visible {
+      outline: 3px solid rgba(225, 29, 72, .3);
+      outline-offset: 3px;
+    }
+
+    .review-dialog {
+      width: min(440px, calc(100% - 28px));
+      max-height: min(92vh, 760px);
+      overflow: auto;
+      padding: 0;
+      border: 1px solid rgba(226, 232, 240, .9);
+      border-radius: 24px;
+      color: var(--ink);
+      background: var(--paper);
+      box-shadow: 0 24px 80px rgba(15, 23, 42, .28);
+    }
+
+    .review-dialog::backdrop { background: rgba(15, 23, 42, .58); }
+
+    .dialog-content { padding: clamp(22px, 6vw, 32px); }
+    .dialog-topline { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .dialog-brand { color: var(--red-dark); font-size: .9rem; font-weight: 800; letter-spacing: .08em; }
+    .service-badge { padding: 6px 10px; border-radius: 999px; color: var(--red-dark); background: var(--red-soft); font-size: .67rem; font-weight: 800; text-transform: uppercase; }
+    .success-icon { display: grid; width: 58px; height: 58px; margin: 24px auto 14px; place-items: center; border-radius: 50%; color: var(--green); background: #ecfdf5; font-size: 1.7rem; font-weight: 800; }
+    .dialog-title { margin: 0; text-align: center; font-size: clamp(1.3rem, 5vw, 1.65rem); letter-spacing: -.03em; }
+    .dialog-copy { margin: 9px 0 22px; color: var(--muted); font-size: .88rem; line-height: 1.6; text-align: center; }
+    .mechanic-name { color: var(--ink); font-weight: 800; }
+
+    fieldset { min-width: 0; margin: 0; padding: 0; border: 0; }
+    legend { margin-bottom: 12px; font-size: .86rem; font-weight: 800; }
+    .rating-options { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 7px; }
+    .rating-choice { position: relative; }
+    .rating-choice input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+    .rating-choice label {
+      display: grid;
+      min-height: 62px;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      color: #cbd5e1;
+      font-size: clamp(1.45rem, 7vw, 2rem);
+      cursor: pointer;
+      transition: border-color .16s ease, color .16s ease, background .16s ease, transform .16s ease;
+    }
+
+    .rating-choice label:hover { transform: translateY(-2px); border-color: #fda4af; }
+    .rating-choice label.is-selected { color: #f59e0b; }
+    .rating-choice label.is-current { border-color: #f59e0b; background: #fffbeb; }
+    .rating-choice input:focus-visible + label { outline: 3px solid rgba(225, 29, 72, .3); outline-offset: 2px; }
+    .rating-choice label span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
+    .rating-caption { min-height: 22px; margin: 10px 0 18px; color: var(--red-dark); font-size: .8rem; font-weight: 700; text-align: center; }
+    .zero-rating { display: flex; align-items: flex-start; gap: 9px; margin: 0 0 17px; color: var(--muted); font-size: .78rem; line-height: 1.45; cursor: pointer; }
+    .zero-rating input { width: 17px; height: 17px; margin: 0; accent-color: var(--red); }
+    .comment-label { display: block; margin-bottom: 8px; font-size: .82rem; font-weight: 800; }
+    .comment-input { width: 100%; min-height: 84px; padding: 11px 12px; resize: vertical; border: 1px solid var(--line); border-radius: 12px; color: var(--ink); background: white; font-size: .82rem; line-height: 1.5; }
+    .form-error { min-height: 20px; margin: 9px 0 0; color: #b91c1c; font-size: .78rem; }
+    .dialog-actions { display: grid; gap: 9px; margin-top: 8px; }
+    .submit-button, .close-button { width: 100%; }
+    .close-button { border: 1px solid var(--line); color: var(--muted); background: white; }
+    .thank-you { padding: 28px 4px 8px; text-align: center; }
+    .thank-you h2 { margin: 0 0 8px; font-size: 1.35rem; }
+    .thank-you p { margin: 0 0 22px; color: var(--muted); font-size: .88rem; line-height: 1.6; }
+    .saved-rating { color: var(--red); font-size: 1.8rem; letter-spacing: .12em; }
+
+    @media (max-width: 380px) {
+      body { padding: 14px; }
+      .page-card { padding: 22px; }
+      .rating-options { gap: 5px; }
+      .rating-choice label { min-height: 54px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page-card" aria-labelledby="page-title">
+    <p class="brand">AMARI</p>
+    <h1 id="page-title">Servicio finalizado</h1>
+    <p>Tu asistencia terminó correctamente. Tu opinión ayuda a otros conductores a elegir un buen mecánico.</p>
+    <button class="open-review" id="open-review" type="button">Calificar al mecánico</button>
+  </main>
+
+  <dialog class="review-dialog" id="review-dialog" aria-labelledby="review-title" aria-describedby="review-description">
+    <div class="dialog-content">
+      <div class="dialog-topline">
+        <span class="dialog-brand">AMARI</span>
+        <span class="service-badge">Servicio finalizado</span>
+      </div>
+
+      <section id="review-form-view">
+        <div class="success-icon" aria-hidden="true">✓</div>
+        <h1 class="dialog-title" id="review-title">¿Cómo estuvo tu servicio?</h1>
+        <p class="dialog-copy" id="review-description">
+          Califica el trabajo de <span class="mechanic-name" id="mechanic-name">tu mecánico</span> con 0 a 5 estrellas.
+        </p>
+
+        <form id="review-form">
+          <fieldset>
+            <legend>Selecciona tu calificación</legend>
+            <div class="rating-options" role="radiogroup" aria-label="Calificación de una a cinco estrellas">
+              <div class="rating-choice"><input id="rating-1" name="rating" type="radio" value="1" required><label for="rating-1" aria-label="1 estrella"><span>1 estrella</span>★</label></div>
+              <div class="rating-choice"><input id="rating-2" name="rating" type="radio" value="2"><label for="rating-2" aria-label="2 estrellas"><span>2 estrellas</span>★</label></div>
+              <div class="rating-choice"><input id="rating-3" name="rating" type="radio" value="3"><label for="rating-3" aria-label="3 estrellas"><span>3 estrellas</span>★</label></div>
+              <div class="rating-choice"><input id="rating-4" name="rating" type="radio" value="4"><label for="rating-4" aria-label="4 estrellas"><span>4 estrellas</span>★</label></div>
+              <div class="rating-choice"><input id="rating-5" name="rating" type="radio" value="5"><label for="rating-5" aria-label="5 estrellas"><span>5 estrellas</span>★</label></div>
+            </div>
+            <p class="rating-caption" id="rating-caption" aria-live="polite">Elige de 1 a 5 estrellas</p>
+            <label class="zero-rating" for="rating-0">
+              <input id="rating-0" name="rating" type="radio" value="0">
+              <span>No deseo calificar (0 estrellas)</span>
+            </label>
+          </fieldset>
+
+          <label class="comment-label" for="review-comment">Comentario (opcional)</label>
+          <textarea class="comment-input" id="review-comment" name="comment" maxlength="300" placeholder="Cuéntanos cómo fue tu experiencia..."></textarea>
+          <p class="form-error" id="form-error" role="alert"></p>
+
+          <div class="dialog-actions">
+            <button class="submit-button" type="submit">Enviar calificación</button>
+            <button class="close-button" id="dismiss-review" type="button">Ahora no</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="thank-you" id="thank-you-view" aria-live="polite" hidden>
+        <div class="success-icon" aria-hidden="true">✓</div>
+        <h2>¡Gracias por tu opinión!</h2>
+        <p id="thank-you-copy">Tu calificación quedó registrada.</p>
+        <div class="saved-rating" id="saved-rating" aria-label="Calificación enviada"></div>
+        <div class="dialog-actions">
+          <button class="submit-button" id="finish-review" type="button">Listo</button>
+        </div>
+      </section>
+    </div>
+  </dialog>
+
+  <script>
+    const reviewDialog = document.getElementById('review-dialog');
+    const reviewForm = document.getElementById('review-form');
+    const ratingCaption = document.getElementById('rating-caption');
+    const formError = document.getElementById('form-error');
+    const mechanicName = document.getElementById('mechanic-name');
+    const ratingLabels = {
+      0: 'Sin calificación',
+      1: 'Muy insatisfecho',
+      2: 'Insatisfecho',
+      3: 'Servicio aceptable',
+      4: 'Buen servicio',
+      5: '¡Excelente servicio!'
+    };
+
+    const mechanic = new URLSearchParams(window.location.search).get('mechanic');
+    if (mechanic) mechanicName.textContent = mechanic;
+
+    function openReview() {
+      if (!reviewDialog.open) reviewDialog.showModal();
+    }
+
+    document.getElementById('open-review').addEventListener('click', openReview);
+    document.getElementById('dismiss-review').addEventListener('click', () => reviewDialog.close());
+    document.getElementById('finish-review').addEventListener('click', () => reviewDialog.close());
+
+    reviewForm.addEventListener('change', (event) => {
+      if (event.target.name !== 'rating') return;
+      const selectedRating = Number(event.target.value);
+      ratingCaption.textContent = ratingLabels[selectedRating];
+      reviewForm.querySelectorAll('.rating-choice input').forEach((input) => {
+        const label = input.nextElementSibling;
+        const rating = Number(input.value);
+        label.classList.toggle('is-selected', rating <= selectedRating);
+        label.classList.toggle('is-current', rating === selectedRating);
+      });
+      formError.textContent = '';
+    });
+
+    reviewForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const selectedRating = reviewForm.querySelector('input[name="rating"]:checked');
+      if (!selectedRating) {
+        formError.textContent = 'Selecciona una calificación o elige “No deseo calificar”.';
+        return;
+      }
+
+      const review = {
+        mechanic: mechanicName.textContent,
+        rating: Number(selectedRating.value),
+        comment: document.getElementById('review-comment').value.trim(),
+        submittedAt: new Date().toISOString()
+      };
+
+      try {
+        localStorage.setItem('amari:last-review', JSON.stringify(review));
+      } catch (error) {
+        formError.textContent = 'No se pudo guardar tu calificación en este dispositivo. Inténtalo de nuevo.';
+        console.error('No se pudo guardar la calificación de AMARI.', error);
+        return;
+      }
+
+      document.getElementById('review-form-view').hidden = true;
+      document.getElementById('thank-you-view').hidden = false;
+      document.getElementById('thank-you-copy').textContent = review.rating === 0
+        ? 'Gracias por contarnos que prefieres no calificar este servicio.'
+        : 'Tu calificación quedó registrada.';
+      document.getElementById('saved-rating').textContent = '★'.repeat(review.rating) || '0 estrellas';
+      document.getElementById('saved-rating').setAttribute(
+        'aria-label',
+        review.rating === 0 ? 'Sin calificación' : `${review.rating} de 5 estrellas`
+      );
+    });
+
+    openReview();
+  </script>
+</body>
+</html>
