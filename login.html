@@ -1,0 +1,2003 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#e11d48">
+  <meta name="description" content="Inicia sesión en Amari para acceder a asistencia vial en tiempo real, mecánicos verificados y gestión de tu vehículo.">
+  <meta name="keywords" content="Amari, login, iniciar sesion, auxilio vial, mecanico, conductor">
+  <meta name="author" content="Amari">
+  <title>Iniciar Sesión | Amari</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       VARIABLES DE COLOR Y DISEÑO (SISTEMA AMARI ROJO Y BLANCO)
+       ========================================================================== */
+    :root {
+      --primary-red: #e11d48;
+      --primary-red-hover: #be123c;
+      --primary-red-dark: #881337;
+      --primary-red-light: #ffe4e6;
+      --primary-red-glow: rgba(225, 29, 72, 0.25);
+      --primary-red-glow-strong: rgba(225, 29, 72, 0.45);
+      --red-accent: #f43f5e;
+      --pure-white: #ffffff;
+      --off-white: #f8fafc;
+      --app-background: #fafaf9;
+      --surface-white: #ffffff;
+      --border-light: #f1f5f9;
+      --border-medium: #e2e8f0;
+      --border-hover: #cbd5e1;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --text-light: #94a3b8;
+      --success-green: #10b981;
+      --success-light: #ecfdf5;
+      --warning-amber: #f59e0b;
+      --danger-red: #e11d48;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 24px;
+      --shadow-subtle: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+      --shadow-card: 0 20px 40px -15px rgba(225, 29, 72, 0.08), 0 0 20px 0 rgba(0, 0, 0, 0.04);
+      --shadow-glow: 0 10px 25px -5px rgba(225, 29, 72, 0.35);
+      --shadow-glow-elevated: 0 14px 28px -6px rgba(225, 29, 72, 0.45);
+      
+      /* Apple Motion Principles (SKILLS.md): Critically damped spring */
+      --spring-timing: cubic-bezier(0.16, 1, 0.3, 1);
+      --spring-fast: 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      --spring-normal: 0.38s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Reset y base */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      min-width: 320px;
+      min-height: 100%;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--app-background);
+      background-image: 
+        radial-gradient(at 12% 18%, rgba(225, 29, 72, 0.08) 0px, transparent 55%),
+        radial-gradient(at 88% 82%, rgba(244, 63, 94, 0.07) 0px, transparent 55%),
+        radial-gradient(at 50% 50%, rgba(255, 228, 230, 0.45) 0px, transparent 80%);
+      color: var(--text-main);
+      min-height: 100vh;
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.5;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    button, a, input {
+      font: inherit;
+    }
+
+    /* ==========================================================================
+       CONTENEDOR PRINCIPAL: PANTALLA DIVIDIDA (SPLIT-SCREEN) RESPONSIVA
+       ========================================================================== */
+    .app-container {
+      display: flex;
+      flex: 1;
+      width: 100%;
+      min-height: 100vh;
+      min-height: 100svh;
+    }
+
+    /* ==========================================================================
+       PANEL HERO IZQUIERDO (DESKTOP)
+       ========================================================================== */
+    .hero-side {
+      display: none;
+      flex: 1.1;
+      background: linear-gradient(145deg, #be123c 0%, #e11d48 50%, #9f1239 100%);
+      padding: 3.5rem;
+      position: relative;
+      overflow: hidden;
+      color: var(--pure-white);
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    @media (min-width: 1024px) {
+      .hero-side {
+        display: flex;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+      }
+    }
+
+    /* Elementos decorativos de fondo con física de luz */
+    .hero-decor-circle-1 {
+      position: absolute;
+      top: -120px;
+      right: -100px;
+      width: 440px;
+      height: 440px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0) 70%);
+      pointer-events: none;
+    }
+
+    .hero-decor-circle-2 {
+      position: absolute;
+      bottom: -150px;
+      left: -100px;
+      width: 520px;
+      height: 520px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0) 70%);
+      pointer-events: none;
+    }
+
+    .hero-pattern {
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.16) 1px, transparent 1px);
+      background-size: 28px 28px;
+      opacity: 0.35;
+      pointer-events: none;
+    }
+
+    .hero-header {
+      position: relative;
+      z-index: 2;
+    }
+
+    .brand-logo-hero {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      text-decoration: none;
+      color: var(--pure-white);
+      transition: transform var(--spring-fast);
+    }
+
+    .brand-logo-hero:hover {
+      transform: translateY(-2px);
+    }
+
+    .brand-logo-hero:active {
+      transform: scale(0.97);
+    }
+
+    .logo-image-wrap {
+      width: 52px;
+      height: 52px;
+      background: var(--pure-white);
+      border-radius: 14px;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .logo-image-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 10px;
+    }
+
+    .brand-logo-text-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-logo-title {
+      font-size: 1.85rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      line-height: 1.1;
+      color: var(--pure-white);
+    }
+
+    .brand-logo-tagline {
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #ffe4e6;
+      font-weight: 700;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 520px;
+      margin: 2rem 0;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(12px) saturate(180%);
+      -webkit-backdrop-filter: blur(12px) saturate(180%);
+      padding: 6px 14px;
+      border-radius: 30px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 1.25rem;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      letter-spacing: 0.3px;
+    }
+
+    .hero-tag-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #4ade80;
+      box-shadow: 0 0 10px #4ade80;
+    }
+
+    .hero-title {
+      font-size: 2.75rem;
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 1.25rem;
+      letter-spacing: -1.2px;
+    }
+
+    .hero-title span {
+      color: #ffe4e6;
+      text-decoration: underline;
+      text-decoration-color: rgba(255, 255, 255, 0.45);
+      text-underline-offset: 6px;
+    }
+
+    .hero-description {
+      font-size: 1.05rem;
+      color: rgba(255, 255, 255, 0.92);
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+
+    .features-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 14px 18px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-top: 1px solid rgba(255, 255, 255, 0.4); /* Apple material edge catch */
+      transition: transform var(--spring-fast), background var(--spring-fast);
+    }
+
+    .feature-item:hover {
+      transform: translateX(6px);
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    .feature-icon-box {
+      width: 42px;
+      height: 42px;
+      background: var(--pure-white);
+      color: var(--primary-red);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.16);
+    }
+
+    .feature-texts {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .feature-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--pure-white);
+    }
+
+    .feature-sub {
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    .hero-footer {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    .hero-footer-link {
+      color: var(--pure-white);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 600;
+      transition: opacity var(--spring-fast);
+    }
+
+    .hero-footer-link:hover {
+      opacity: 0.8;
+      text-decoration: underline;
+    }
+
+    /* ==========================================================================
+       PANEL DERECHO: FORMULARIO DE ACCESO UNIFICADO
+       ========================================================================== */
+    .form-side {
+      flex: 1.25;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: clamp(1.5rem, 5vw, 3.5rem) clamp(1rem, 4vw, 2.5rem);
+      position: relative;
+      min-height: 100vh;
+      min-height: 100svh;
+      overflow-y: auto;
+    }
+
+    /* Barra superior de navegación / retorno */
+    .top-nav-bar {
+      width: 100%;
+      max-width: 520px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+
+    .back-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      background: var(--surface-white);
+      color: var(--text-muted);
+      border: 1px solid var(--border-medium);
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all var(--spring-fast);
+      box-shadow: var(--shadow-subtle);
+    }
+
+    .back-button:hover {
+      color: var(--primary-red);
+      border-color: #fda4af;
+      background: #fff7f8;
+      transform: translateX(-3px);
+    }
+
+    .back-button:active {
+      transform: scale(0.97);
+    }
+
+    .support-badge {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .form-wrapper {
+      width: 100%;
+      max-width: 520px;
+      background: var(--surface-white);
+      padding: clamp(2rem, 5vw, 2.75rem);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      border: 1px solid var(--border-medium);
+      position: relative;
+      animation: springFadeIn 0.5s var(--spring-timing);
+    }
+
+    @keyframes springFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(22px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Logotipo móvil */
+    .brand-mobile {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text-main);
+      margin-bottom: 1.5rem;
+    }
+
+    @media (min-width: 1024px) {
+      .brand-mobile {
+        display: none;
+      }
+    }
+
+    .brand-mobile-logo-wrap {
+      width: 46px;
+      height: 46px;
+      background: var(--pure-white);
+      border-radius: 13px;
+      padding: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 14px rgba(225, 29, 72, 0.18);
+      border: 1px solid var(--border-medium);
+    }
+
+    .brand-mobile-logo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .brand-mobile-text-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-mobile-title {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.1;
+      letter-spacing: -0.5px;
+    }
+
+    .brand-mobile-subtitle {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--primary-red);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Encabezado del Formulario */
+    .form-header {
+      margin-bottom: 1.75rem;
+      text-align: left;
+    }
+
+    .badge-sub {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--primary-red);
+      background-color: var(--primary-red-light);
+      padding: 5px 12px;
+      border-radius: 8px;
+      margin-bottom: 0.65rem;
+    }
+
+    .form-title {
+      font-size: clamp(1.8rem, 4vw, 2.2rem);
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 0.5rem;
+    }
+
+    .form-subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    /* Selector de tipo de cuenta / Rol (Opcional & Cohesivo) */
+    .role-switcher-container {
+      margin-bottom: 1.6rem;
+    }
+
+    .role-switcher-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-bottom: 0.45rem;
+      display: block;
+    }
+
+    .role-switcher {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      background: var(--off-white);
+      padding: 5px;
+      border-radius: 14px;
+      border: 1.5px solid var(--border-medium);
+    }
+
+    .role-tab-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all var(--spring-fast);
+      position: relative;
+      user-select: none;
+    }
+
+    .role-tab-btn:hover:not(.active) {
+      color: var(--text-main);
+      background: rgba(0, 0, 0, 0.03);
+    }
+
+    .role-tab-btn:active {
+      transform: scale(0.97);
+    }
+
+    .role-tab-btn.active {
+      background: var(--primary-red);
+      color: var(--pure-white);
+      box-shadow: 0 4px 12px var(--primary-red-glow);
+    }
+
+    .role-tab-btn svg {
+      width: 17px;
+      height: 17px;
+      flex-shrink: 0;
+    }
+
+    /* Alerta de notificación / Feedback inline */
+    .alert-banner {
+      display: none;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-size: 0.875rem;
+      margin-bottom: 1.25rem;
+      animation: springSlideDown 0.35s var(--spring-timing);
+    }
+
+    @keyframes springSlideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .alert-banner.alert-error {
+      display: flex;
+      background-color: #fff1f2;
+      border: 1.5px solid #fecdd3;
+      color: #9f1239;
+    }
+
+    .alert-banner.alert-success {
+      display: flex;
+      background-color: #ecfdf5;
+      border: 1.5px solid #a7f3d0;
+      color: #065f46;
+    }
+
+    .alert-icon {
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* Formulario y campos de entrada (Campus) */
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      position: relative;
+    }
+
+    .form-label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-main);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .required-star {
+      color: var(--primary-red);
+      margin-left: 2px;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 15px;
+      color: var(--text-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      transition: color var(--spring-fast);
+      z-index: 2;
+    }
+
+    .form-input {
+      width: 100%;
+      height: 52px;
+      padding: 0 44px 0 46px;
+      background-color: var(--off-white);
+      border: 1.5px solid var(--border-medium);
+      border-radius: var(--radius-md);
+      font-size: 0.95rem;
+      font-family: inherit;
+      color: var(--text-main);
+      outline: none;
+      transition: all var(--spring-fast);
+    }
+
+    .form-input:hover {
+      border-color: var(--border-hover);
+      background-color: #fdfdfd;
+    }
+
+    .form-input:focus {
+      background-color: var(--pure-white);
+      border-color: var(--primary-red);
+      box-shadow: 0 0 0 4px var(--primary-red-glow);
+    }
+
+    .input-wrapper:focus-within .input-icon {
+      color: var(--primary-red);
+    }
+
+    /* Botón para alternar visibilidad de contraseña (Instant Response) */
+    .toggle-password {
+      position: absolute;
+      right: 12px;
+      background: none;
+      border: none;
+      color: var(--text-light);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      border-radius: 8px;
+      transition: color var(--spring-fast), background var(--spring-fast), transform 100ms ease-out;
+      z-index: 2;
+    }
+
+    .toggle-password:hover {
+      color: var(--primary-red);
+      background-color: var(--primary-red-light);
+    }
+
+    .toggle-password:active {
+      transform: scale(0.92);
+    }
+
+    .toggle-password:focus-visible {
+      outline: 2px solid var(--primary-red);
+      outline-offset: 1px;
+    }
+
+    /* Mensajes de error por campo */
+    .field-error {
+      font-size: 0.78rem;
+      color: var(--danger-red);
+      display: none;
+      align-items: center;
+      gap: 6px;
+      margin-top: 3px;
+      font-weight: 500;
+    }
+
+    .form-group.has-error .form-input {
+      border-color: var(--danger-red);
+      background-color: #fff1f2;
+      animation: appleShake 0.38s var(--spring-timing);
+    }
+
+    .form-group.has-error .field-error {
+      display: flex;
+    }
+
+    .form-group.has-success .form-input {
+      border-color: var(--success-green);
+    }
+
+    @keyframes appleShake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-5px); }
+      40%, 80% { transform: translateX(5px); }
+    }
+
+    /* Fila de opciones: Recordar sesión y Olvidé mi contraseña */
+    .form-actions-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 0.2rem;
+      flex-wrap: wrap;
+    }
+
+    .remember-group {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .custom-checkbox {
+      position: relative;
+      width: 19px;
+      height: 19px;
+      flex-shrink: 0;
+    }
+
+    .custom-checkbox input {
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      cursor: pointer;
+      z-index: 2;
+    }
+
+    .checkbox-box {
+      width: 100%;
+      height: 100%;
+      border: 1.8px solid var(--border-medium);
+      border-radius: 6px;
+      background-color: var(--off-white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--spring-fast);
+    }
+
+    .checkbox-box svg {
+      opacity: 0;
+      transform: scale(0.6);
+      transition: all 0.15s ease-in-out;
+      color: var(--pure-white);
+    }
+
+    .custom-checkbox input:checked + .checkbox-box {
+      background-color: var(--primary-red);
+      border-color: var(--primary-red);
+      box-shadow: 0 0 0 3px var(--primary-red-glow);
+    }
+
+    .custom-checkbox input:checked + .checkbox-box svg {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .custom-checkbox input:focus-visible + .checkbox-box {
+      border-color: var(--primary-red);
+      box-shadow: 0 0 0 3px var(--primary-red-glow);
+    }
+
+    .remember-text {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* Enlace de Olvidé mi contraseña */
+    .forgot-link {
+      background: none;
+      border: none;
+      padding: 0;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--primary-red);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: color var(--spring-fast), transform 100ms ease-out;
+    }
+
+    .forgot-link:hover {
+      color: var(--primary-red-hover);
+      text-decoration: underline;
+    }
+
+    .forgot-link:active {
+      transform: scale(0.96);
+    }
+
+    .forgot-link:focus-visible {
+      outline: 2px solid var(--primary-red);
+      outline-offset: 3px;
+      border-radius: 4px;
+    }
+
+    /* Botón de Iniciar Sesión (Respuesta táctil instantánea WWDC 2018 / SKILLS.md) */
+    .btn-submit {
+      width: 100%;
+      height: 54px;
+      background: linear-gradient(135deg, var(--primary-red) 0%, #be123c 100%);
+      color: var(--pure-white);
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 1.02rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: var(--shadow-glow);
+      transition: background 0.2s ease, transform 100ms ease-out, box-shadow 0.2s ease;
+      margin-top: 0.5rem;
+      position: relative;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    .btn-submit::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+      transition: left 0.75s ease;
+    }
+
+    .btn-submit:hover {
+      background: linear-gradient(135deg, var(--red-accent) 0%, var(--primary-red) 100%);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-glow-elevated);
+    }
+
+    .btn-submit:hover::after {
+      left: 100%;
+    }
+
+    /* Feedback instantáneo al pulsar (Section 1 SKILLS.md) */
+    .btn-submit:active {
+      transform: scale(0.97) !important;
+      box-shadow: 0 4px 12px rgba(225, 29, 72, 0.35);
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.75;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    .spinner {
+      display: none;
+      width: 20px;
+      height: 20px;
+      border: 2.5px solid rgba(255, 255, 255, 0.35);
+      border-radius: 50%;
+      border-top-color: var(--pure-white);
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Divisor sutil */
+    .divider-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 1.6rem 0 1.2rem;
+      color: var(--text-light);
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .divider-row::before, .divider-row::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border-medium);
+    }
+
+    /* Acceso rápido de demostración / testing */
+    .demo-hint-box {
+      background: #fff1f2;
+      border: 1px dashed #fecdd3;
+      border-radius: 12px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 0.5rem;
+    }
+
+    .demo-hint-text {
+      font-size: 0.8rem;
+      color: var(--primary-red-dark);
+      font-weight: 600;
+    }
+
+    .demo-fill-btn {
+      background: var(--pure-white);
+      color: var(--primary-red);
+      border: 1px solid #fecdd3;
+      border-radius: 8px;
+      padding: 4px 9px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all var(--spring-fast);
+      flex-shrink: 0;
+    }
+
+    .demo-fill-btn:hover {
+      background: var(--primary-red);
+      color: var(--pure-white);
+    }
+
+    .demo-fill-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* Pie del formulario: Registro */
+    .form-footer {
+      text-align: center;
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .form-footer a {
+      color: var(--primary-red);
+      font-weight: 700;
+      text-decoration: none;
+      transition: color var(--spring-fast);
+      margin-left: 4px;
+    }
+
+    .form-footer a:hover {
+      color: var(--primary-red-hover);
+      text-decoration: underline;
+    }
+
+    /* ==========================================================================
+       MODAL DE RECUPERACIÓN DE CONTRASEÑA (FLUID SHEET / APPLE DESIGN)
+       ========================================================================== */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.55);
+      backdrop-filter: blur(16px) saturate(160%);
+      -webkit-backdrop-filter: blur(16px) saturate(160%);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      z-index: 100;
+      opacity: 0;
+      transition: opacity 0.28s var(--spring-timing);
+    }
+
+    .modal-backdrop.is-open {
+      display: flex;
+      opacity: 1;
+    }
+
+    .sheet-modal {
+      width: 100%;
+      max-width: 480px;
+      background: var(--pure-white);
+      border-radius: 28px;
+      padding: 2.25rem 2rem;
+      box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      position: relative;
+      transform: translateY(28px) scale(0.96);
+      transition: transform 0.38s var(--spring-timing);
+    }
+
+    .modal-backdrop.is-open .sheet-modal {
+      transform: translateY(0) scale(1);
+    }
+
+    /* Manija de arrastre táctil / Apple handle */
+    .sheet-handle {
+      width: 40px;
+      height: 4.5px;
+      background: #cbd5e1;
+      border-radius: 99px;
+      margin: -10px auto 18px;
+    }
+
+    .modal-header-group {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 1.25rem;
+    }
+
+    .modal-icon-badge {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: var(--primary-red-light);
+      color: var(--primary-red);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 4px 14px rgba(225, 29, 72, 0.15);
+    }
+
+    .modal-close-btn {
+      background: var(--off-white);
+      border: 1px solid var(--border-medium);
+      color: var(--text-muted);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all var(--spring-fast);
+      flex-shrink: 0;
+    }
+
+    .modal-close-btn:hover {
+      background: #fee2e2;
+      color: var(--danger-red);
+      border-color: #fecdd3;
+    }
+
+    .modal-close-btn:active {
+      transform: scale(0.92);
+    }
+
+    .modal-title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.5px;
+      margin-bottom: 0.4rem;
+    }
+
+    .modal-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+      margin-bottom: 1.5rem;
+    }
+
+    .forgot-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.15rem;
+    }
+
+    .modal-success-state {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 1rem 0;
+      animation: springFadeIn 0.35s var(--spring-timing);
+    }
+
+    .modal-success-state.active {
+      display: flex;
+    }
+
+    .success-icon-badge {
+      width: 64px;
+      height: 64px;
+      background: var(--success-light);
+      color: var(--success-green);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 6px 18px rgba(16, 185, 129, 0.2);
+    }
+
+    .modal-actions-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 0.5rem;
+    }
+
+    .btn-secondary {
+      width: 100%;
+      height: 48px;
+      background: var(--off-white);
+      color: var(--text-main);
+      border: 1.5px solid var(--border-medium);
+      border-radius: var(--radius-md);
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all var(--spring-fast);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-secondary:hover {
+      background: #f1f5f9;
+      border-color: var(--border-hover);
+    }
+
+    .btn-secondary:active {
+      transform: scale(0.97);
+    }
+
+    /* ==========================================================================
+       ACCESIBILIDAD & REDUCED MOTION (Section 14 SKILLS.md)
+       ========================================================================== */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+      .form-wrapper, .sheet-modal {
+        transform: none !important;
+      }
+    }
+
+    @media (prefers-reduced-transparency: reduce) {
+      .hero-tag, .feature-item, .modal-backdrop {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        background-color: var(--surface-white) !important;
+      }
+      .hero-tag, .feature-item {
+        background-color: rgba(255, 255, 255, 0.25) !important;
+      }
+      .modal-backdrop {
+        background-color: rgba(15, 23, 42, 0.85) !important;
+      }
+    }
+
+    @media (prefers-contrast: more) {
+      .form-input {
+        border-color: #475569 !important;
+      }
+      .form-label {
+        color: #000000 !important;
+      }
+      .btn-submit {
+        border: 2px solid #000000;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+
+    <!-- ==========================================================================
+         PANEL HERO IZQUIERDO (DESKTOP)
+         ========================================================================== -->
+    <aside class="hero-side" aria-label="Información y características de Amari">
+      <div class="hero-decor-circle-1" aria-hidden="true"></div>
+      <div class="hero-decor-circle-2" aria-hidden="true"></div>
+      <div class="hero-pattern" aria-hidden="true"></div>
+
+      <!-- Logotipo e Identidad de Marca -->
+      <header class="hero-header">
+        <a href="index.html" class="brand-logo-hero" aria-label="Amari, ir al inicio">
+          <div class="logo-image-wrap">
+            <img src="assets/logoamari.png" alt="Logotipo oficial de Amari" width="44" height="44">
+          </div>
+          <div class="brand-logo-text-group">
+            <span class="brand-logo-title">AMARI</span>
+            <span class="brand-logo-tagline">Auxilio Vial & Asistencia</span>
+          </div>
+        </a>
+      </header>
+
+      <!-- Mensaje Central y Beneficios Clave -->
+      <section class="hero-content">
+        <div class="hero-tag">
+          <span class="hero-tag-dot" aria-hidden="true"></span>
+          <span>Red Activa 24/7 en tu Camino</span>
+        </div>
+        <h1 class="hero-title">
+          Tu tranquilidad al volante, <span>siempre conectada.</span>
+        </h1>
+        <p class="hero-description">
+          Inicia sesión para gestionar tus solicitudes de auxilio mecánico, monitorear especialistas en tiempo real y proteger cada kilómetro de tu viaje.
+        </p>
+
+        <div class="features-list">
+          <article class="feature-item">
+            <div class="feature-icon-box" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+            </div>
+            <div class="feature-texts">
+              <span class="feature-title">Asistencia en Tiempo Real</span>
+              <span class="feature-sub">Localización de talleres y mecánicos certificados cerca de ti.</span>
+            </div>
+          </article>
+
+          <article class="feature-item">
+            <div class="feature-icon-box" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+            </div>
+            <div class="feature-texts">
+              <span class="feature-title">Seguridad & Pagos Protegidos</span>
+              <span class="feature-sub">Transacciones bancarias transparentes y seguimiento satelital.</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Pie de página del Hero -->
+      <footer class="hero-footer">
+        <span>© 2026 Amari Technologies Inc.</span>
+        <a href="index.html" class="hero-footer-link">
+          <span>Volver al portal principal</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </a>
+      </footer>
+    </aside>
+
+    <!-- ==========================================================================
+         PANEL DERECHO: FORMULARIO DE ACCESO (LOGIN)
+         ========================================================================== -->
+    <main class="form-side">
+
+      <!-- Barra superior de navegación / Salida rápida (Wayfinding) -->
+      <div class="top-nav-bar">
+        <a href="index.html" class="back-button" aria-label="Volver a la página de bienvenida">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+          <span>Inicio</span>
+        </a>
+        <div class="support-badge">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+          <span>Soporte Amari</span>
+        </div>
+      </div>
+
+      <!-- Tarjeta principal de inicio de sesión -->
+      <section class="form-wrapper" aria-labelledby="login-title">
+
+        <!-- Logotipo visible en dispositivos móviles -->
+        <a href="index.html" class="brand-mobile" aria-label="Ir a Inicio de Amari">
+          <div class="brand-mobile-logo-wrap">
+            <img src="assets/logoamari.png" alt="Logotipo Amari">
+          </div>
+          <div class="brand-mobile-text-group">
+            <span class="brand-mobile-title">AMARI</span>
+            <span class="brand-mobile-subtitle">Auxilio Vial</span>
+          </div>
+        </a>
+
+        <!-- Encabezado del Formulario -->
+        <header class="form-header">
+          <div class="badge-sub">Acceso Seguro</div>
+          <h2 class="form-title" id="login-title">Iniciar Sesión</h2>
+          <p class="form-subtitle">Ingresa tus credenciales para acceder a tu cuenta de Amari.</p>
+        </header>
+
+        <!-- Selector de Perfil / Rol -->
+        <div class="role-switcher-container">
+          <span class="role-switcher-label">Tipo de cuenta</span>
+          <div class="role-switcher" role="tablist" aria-label="Seleccionar perfil de acceso">
+            <button type="button" class="role-tab-btn active" id="tab-driver" role="tab" aria-selected="true" data-role="conductor">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.5 2.8C2.1 10.9 2 11.2 2 11.5V16c0 .6.4 1 1 1h2"></path>
+                <circle cx="7" cy="17" r="2"></circle>
+                <path d="M9 17h6"></path>
+                <circle cx="17" cy="17" r="2"></circle>
+              </svg>
+              <span>Conductor</span>
+            </button>
+            <button type="button" class="role-tab-btn" id="tab-specialist" role="tab" aria-selected="false" data-role="mecanico">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+              </svg>
+              <span>Especialista</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Banner de Notificación y Feedback dinámico -->
+        <div class="alert-banner" id="alert-banner" role="alert" aria-live="polite">
+          <svg class="alert-icon" id="alert-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+          <span id="alert-message">Mensaje del sistema</span>
+        </div>
+
+        <!-- FORMULARIO PRINCIPAL -->
+        <form class="login-form" id="loginForm" novalidate>
+
+          <!-- ==========================================
+               CAMPO: CORREO ELECTRÓNICO (EMAIL CAMPUS)
+               ========================================== -->
+          <div class="form-group" id="group-email">
+            <label for="email" class="form-label">
+              <span>Correo electrónico <span class="required-star">*</span></span>
+            </label>
+            <div class="input-wrapper">
+              <div class="input-icon" aria-hidden="true">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                  <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+              </div>
+              <input 
+                type="email" 
+                id="email" 
+                name="email" 
+                class="form-input" 
+                placeholder="ejemplo@correo.com" 
+                required 
+                autocomplete="email"
+                spellcheck="false"
+                aria-describedby="error-email"
+              >
+            </div>
+            <div class="field-error" id="error-email">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+              <span id="error-email-text">Ingresa un correo electrónico válido.</span>
+            </div>
+          </div>
+
+          <!-- ==========================================
+               CAMPO: CONTRASEÑA (PASSWORD CAMPUS)
+               ========================================== -->
+          <div class="form-group" id="group-password">
+            <label for="password" class="form-label">
+              <span>Contraseña <span class="required-star">*</span></span>
+            </label>
+            <div class="input-wrapper">
+              <div class="input-icon" aria-hidden="true">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+              </div>
+              <input 
+                type="password" 
+                id="password" 
+                name="password" 
+                class="form-input" 
+                placeholder="Ingresa tu contraseña" 
+                required 
+                autocomplete="current-password"
+                aria-describedby="error-password"
+              >
+              <!-- Botón Mostrar/Ocultar contraseña (Instant feedback) -->
+              <button 
+                type="button" 
+                class="toggle-password" 
+                id="togglePasswordBtn" 
+                aria-label="Mostrar u ocultar contraseña"
+                title="Mostrar contraseña"
+              >
+                <!-- Icono de ojo abierto -->
+                <svg class="eye-open" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+                <!-- Icono de ojo tachado (oculto por defecto) -->
+                <svg class="eye-closed" style="display: none;" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                  <line x1="1" y1="1" x2="23" y2="23"></line>
+                </svg>
+              </button>
+            </div>
+            <div class="field-error" id="error-password">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+              <span id="error-password-text">Ingresa tu contraseña para continuar.</span>
+            </div>
+          </div>
+
+          <!-- ==========================================
+               FILA: RECORDARME Y OLVIDÉ MI CONTRASEÑA
+               ========================================== -->
+          <div class="form-actions-row">
+            <label class="remember-group" for="rememberMe">
+              <div class="custom-checkbox">
+                <input type="checkbox" id="rememberMe" name="rememberMe">
+                <div class="checkbox-box" aria-hidden="true">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <span class="remember-text">Recordar mi sesión</span>
+            </label>
+
+            <!-- Disparador de Olvidé mi contraseña -->
+            <button type="button" class="forgot-link" id="forgotPasswordBtn">
+              <span>¿Olvidaste tu contraseña?</span>
+            </button>
+          </div>
+
+          <!-- BOTÓN DE ENVÍO PRINCIPAL -->
+          <button type="submit" id="btnSubmit" class="btn-submit">
+            <span id="submitBtnText">Iniciar Sesión</span>
+            <div class="spinner" id="btnSpinner" aria-hidden="true"></div>
+            <svg id="btnArrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+
+        </form>
+
+        <!-- Acceso Rápido / Credenciales de Prueba -->
+        <div class="divider-row">
+          <span>O ingresa rápidamente</span>
+        </div>
+
+        <div class="demo-hint-box">
+          <div class="demo-hint-text">
+            <span>¿Deseas probar la interfaz?</span>
+          </div>
+          <button type="button" class="demo-fill-btn" id="demoFillBtn">
+            Usar cuenta demo
+          </button>
+        </div>
+
+        <!-- Pie de Formulario: Registro -->
+        <footer class="form-footer">
+          <span>¿Aún no tienes una cuenta?</span>
+          <a href="register.html">Regístrate en Amari</a>
+        </footer>
+
+      </section>
+    </main>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL DE RECUPERACIÓN DE CONTRASEÑA (FLUID SHEET / WWDC 2018)
+       ========================================================================== -->
+  <div 
+    class="modal-backdrop" 
+    id="forgotModal" 
+    role="dialog" 
+    aria-modal="true" 
+    aria-labelledby="forgotModalTitle" 
+    aria-hidden="true"
+  >
+    <div class="sheet-modal" id="sheetModalContainer">
+      <!-- Indicador visual de arrastre / Apple Sheet Handle -->
+      <div class="sheet-handle" aria-hidden="true"></div>
+
+      <!-- Encabezado del Modal -->
+      <div class="modal-header-group">
+        <div class="modal-icon-badge" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+        </div>
+        <button type="button" class="modal-close-btn" id="closeForgotModalBtn" aria-label="Cerrar modal de recuperación">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Estado 1: Formulario para enviar correo de recuperación -->
+      <div id="forgotStateInitial">
+        <h3 class="modal-title" id="forgotModalTitle">¿Olvidaste tu contraseña?</h3>
+        <p class="modal-desc">
+          No te preocupes. Escribe el correo electrónico asociado a tu cuenta de Amari y te enviaremos de inmediato un enlace seguro para restablecerla.
+        </p>
+
+        <form class="forgot-form" id="forgotForm" novalidate>
+          <div class="form-group" id="group-forgot-email">
+            <label for="forgotEmail" class="form-label">
+              <span>Correo electrónico registrado</span>
+            </label>
+            <div class="input-wrapper">
+              <div class="input-icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                  <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+              </div>
+              <input 
+                type="email" 
+                id="forgotEmail" 
+                class="form-input" 
+                placeholder="ejemplo@correo.com" 
+                required 
+                autocomplete="email"
+              >
+            </div>
+            <div class="field-error" id="error-forgot-email">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+              <span>Por favor ingresa un correo electrónico válido.</span>
+            </div>
+          </div>
+
+          <div class="modal-actions-group">
+            <button type="submit" id="btnForgotSubmit" class="btn-submit">
+              <span id="forgotSubmitText">Enviar enlace de recuperación</span>
+              <div class="spinner" id="forgotSpinner" aria-hidden="true"></div>
+            </button>
+            <button type="button" class="btn-secondary" id="cancelForgotBtn">
+              Cancelar
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Estado 2: Confirmación de envío exitoso -->
+      <div class="modal-success-state" id="forgotStateSuccess">
+        <div class="success-icon-badge" aria-hidden="true">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+        </div>
+        <h3 class="modal-title">¡Enlace enviado con éxito!</h3>
+        <p class="modal-desc" id="forgotSuccessMessage">
+          Hemos enviado las instrucciones para restablecer tu contraseña a tu correo. Revisa tu bandeja de entrada o spam.
+        </p>
+        <button type="button" class="btn-submit" id="btnBackToLoginSuccess">
+          Entendido, volver al inicio de sesión
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Integración con Tema Amari -->
+  <script type="module">
+    import amariTheme from './assets/theme.js';
+    if (amariTheme && typeof amariTheme.applyToDOM === 'function') {
+      amariTheme.applyToDOM();
+    }
+  </script>
+
+  <!-- LÓGICA DE INTERACCIÓN, VALIDACIÓN Y ANIMACIONES FLUIDAS -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Elementos del DOM - Formulario de Login
+      const loginForm = document.getElementById('loginForm');
+      const emailInput = document.getElementById('email');
+      const passwordInput = document.getElementById('password');
+      const togglePasswordBtn = document.getElementById('togglePasswordBtn');
+      const rememberMeInput = document.getElementById('rememberMe');
+      const groupEmail = document.getElementById('group-email');
+      const groupPassword = document.getElementById('group-password');
+      const errorEmail = document.getElementById('error-email');
+      const errorPassword = document.getElementById('error-password');
+      const btnSubmit = document.getElementById('btnSubmit');
+      const submitBtnText = document.getElementById('submitBtnText');
+      const btnSpinner = document.getElementById('btnSpinner');
+      const btnArrow = document.getElementById('btnArrow');
+      const alertBanner = document.getElementById('alert-banner');
+      const alertMessage = document.getElementById('alert-message');
+      const demoFillBtn = document.getElementById('demoFillBtn');
+
+      // Selector de Rol (Tabs)
+      const tabDriver = document.getElementById('tab-driver');
+      const tabSpecialist = document.getElementById('tab-specialist');
+      let currentRole = 'conductor';
+
+      // Modal de Recuperación de Contraseña
+      const forgotPasswordBtn = document.getElementById('forgotPasswordBtn');
+      const forgotModal = document.getElementById('forgotModal');
+      const sheetModalContainer = document.getElementById('sheetModalContainer');
+      const closeForgotModalBtn = document.getElementById('closeForgotModalBtn');
+      const cancelForgotBtn = document.getElementById('cancelForgotBtn');
+      const forgotForm = document.getElementById('forgotForm');
+      const forgotEmail = document.getElementById('forgotEmail');
+      const groupForgotEmail = document.getElementById('group-forgot-email');
+      const btnForgotSubmit = document.getElementById('btnForgotSubmit');
+      const forgotSubmitText = document.getElementById('forgotSubmitText');
+      const forgotSpinner = document.getElementById('forgotSpinner');
+      const forgotStateInitial = document.getElementById('forgotStateInitial');
+      const forgotStateSuccess = document.getElementById('forgotStateSuccess');
+      const forgotSuccessMessage = document.getElementById('forgotSuccessMessage');
+      const btnBackToLoginSuccess = document.getElementById('btnBackToLoginSuccess');
+
+      // Expresión regular para validación rigurosa de correo
+      const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+
+      // Cargar credenciales recordadas si existen en localStorage
+      try {
+        const savedEmail = localStorage.getItem('amari_remembered_email');
+        const savedRole = localStorage.getItem('amari_user_role');
+        if (savedEmail) {
+          emailInput.value = savedEmail;
+          rememberMeInput.checked = true;
+        }
+        if (savedRole === 'mecanico') {
+          setRole('mecanico');
+        }
+      } catch (err) {
+        console.warn('LocalStorage inaccesible:', err);
+      }
+
+      // ----------------------------------------------------
+      // 1. Selector de Rol / Perfil de Cuenta
+      // ----------------------------------------------------
+      function setRole(role) {
+        currentRole = role;
+        if (role === 'conductor') {
+          tabDriver.classList.add('active');
+          tabDriver.setAttribute('aria-selected', 'true');
+          tabSpecialist.classList.remove('active');
+          tabSpecialist.setAttribute('aria-selected', 'false');
+          submitBtnText.textContent = 'Iniciar Sesión como Conductor';
+        } else {
+          tabSpecialist.classList.add('active');
+          tabSpecialist.setAttribute('aria-selected', 'true');
+          tabDriver.classList.remove('active');
+          tabDriver.setAttribute('aria-selected', 'false');
+          submitBtnText.textContent = 'Iniciar Sesión como Especialista';
+        }
+      }
+
+      tabDriver.addEventListener('click', () => setRole('conductor'));
+      tabSpecialist.addEventListener('click', () => setRole('mecanico'));
+
+      // ----------------------------------------------------
+      // 2. Alternar visibilidad de contraseña (Instant Response)
+      // ----------------------------------------------------
+      const eyeOpen = togglePasswordBtn.querySelector('.eye-open');
+      const eyeClosed = togglePasswordBtn.querySelector('.eye-closed');
+
+      togglePasswordBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const isPassword = passwordInput.getAttribute('type') === 'password';
+        passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
+        eyeOpen.style.display = isPassword ? 'none' : 'block';
+        eyeClosed.style.display = isPassword ? 'block' : 'none';
+        togglePasswordBtn.setAttribute('title', isPassword ? 'Ocultar contraseña' : 'Mostrar contraseña');
+        passwordInput.focus();
+      });
+
+      // ----------------------------------------------------
+      // 3. Limpieza y validación en tiempo real (Feedback continuo)
+      // ----------------------------------------------------
+      function validateEmailField() {
+        const val = emailInput.value.trim();
+        if (!val) {
+          showFieldError(groupEmail, 'El correo electrónico es requerido.');
+          return false;
+        }
+        if (!emailRegex.test(val)) {
+          showFieldError(groupEmail, 'Ingresa un formato de correo válido (ej. usuario@dominio.com).');
+          return false;
+        }
+        clearFieldError(groupEmail);
+        return true;
+      }
+
+      function validatePasswordField() {
+        const val = passwordInput.value;
+        if (!val) {
+          showFieldError(groupPassword, 'Ingresa tu contraseña para acceder.');
+          return false;
+        }
+        if (val.length < 6) {
+          showFieldError(groupPassword, 'La contraseña debe tener al menos 6 caracteres.');
+          return false;
+        }
+        clearFieldError(groupPassword);
+        return true;
+      }
+
+      function showFieldError(groupEl, message) {
+        groupEl.classList.add('has-error');
+        groupEl.classList.remove('has-success');
+        const errSpan = groupEl.querySelector('.field-error span');
+        if (errSpan && message) {
+          errSpan.textContent = message;
+        }
+      }
+
+      function clearFieldError(groupEl) {
+        groupEl.classList.remove('has-error');
+        groupEl.classList.add('has-success');
+      }
+
+      emailInput.addEventListener('input', () => {
+        if (groupEmail.classList.contains('has-error')) {
+          validateEmailField();
+        }
+        hideAlert();
+      });
+
+      emailInput.addEventListener('blur', () => {
+        if (emailInput.value.trim() !== '') {
+          validateEmailField();
+        }
+      });
+
+      passwordInput.addEventListener('input', () => {
+        if (groupPassword.classList.contains('has-error')) {
+          validatePasswordField();
+        }
+        hideAlert();
+      });
+
+      // ----------------------------------------------------
+      // 4. Botón Demo para pruebas rápidas
+      // ----------------------------------------------------
+      demoFillBtn.addEventListener('click', () => {
+        emailInput.value = 'conductor@amari.com';
+        passwordInput.value = 'AmariSeguro2026';
+        clearFieldError(groupEmail);
+        clearFieldError(groupPassword);
+        showAlert('Credenciales de demostración cargadas. Puedes hacer clic en Iniciar Sesión.', 'success');
+      });
+
+      // ----------------------------------------------------
+      // 5. Manejo del envío del Formulario de Login
+      // ----------------------------------------------------
+      loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const isEmailValid = validateEmailField();
+        const isPasswordValid = validatePasswordField();
+
+        if (!isEmailValid || !isPasswordValid) {
+          showAlert('Por favor corrige los campos señalados antes de continuar.', 'error');
+          // Focalizar el primer campo con error
+          if (!isEmailValid) {
+            emailInput.focus();
+          } else {
+            passwordInput.focus();
+          }
+          return;
+        }
+
+        // Simulación de autenticación segura con retroalimentación física
+        setSubmittingState(true);
+
+        setTimeout(() => {
+          setSubmittingState(false);
+
+          // Guardar en sesión o localStorage
+          try {
+            if (rememberMeInput.checked) {
+              localStorage.setItem('amari_remembered_email', emailInput.value.trim());
+              localStorage.setItem('amari_user_role', currentRole);
+            } else {
+              localStorage.removeItem('amari_remembered_email');
+            }
+            sessionStorage.setItem('amari_active_session', JSON.stringify({
+              email: emailInput.value.trim(),
+              role: currentRole,
+              loggedInAt: new Date().toISOString()
+            }));
+          } catch (err) {
+            console.warn('Error en storage:', err);
+          }
+
+          showAlert('¡Acceso verificado! Redirigiendo a tu panel de Amari...', 'success');
+
+          // Redirección fluida a la aplicación (home.html)
+          setTimeout(() => {
+            window.location.href = 'home.html';
+          }, 800);
+
+        }, 1100);
+      });
+
+      function setSubmittingState(isSubmitting) {
+        btnSubmit.disabled = isSubmitting;
+        if (isSubmitting) {
+          btnSpinner.style.display = 'block';
+          btnArrow.style.display = 'none';
+          submitBtnText.textContent = 'Verificando...';
+        } else {
+          btnSpinner.style.display = 'none';
+          btnArrow.style.display = 'block';
+          submitBtnText.textContent = currentRole === 'conductor' 
+            ? 'Iniciar Sesión como Conductor' 
+            : 'Iniciar Sesión como Especialista';
+        }
+      }
+
+      function showAlert(msg, type = 'error') {
+        alertMessage.textContent = msg;
+        alertBanner.className = `alert-banner ${type === 'success' ? 'alert-success' : 'alert-error'}`;
+        alertBanner.style.display = 'flex';
+      }
+
+      function hideAlert() {
+        alertBanner.style.display = 'none';
+      }
+
+      // ----------------------------------------------------
+      // 6. Modal de Olvidé mi Contraseña (Apple Fluid Sheet)
+      // ----------------------------------------------------
+      function openForgotModal() {
+        // Prellenar con el email del campo principal si ya se escribió
+        if (emailInput.value.trim()) {
+          forgotEmail.value = emailInput.value.trim();
+        }
+        forgotStateInitial.style.display = 'block';
+        forgotStateSuccess.classList.remove('active');
+        groupForgotEmail.classList.remove('has-error');
+
+        forgotModal.classList.add('is-open');
+        forgotModal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+
+        setTimeout(() => {
+          forgotEmail.focus();
+        }, 120);
+      }
+
+      function closeForgotModal() {
+        forgotModal.classList.remove('is-open');
+        forgotModal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      }
+
+      forgotPasswordBtn.addEventListener('click', openForgotModal);
+      closeForgotModalBtn.addEventListener('click', closeForgotModal);
+      cancelForgotBtn.addEventListener('click', closeForgotModal);
+      btnBackToLoginSuccess.addEventListener('click', closeForgotModal);
+
+      // Cerrar al hacer clic en el backdrop fuera del contenedor
+      forgotModal.addEventListener('click', (e) => {
+        if (e.target === forgotModal) {
+          closeForgotModal();
+        }
+      });
+
+      // Accesibilidad con teclado: Cerrar con tecla Escape
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && forgotModal.classList.contains('is-open')) {
+          closeForgotModal();
+        }
+      });
+
+      // Envío de recuperación de contraseña
+      forgotForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const emailVal = forgotEmail.value.trim();
+
+        if (!emailVal || !emailRegex.test(emailVal)) {
+          groupForgotEmail.classList.add('has-error');
+          forgotEmail.focus();
+          return;
+        }
+
+        groupForgotEmail.classList.remove('has-error');
+        btnForgotSubmit.disabled = true;
+        forgotSubmitText.textContent = 'Enviando enlace...';
+        forgotSpinner.style.display = 'block';
+
+        setTimeout(() => {
+          btnForgotSubmit.disabled = false;
+          forgotSubmitText.textContent = 'Enviar enlace de recuperación';
+          forgotSpinner.style.display = 'none';
+
+          // Cambiar a vista de éxito dentro del sheet
+          forgotStateInitial.style.display = 'none';
+          forgotSuccessMessage.innerHTML = `Hemos enviado un enlace seguro a <strong>${escapeHtml(emailVal)}</strong> con las instrucciones para restablecer tu contraseña.`;
+          forgotStateSuccess.classList.add('active');
+        }, 1000);
+      });
+
+      function escapeHtml(string) {
+        return String(string).replace(/[&<>"']/g, function(s) {
+          return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[s];
+        });
+      }
+
+    });
+  </script>
+</body>
+</html>
+

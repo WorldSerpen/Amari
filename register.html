@@ -2,7 +2,8 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#e11d48">
   <meta name="description" content="Regístrate en Amari como usuario conductor o especialista mecánico certificado. Únete a la plataforma líder de servicios y auxilio vial.">
   <meta name="keywords" content="Amari, registro, crear cuenta, registro mecanico, auxilio vial, conductor, taller mecanico, banca digital">
   <meta name="author" content="Amari">
@@ -46,8 +47,13 @@
       --shadow-card: 0 20px 40px -15px rgba(225, 29, 72, 0.08), 0 0 20px 0 rgba(0, 0, 0, 0.04);
       --shadow-glow: 0 10px 25px -5px rgba(225, 29, 72, 0.35);
       --shadow-glow-elevated: 0 14px 28px -6px rgba(225, 29, 72, 0.45);
-      --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-      --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+      /* Apple Motion Principles (SKILLS.md): Critically damped spring */
+      --spring-timing: cubic-bezier(0.16, 1, 0.3, 1);
+      --spring-fast: 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      --spring-normal: 0.38s cubic-bezier(0.16, 1, 0.3, 1);
+      --transition-fast: 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      --transition-normal: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     /* Reset y base */
@@ -55,6 +61,11 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+    }
+
+    html {
+      min-width: 320px;
+      min-height: 100%;
     }
 
     body {
@@ -66,10 +77,18 @@
         radial-gradient(at 50% 50%, rgba(255, 228, 230, 0.45) 0px, transparent 80%);
       color: var(--text-main);
       min-height: 100vh;
+      min-height: 100svh;
+      min-height: 100dvh;
       display: flex;
       flex-direction: column;
       line-height: 1.5;
+      text-rendering: optimizeLegibility;
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    button, a, input, select {
+      font: inherit;
     }
 
     /* Contenedor Principal */
@@ -77,17 +96,18 @@
       display: flex;
       flex: 1;
       min-height: 100vh;
+      min-height: 100svh;
       width: 100%;
     }
 
     /* ==========================================================================
-       PANEL HERO IZQUIERDO (TEMA ROJO & BLANCO CON LOGOTIPO AMARI)
+       PANEL HERO IZQUIERDO (DESKTOP >= 1024px)
        ========================================================================== */
     .hero-side {
       display: none;
       flex: 1.1;
       background: linear-gradient(145deg, #be123c 0%, #e11d48 50%, #9f1239 100%);
-      padding: 3.5rem 3.5rem;
+      padding: 3.5rem;
       position: relative;
       overflow: hidden;
       color: var(--pure-white);
@@ -147,11 +167,15 @@
       gap: 14px;
       text-decoration: none;
       color: var(--pure-white);
-      transition: transform var(--transition-fast);
+      transition: transform var(--spring-fast);
     }
 
     .brand-logo-hero:hover {
       transform: translateY(-2px);
+    }
+
+    .brand-logo-hero:active {
+      transform: scale(0.97);
     }
 
     .logo-image-wrap {
@@ -207,7 +231,8 @@
       align-items: center;
       gap: 8px;
       background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(12px) saturate(180%);
+      -webkit-backdrop-filter: blur(12px) saturate(180%);
       padding: 6px 14px;
       border-radius: 30px;
       font-size: 0.85rem;
@@ -222,7 +247,7 @@
       font-weight: 800;
       line-height: 1.15;
       margin-bottom: 1.25rem;
-      letter-spacing: -1px;
+      letter-spacing: -0.02em;
     }
 
     .hero-title span {
@@ -249,12 +274,14 @@
       display: flex;
       align-items: center;
       gap: 14px;
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.12);
       backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       padding: 12px 18px;
       border-radius: 14px;
       border: 1px solid rgba(255, 255, 255, 0.18);
-      transition: transform var(--transition-fast), background var(--transition-fast);
+      border-top: 1px solid rgba(255, 255, 255, 0.4);
+      transition: transform var(--spring-fast), background var(--spring-fast);
     }
 
     .feature-item:hover {
@@ -304,7 +331,7 @@
     }
 
     /* ==========================================================================
-       PANEL DERECHO: FORMULARIO UNIFICADO CON SELECTOR SUPERIOR
+       PANEL DERECHO: FORMULARIO OPTIMIZADO PARA MÓVILES Y PANTALLAS TÁCTILES
        ========================================================================== */
     .form-side {
       flex: 1.25;
@@ -312,31 +339,94 @@
       flex-direction: column;
       justify-content: flex-start;
       align-items: center;
-      padding: 3rem 1.5rem;
+      /* Padding fluido optimizado para celular sin estrangular contenido */
+      padding: clamp(1rem, 3.5vw, 3rem) clamp(0.75rem, 3vw, 1.5rem);
+      padding-top: max(clamp(1rem, 3.5vw, 3rem), env(safe-area-inset-top));
+      padding-bottom: max(clamp(1.5rem, 4vw, 3.5rem), env(safe-area-inset-bottom));
       position: relative;
       overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      width: 100%;
+    }
+
+    /* Barra superior de navegación / Salida rápida para móvil */
+    .top-nav-bar {
+      width: 100%;
+      max-width: 650px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 1.25rem;
+    }
+
+    .back-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 14px;
+      background: var(--surface-white);
+      color: var(--text-muted);
+      border: 1px solid var(--border-medium);
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all var(--spring-fast);
+      box-shadow: var(--shadow-subtle);
+    }
+
+    .back-button:hover {
+      color: var(--primary-red);
+      border-color: #fda4af;
+      background: #fff7f8;
+      transform: translateX(-3px);
+    }
+
+    .back-button:active {
+      transform: scale(0.96);
+    }
+
+    .top-nav-login-link {
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: color var(--spring-fast);
+    }
+
+    .top-nav-login-link strong {
+      color: var(--primary-red);
+      font-weight: 700;
+    }
+
+    .top-nav-login-link:hover strong {
+      text-decoration: underline;
     }
 
     .form-wrapper {
       width: 100%;
       max-width: 650px;
       background: var(--surface-white);
-      padding: 2.75rem 2.5rem;
-      border-radius: var(--radius-lg);
+      /* Padding responsivo: 18px en celular vs 40px en desktop */
+      padding: clamp(1.25rem, 4.5vw, 2.75rem) clamp(1rem, 4vw, 2.5rem);
+      border-radius: clamp(18px, 4vw, var(--radius-lg));
       box-shadow: var(--shadow-card);
       border: 1px solid var(--border-medium);
       position: relative;
-      animation: fadeIn 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+      animation: springFadeIn 0.48s var(--spring-timing);
     }
 
-    @keyframes fadeIn {
+    @keyframes springFadeIn {
       from {
         opacity: 0;
-        transform: translateY(18px);
+        transform: translateY(18px) scale(0.98);
       }
       to {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0) scale(1);
       }
     }
 
@@ -347,7 +437,7 @@
       gap: 12px;
       text-decoration: none;
       color: var(--text-main);
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.25rem;
     }
 
     @media (min-width: 1024px) {
@@ -385,6 +475,7 @@
       font-weight: 800;
       color: var(--text-main);
       line-height: 1.1;
+      letter-spacing: -0.5px;
     }
 
     .brand-mobile-subtitle {
@@ -396,14 +487,14 @@
     }
 
     /* ==========================================================================
-       SELECTOR SUPERIOR DE ROL (USUARIO vs MECÁNICO)
+       SELECTOR SUPERIOR DE ROL (APPLE SEGMENTED CONTROL / TÁCTIL)
        ========================================================================== */
     .top-role-selector-container {
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
     }
 
     .top-role-label {
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 1px;
@@ -415,9 +506,9 @@
     .top-role-switcher {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 8px;
+      gap: 6px;
       background: var(--off-white);
-      padding: 6px;
+      padding: 5px;
       border-radius: 16px;
       border: 1.5px solid var(--border-medium);
     }
@@ -426,24 +517,31 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
-      padding: 12px 14px;
+      gap: 8px;
+      padding: 10px 8px;
       border-radius: 12px;
       border: none;
       background: transparent;
       color: var(--text-muted);
       font-family: inherit;
-      font-size: 0.92rem;
+      font-size: clamp(0.78rem, 2.5vw, 0.92rem);
       font-weight: 700;
       cursor: pointer;
-      transition: all var(--transition-fast);
+      transition: all var(--spring-fast);
       position: relative;
       user-select: none;
+      min-height: 48px; /* Touch target HIG */
+      text-align: center;
     }
 
     .role-tab-btn:hover:not(.active) {
       color: var(--text-main);
       background: rgba(0, 0, 0, 0.03);
+    }
+
+    /* Feedback instantáneo en toque (SKILLS.md Principle 1) */
+    .role-tab-btn:active {
+      transform: scale(0.97);
     }
 
     .role-tab-btn.active {
@@ -453,8 +551,8 @@
     }
 
     .role-tab-icon {
-      width: 20px;
-      height: 20px;
+      width: 18px;
+      height: 18px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -463,16 +561,21 @@
 
     .role-tab-badge {
       display: none;
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       padding: 2px 7px;
       border-radius: 20px;
       font-weight: 800;
       text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
-    @media (min-width: 480px) {
+    @media (min-width: 520px) {
       .role-tab-badge {
         display: inline-block;
+      }
+      .role-tab-btn {
+        padding: 11px 14px;
+        gap: 10px;
       }
     }
 
@@ -488,7 +591,7 @@
 
     /* Encabezado dinámico del formulario */
     .form-header {
-      margin-bottom: 2rem;
+      margin-bottom: 1.6rem;
       text-align: left;
     }
 
@@ -496,29 +599,29 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 1px;
       color: var(--primary-red);
       background-color: var(--primary-red-light);
-      padding: 5px 12px;
+      padding: 4px 10px;
       border-radius: 8px;
-      margin-bottom: 0.65rem;
+      margin-bottom: 0.5rem;
     }
 
     .form-title {
-      font-size: 2.1rem;
+      font-size: clamp(1.75rem, 5vw, 2.2rem);
       font-weight: 800;
       color: var(--text-main);
-      letter-spacing: -0.5px;
-      line-height: 1.2;
-      margin-bottom: 0.4rem;
+      letter-spacing: -0.02em;
+      line-height: 1.18;
+      margin-bottom: 0.35rem;
     }
 
     .form-subtitle {
       color: var(--text-muted);
-      font-size: 0.95rem;
+      font-size: clamp(0.85rem, 2.5vw, 0.95rem);
       line-height: 1.5;
     }
 
@@ -526,19 +629,19 @@
     .register-form {
       display: flex;
       flex-direction: column;
-      gap: 1.25rem;
+      gap: 1.15rem;
     }
 
     .form-section-title {
       display: flex;
       align-items: center;
       gap: 10px;
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: 800;
       color: var(--text-main);
-      padding-bottom: 0.6rem;
-      margin-top: 1rem;
-      margin-bottom: 0.75rem;
+      padding-bottom: 0.55rem;
+      margin-top: 0.75rem;
+      margin-bottom: 0.65rem;
       border-bottom: 1.5px solid var(--border-light);
     }
 
@@ -553,12 +656,13 @@
       justify-content: center;
       font-size: 0.75rem;
       font-weight: 800;
+      flex-shrink: 0;
     }
 
     .form-grid-2 {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 1.25rem;
+      gap: 1.15rem;
     }
 
     @media (min-width: 640px) {
@@ -575,7 +679,7 @@
     }
 
     .form-label {
-      font-size: 0.875rem;
+      font-size: 0.85rem;
       font-weight: 600;
       color: var(--text-main);
       display: flex;
@@ -596,28 +700,30 @@
 
     .input-icon {
       position: absolute;
-      left: 14px;
+      left: 15px;
       color: var(--text-light);
       display: flex;
       align-items: center;
       justify-content: center;
       pointer-events: none;
-      transition: color var(--transition-fast);
+      transition: color var(--spring-fast);
       z-index: 2;
     }
 
+    /* Inputs optimizados: 16px para evitar auto-zoom involuntario en Safari iOS */
     .form-input, .form-select {
       width: 100%;
-      height: 50px;
-      padding: 0 44px 0 44px;
+      height: 52px;
+      padding: 0 46px 0 46px;
       background-color: var(--off-white);
       border: 1.5px solid var(--border-medium);
       border-radius: var(--radius-md);
-      font-size: 0.95rem;
+      font-size: 16px; /* Evita auto-zoom en iOS Safari */
       font-family: inherit;
       color: var(--text-main);
       outline: none;
-      transition: all var(--transition-fast);
+      transition: all var(--spring-fast);
+      -webkit-appearance: none;
     }
 
     .form-select {
@@ -640,15 +746,14 @@
       box-shadow: 0 0 0 4px var(--primary-red-glow);
     }
 
-    .form-input:focus + .input-icon,
     .input-wrapper:focus-within .input-icon {
       color: var(--primary-red);
     }
 
-    /* Botón para alternar visibilidad de contraseña */
+    /* Botón para alternar visibilidad de contraseña: Touch target de 44x44px */
     .toggle-password {
       position: absolute;
-      right: 14px;
+      right: 6px;
       background: none;
       border: none;
       color: var(--text-light);
@@ -656,9 +761,10 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 6px;
-      border-radius: 6px;
-      transition: color var(--transition-fast), background var(--transition-fast);
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+      transition: color var(--spring-fast), background var(--spring-fast), transform 100ms ease-out;
       z-index: 2;
     }
 
@@ -667,13 +773,17 @@
       background-color: var(--primary-red-light);
     }
 
+    .toggle-password:active {
+      transform: scale(0.92);
+    }
+
     /* Mensajes de error */
     .field-error {
       font-size: 0.78rem;
       color: var(--danger-red);
       display: none;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
       margin-top: 2px;
       font-weight: 500;
     }
@@ -683,6 +793,7 @@
     .form-group.has-error .file-dropzone {
       border-color: var(--danger-red);
       background-color: #fff1f2;
+      animation: appleShake 0.38s var(--spring-timing);
     }
 
     .form-group.has-error .field-error {
@@ -692,6 +803,12 @@
     .form-group.has-success .form-input,
     .form-group.has-success .form-select {
       border-color: var(--success-green);
+    }
+
+    @keyframes appleShake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-5px); }
+      40%, 80% { transform: translateX(5px); }
     }
 
     /* Medidor de fortaleza de contraseña */
@@ -717,7 +834,7 @@
       flex: 1;
       background-color: transparent;
       border-radius: 2px;
-      transition: background-color var(--transition-fast);
+      transition: background-color var(--spring-fast);
     }
 
     .strength-status {
@@ -757,20 +874,26 @@
     .mechanic-exclusive-section {
       display: flex;
       flex-direction: column;
-      gap: 1.25rem;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      gap: 1.15rem;
+      transition: all 0.35s var(--spring-timing);
     }
 
     .mechanic-exclusive-section.hidden-section {
       display: none;
     }
 
-    /* Tarjetas de Selección de Acreditación */
+    /* Tarjetas de Selección de Acreditación (Apilables en móvil) */
     .radio-card-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-      gap: 10px;
+      grid-template-columns: 1fr;
+      gap: 8px;
       margin-top: 2px;
+    }
+
+    @media (min-width: 580px) {
+      .radio-card-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
     }
 
     .radio-card {
@@ -780,10 +903,11 @@
       border-radius: var(--radius-md);
       padding: 12px 14px;
       background-color: var(--off-white);
-      transition: all var(--transition-fast);
+      transition: all var(--spring-fast);
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 4px;
+      user-select: none;
     }
 
     .radio-card input {
@@ -796,6 +920,10 @@
     .radio-card:hover {
       border-color: var(--border-hover);
       background-color: #fcfcfc;
+    }
+
+    .radio-card:active {
+      transform: scale(0.98);
     }
 
     .radio-card.active,
@@ -826,23 +954,24 @@
     .radio-card-desc {
       font-size: 0.75rem;
       color: var(--text-muted);
-      line-height: 1.3;
+      line-height: 1.35;
     }
 
-    /* Dropzones para subida de archivos */
+    /* Dropzones para subida de archivos táctiles */
     .file-dropzone {
       border: 2px dashed var(--border-medium);
       border-radius: var(--radius-md);
-      padding: 20px 16px;
+      padding: clamp(16px, 4vw, 22px) 16px;
       background-color: var(--off-white);
       text-align: center;
       cursor: pointer;
-      transition: all var(--transition-fast);
+      transition: all var(--spring-fast);
       position: relative;
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 8px;
+      user-select: none;
     }
 
     .file-dropzone:hover,
@@ -850,6 +979,10 @@
       border-color: var(--primary-red);
       background-color: #fff1f2;
       box-shadow: 0 0 0 4px var(--primary-red-glow);
+    }
+
+    .file-dropzone:active {
+      transform: scale(0.985);
     }
 
     .file-dropzone input[type="file"] {
@@ -871,7 +1004,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: transform var(--transition-fast);
+      transition: transform var(--spring-fast);
     }
 
     .file-dropzone:hover .dropzone-icon {
@@ -879,7 +1012,7 @@
     }
 
     .dropzone-text {
-      font-size: 0.88rem;
+      font-size: clamp(0.82rem, 2.5vw, 0.88rem);
       font-weight: 600;
       color: var(--text-main);
     }
@@ -890,7 +1023,7 @@
     }
 
     .dropzone-hint {
-      font-size: 0.75rem;
+      font-size: 0.74rem;
       color: var(--text-muted);
     }
 
@@ -917,8 +1050,8 @@
     }
 
     .file-type-icon {
-      width: 34px;
-      height: 34px;
+      width: 36px;
+      height: 36px;
       background: var(--success-light);
       color: var(--success-green);
       border-radius: 8px;
@@ -941,11 +1074,17 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      max-width: 280px;
+      max-width: 200px;
+    }
+
+    @media (min-width: 480px) {
+      .file-name {
+        max-width: 280px;
+      }
     }
 
     .file-size {
-      font-size: 0.75rem;
+      font-size: 0.74rem;
       color: var(--text-muted);
     }
 
@@ -954,12 +1093,14 @@
       border: none;
       color: var(--text-light);
       cursor: pointer;
-      padding: 6px;
-      border-radius: 6px;
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all var(--transition-fast);
+      transition: all var(--spring-fast);
+      flex-shrink: 0;
     }
 
     .btn-remove-file:hover {
@@ -967,19 +1108,24 @@
       color: var(--danger-red);
     }
 
+    .btn-remove-file:active {
+      transform: scale(0.92);
+    }
+
     /* Términos y Condiciones */
     .terms-group {
       display: flex;
       align-items: flex-start;
-      gap: 10px;
-      margin-top: 0.25rem;
+      gap: 12px;
+      margin-top: 0.35rem;
       user-select: none;
+      padding: 4px 0;
     }
 
     .custom-checkbox {
       position: relative;
-      width: 18px;
-      height: 18px;
+      width: 20px;
+      height: 20px;
       flex-shrink: 0;
       margin-top: 2px;
     }
@@ -990,19 +1136,19 @@
       height: 100%;
       position: absolute;
       cursor: pointer;
-      z-index: 1;
+      z-index: 2;
     }
 
     .checkbox-box {
       width: 100%;
       height: 100%;
       border: 1.8px solid var(--border-medium);
-      border-radius: 5px;
+      border-radius: 6px;
       background-color: var(--off-white);
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all var(--transition-fast);
+      transition: all var(--spring-fast);
     }
 
     .checkbox-box svg {
@@ -1023,22 +1169,22 @@
       transform: scale(1);
     }
 
-    .custom-checkbox input:focus + .checkbox-box {
+    .custom-checkbox input:focus-visible + .checkbox-box {
       border-color: var(--primary-red);
       box-shadow: 0 0 0 3px var(--primary-red-glow);
     }
 
     .terms-text {
-      font-size: 0.85rem;
+      font-size: clamp(0.78rem, 2.4vw, 0.85rem);
       color: var(--text-muted);
-      line-height: 1.4;
+      line-height: 1.45;
     }
 
     .terms-link {
       color: var(--primary-red);
       font-weight: 600;
       text-decoration: none;
-      transition: color var(--transition-fast);
+      transition: color var(--spring-fast);
     }
 
     .terms-link:hover {
@@ -1046,10 +1192,11 @@
       text-decoration: underline;
     }
 
-    /* Botón de Enviar */
+    /* Botón de Enviar (Instant Touch Response - Section 1 SKILLS.md) */
     .btn-submit {
       width: 100%;
       height: 54px;
+      min-height: 52px;
       background: linear-gradient(135deg, var(--primary-red) 0%, #be123c 100%);
       color: var(--pure-white);
       border: none;
@@ -1063,10 +1210,11 @@
       justify-content: center;
       gap: 10px;
       box-shadow: var(--shadow-glow);
-      transition: all var(--transition-normal);
-      margin-top: 1rem;
+      transition: background 0.2s ease, transform 100ms ease-out, box-shadow 0.2s ease;
+      margin-top: 0.85rem;
       position: relative;
       overflow: hidden;
+      user-select: none;
     }
 
     .btn-submit::after {
@@ -1091,14 +1239,14 @@
     }
 
     .btn-submit:active {
-      transform: translateY(0);
-      box-shadow: 0 6px 16px -4px rgba(225, 29, 72, 0.4);
+      transform: scale(0.97) !important;
+      box-shadow: 0 4px 12px rgba(225, 29, 72, 0.35);
     }
 
     .btn-submit:disabled {
       opacity: 0.75;
       cursor: not-allowed;
-      transform: none;
+      transform: none !important;
     }
 
     .spinner {
@@ -1118,8 +1266,8 @@
     /* Pie del formulario */
     .form-footer {
       text-align: center;
-      margin-top: 1.75rem;
-      font-size: 0.9rem;
+      margin-top: 1.5rem;
+      font-size: clamp(0.82rem, 2.5vw, 0.9rem);
       color: var(--text-muted);
     }
 
@@ -1127,7 +1275,7 @@
       color: var(--primary-red);
       font-weight: 700;
       text-decoration: none;
-      transition: color var(--transition-fast);
+      transition: color var(--spring-fast);
       margin-left: 4px;
     }
 
@@ -1136,19 +1284,22 @@
       text-decoration: underline;
     }
 
-    /* Modal de Confirmación y Éxito */
+    /* ==========================================================================
+       MODAL DE CONFIRMACIÓN / ÉXITO (APPLE SHEET MODAL)
+       ========================================================================== */
     .modal-backdrop {
       position: fixed;
       inset: 0;
       background: rgba(15, 23, 42, 0.65);
-      backdrop-filter: blur(6px);
+      backdrop-filter: blur(16px) saturate(160%);
+      -webkit-backdrop-filter: blur(16px) saturate(160%);
       display: none;
       align-items: center;
       justify-content: center;
-      padding: 1.5rem;
+      padding: clamp(1rem, 4vw, 1.5rem);
       z-index: 100;
       opacity: 0;
-      transition: opacity var(--transition-normal);
+      transition: opacity var(--spring-normal);
     }
 
     .modal-backdrop.show {
@@ -1158,43 +1309,55 @@
 
     .success-modal {
       background: var(--pure-white);
-      width: 100%;
-      max-width: 480px;
-      border-radius: var(--radius-lg);
-      padding: 2.75rem 2.25rem;
+      width: min(100%, 480px);
+      max-height: 90vh;
+      max-height: 90svh;
+      overflow-y: auto;
+      border-radius: clamp(20px, 5vw, var(--radius-lg));
+      padding: clamp(1.75rem, 5vw, 2.75rem) clamp(1.25rem, 4.5vw, 2.25rem);
       text-align: center;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-      border: 1px solid var(--border-light);
-      transform: scale(0.9);
-      transition: transform var(--transition-normal);
+      box-shadow: 0 25px 60px -12px rgba(15, 23, 42, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      transform: translateY(20px) scale(0.96);
+      transition: transform var(--spring-normal);
+      position: relative;
     }
 
     .modal-backdrop.show .success-modal {
-      transform: scale(1);
+      transform: translateY(0) scale(1);
+    }
+
+    .modal-sheet-handle {
+      width: 40px;
+      height: 4.5px;
+      background: #cbd5e1;
+      border-radius: 99px;
+      margin: -10px auto 18px;
     }
 
     .success-icon-wrap {
-      width: 76px;
-      height: 76px;
+      width: 72px;
+      height: 72px;
       background: var(--primary-red-light);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 0 auto 1.5rem;
+      margin: 0 auto 1.25rem;
       color: var(--primary-red);
       box-shadow: 0 8px 20px var(--primary-red-glow);
     }
 
     .modal-title {
-      font-size: 1.6rem;
+      font-size: clamp(1.35rem, 4vw, 1.6rem);
       font-weight: 800;
       color: var(--text-main);
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.65rem;
+      letter-spacing: -0.5px;
     }
 
     .modal-desc {
-      font-size: 0.95rem;
+      font-size: clamp(0.85rem, 2.5vw, 0.95rem);
       color: var(--text-muted);
       line-height: 1.55;
       margin-bottom: 1.5rem;
@@ -1206,7 +1369,7 @@
       border-radius: var(--radius-md);
       padding: 14px 16px;
       text-align: left;
-      margin-bottom: 1.75rem;
+      margin-bottom: 1.5rem;
       display: flex;
       flex-direction: column;
       gap: 10px;
@@ -1216,7 +1379,7 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      font-size: 0.85rem;
+      font-size: 0.84rem;
       color: var(--text-main);
     }
 
@@ -1242,7 +1405,7 @@
 
     .modal-btn {
       width: 100%;
-      height: 48px;
+      height: 50px;
       background: var(--primary-red);
       color: var(--pure-white);
       border: none;
@@ -1250,7 +1413,7 @@
       font-weight: 700;
       font-size: 0.95rem;
       cursor: pointer;
-      transition: background var(--transition-fast);
+      transition: background var(--spring-fast), transform 100ms ease-out;
       text-decoration: none;
       display: inline-flex;
       align-items: center;
@@ -1260,6 +1423,48 @@
 
     .modal-btn:hover {
       background: var(--primary-red-hover);
+    }
+
+    .modal-btn:active {
+      transform: scale(0.97);
+    }
+
+    /* ==========================================================================
+       ACCESIBILIDAD & REDUCED MOTION (SKILLS.md Section 14)
+       ========================================================================== */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+      .form-wrapper, .success-modal {
+        transform: none !important;
+      }
+    }
+
+    @media (prefers-reduced-transparency: reduce) {
+      .hero-tag, .feature-item, .modal-backdrop {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        background-color: var(--surface-white) !important;
+      }
+      .modal-backdrop {
+        background-color: rgba(15, 23, 42, 0.85) !important;
+      }
+    }
+
+    @media (prefers-contrast: more) {
+      .form-input, .form-select {
+        border-color: #475569 !important;
+      }
+      .form-label {
+        color: #000000 !important;
+      }
+      .btn-submit {
+        border: 2px solid #000000;
+      }
     }
   </style>
 </head>
@@ -1271,13 +1476,13 @@
          PANEL HERO IZQUIERDO (DINÁMICO SEGÚN ROL SELECCIONADO)
          ========================================================================== -->
     <aside class="hero-side">
-      <div class="hero-pattern"></div>
-      <div class="hero-decor-circle-1"></div>
-      <div class="hero-decor-circle-2"></div>
+      <div class="hero-pattern" aria-hidden="true"></div>
+      <div class="hero-decor-circle-1" aria-hidden="true"></div>
+      <div class="hero-decor-circle-2" aria-hidden="true"></div>
 
       <!-- Logotipo Oficial Amari con Imagen -->
       <header class="hero-header">
-        <a href="home.html" class="brand-logo-hero" id="brand-link-hero" aria-label="Ir a Inicio de Amari">
+        <a href="index.html" class="brand-logo-hero" id="brand-link-hero" aria-label="Ir a Inicio de Amari">
           <div class="logo-image-wrap">
             <img src="assets/logoamari.png" alt="Logotipo Oficial de AMARI">
           </div>
@@ -1320,10 +1525,27 @@
          PANEL DERECHO: FORMULARIO CON SELECTOR SUPERIOR DE ROL
          ========================================================================== -->
     <section class="form-side">
+
+      <!-- Barra superior de navegación / Salida rápida para móvil -->
+      <div class="top-nav-bar">
+        <a href="index.html" class="back-button" aria-label="Volver a la página principal">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+          <span>Inicio</span>
+        </a>
+        <a href="login.html" class="top-nav-login-link" aria-label="Iniciar sesión con cuenta existente">
+          <span>¿Ya tienes cuenta? <strong>Inicia sesión</strong></span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </a>
+      </div>
+
       <div class="form-wrapper">
 
         <!-- Logotipo móvil con imagen -->
-        <a href="home.html" class="brand-mobile" id="brand-link-mobile" aria-label="Ir a Inicio de Amari">
+        <a href="index.html" class="brand-mobile" id="brand-link-mobile" aria-label="Ir a Inicio de Amari">
           <div class="brand-mobile-logo-wrap">
             <img src="assets/logoamari.png" alt="Logotipo AMARI">
           </div>
@@ -1633,7 +1855,7 @@
                   </svg>
                 </div>
                 <div class="dropzone-text">
-                  Arrastra tu documento aquí o <span>explora en tu equipo</span>
+                  Toca para adjuntar documento o <span>tomar foto</span>
                 </div>
                 <div class="dropzone-hint">
                   Formatos permitidos: PDF, JPG, PNG (Máx. 5 MB)
@@ -1750,37 +1972,37 @@
                 </div>
                 <div class="field-error" id="error-especialidad">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-                  <span>Por favor selecciona tu especialidad principal.</span>
+                  <span>Por favor selecciona tu especialidad técnica principal.</span>
                 </div>
               </div>
 
               <div class="form-group" id="group-experience">
                 <label for="experiencia" class="form-label">
-                  <span>Años de experiencia <span class="required-star">*</span></span>
+                  <span>Años de experiencia laboral <span class="required-star">*</span></span>
                 </label>
                 <div class="input-wrapper">
                   <div class="input-icon">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <circle cx="12" cy="12" r="10"></circle>
-                      <polyline points="12 6 12 12 14 14"></polyline>
+                      <polyline points="12 6 12 12 16 14"></polyline>
                     </svg>
                   </div>
                   <select id="experiencia" name="experiencia" class="form-select">
-                    <option value="" disabled selected>Experiencia comprobable</option>
-                    <option value="1-2">1 a 2 años de experiencia</option>
-                    <option value="3-5">3 a 5 años de experiencia</option>
-                    <option value="6-10">6 a 10 años de experiencia</option>
-                    <option value="mas-10">Más de 10 años de trayectoria</option>
+                    <option value="" disabled selected>Años de experiencia</option>
+                    <option value="1_2">De 1 a 2 años (Junior)</option>
+                    <option value="3_5">De 3 a 5 años (Intermedio)</option>
+                    <option value="6_10">De 6 a 10 años (Avanzado)</option>
+                    <option value="10_plus">Más de 10 años (Master / Especialista)</option>
                   </select>
                 </div>
                 <div class="field-error" id="error-experiencia">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-                  <span>Indica tus años de experiencia comprobable.</span>
+                  <span>Indica tus años de experiencia en el ramo.</span>
                 </div>
               </div>
             </div>
 
-            <!-- Subida de Archivo: Acreditación de Mecánico -->
+            <!-- Archivo de comprobante de mecánico -->
             <div class="form-group" id="group-proof-file">
               <label class="form-label">
                 <span id="proof-file-label">Subir archivo de Certificación Técnica <span class="required-star">*</span></span>
@@ -1792,30 +2014,29 @@
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                     <polyline points="14 2 14 8 20 8"></polyline>
-                    <line x1="16" y1="13" x2="8" y2="13"></line>
-                    <line x1="16" y1="17" x2="8" y2="17"></line>
-                    <polyline points="10 9 9 9 8 9"></polyline>
+                    <line x1="12" y1="18" x2="12" y2="12"></line>
+                    <line x1="9" y1="15" x2="15" y2="15"></line>
                   </svg>
                 </div>
                 <div class="dropzone-text">
-                  Arrastra tu comprobante aquí o <span>haz clic para examinar</span>
+                  Toca para subir tu documento <span>o certificado</span>
                 </div>
-                <div class="dropzone-hint" id="proof-dropzone-hint">
-                  Certificado oficial, Título universitario o Carta de Taller (PDF, JPG, PNG - Máx. 10 MB)
+                <div class="dropzone-hint">
+                  PDF, JPG o PNG con sellos legibles (Máximo 10 MB)
                 </div>
               </div>
 
-              <!-- Vista previa comprobante -->
               <div class="file-preview-card" id="preview-proof-card">
                 <div class="file-preview-info">
                   <div class="file-type-icon">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <polyline points="20 6 9 17 4 12"></polyline>
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                      <polyline points="14 2 14 8 20 8"></polyline>
                     </svg>
                   </div>
                   <div class="file-details">
-                    <span class="file-name" id="preview-proof-name">acreditacion_mecanico.pdf</span>
-                    <span class="file-size" id="preview-proof-size">2.4 MB • Listo para validación</span>
+                    <span class="file-name" id="preview-proof-name">certificado_mecanico.pdf</span>
+                    <span class="file-size" id="preview-proof-size">2.4 MB • Listo</span>
                   </div>
                 </div>
                 <button type="button" class="btn-remove-file" id="btn-remove-proof" aria-label="Eliminar comprobante">
@@ -1838,7 +2059,7 @@
           <div class="terms-group">
             <div class="custom-checkbox">
               <input type="checkbox" id="terminos" name="terminos" required>
-              <div class="checkbox-box">
+              <div class="checkbox-box" aria-hidden="true">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                   <polyline points="20 6 9 17 4 12"></polyline>
                 </svg>
@@ -1856,7 +2077,7 @@
           <!-- Botón de Registro -->
           <button type="submit" id="btn-submit" class="btn-submit">
             <span class="btn-text" id="submit-btn-text">Crear Cuenta de Usuario</span>
-            <div class="spinner" id="btn-spinner"></div>
+            <div class="spinner" id="btn-spinner" aria-hidden="true"></div>
             <svg id="btn-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <line x1="5" y1="12" x2="19" y2="12"></line>
               <polyline points="12 5 19 12 12 19"></polyline>
@@ -1868,7 +2089,7 @@
         <!-- Pie de Formulario: Ya tengo una cuenta -->
         <footer class="form-footer">
           <span>¿Ya tienes una cuenta registrada?</span>
-          <a href="home.html" id="link-login">Inicia sesión aquí</a>
+          <a href="login.html" id="link-login">Inicia sesión aquí</a>
         </footer>
 
       </div>
@@ -1876,47 +2097,53 @@
   </main>
 
   <!-- ==========================================================================
-       MODAL DE CONFIRMACIÓN / ÉXITO TRAS EL REGISTRO
+       MODAL DE CONFIRMACIÓN / ÉXITO TRAS EL REGISTRO (APPLE SHEET STYLE)
        ========================================================================== -->
   <div class="modal-backdrop" id="modal-exito" role="dialog" aria-modal="true" aria-labelledby="modal-titulo">
     <div class="success-modal">
+      <div class="modal-sheet-handle" aria-hidden="true"></div>
       <div class="success-icon-wrap">
-        <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
           <polyline points="22 4 12 14.01 9 11.01"></polyline>
         </svg>
       </div>
 
       <h2 class="modal-title" id="modal-titulo">¡Bienvenido a Amari!</h2>
-      
       <p class="modal-desc" id="modal-mensaje">
-        Tu registro ha sido completado exitosamente. Te hemos enviado un correo de bienvenida.
+        Tu cuenta de usuario ha sido creada exitosamente. Ahora tienes acceso a auxilio vial, reporte de fallas y servicios mecánicos en tiempo real.
       </p>
 
-      <!-- Pasos adicionales para mecánicos (solo visibles en modo mecánico) -->
+      <!-- Pasos adicionales para mecánicos (oculto por defecto) -->
       <div class="verification-steps-card" id="modal-mechanic-steps" style="display: none;">
         <div class="verif-step-row">
-          <span class="verif-step-badge">1</span>
-          <span><strong>Revisión documental:</strong> Nuestro equipo técnico coteja tu identidad y acreditación (en 12 a 24 horas).</span>
+          <div class="verif-step-badge">1</div>
+          <span>Documentos e identidad recibidos</span>
         </div>
         <div class="verif-step-row">
-          <span class="verif-step-badge">2</span>
-          <span><strong>Activación de cuenta:</strong> Recibirás un correo con tus credenciales y acceso al panel de solicitudes de auxilio.</span>
+          <div class="verif-step-badge">2</div>
+          <span>Revisión por el equipo de seguridad (12-24 hrs)</span>
+        </div>
+        <div class="verif-step-row">
+          <div class="verif-step-badge">3</div>
+          <span>Activación de tu perfil y radar vial</span>
         </div>
       </div>
 
       <div class="modal-btn-group">
         <a href="home.html" class="modal-btn" id="modal-continue-btn">
-          Ir a la Plataforma Amari
+          Continuar a la Plataforma
         </a>
       </div>
     </div>
   </div>
 
-  <!-- APLICACIÓN DINÁMICA DEL TEMA OFICIAL AMARI -->
+  <!-- Integración con Tema Amari -->
   <script type="module">
     import amariTheme from './assets/theme.js';
-    amariTheme.applyToDOM();
+    if (amariTheme && typeof amariTheme.applyToDOM === 'function') {
+      amariTheme.applyToDOM();
+    }
   </script>
 
   <!-- LÓGICA DE CONTROL, TOGGLE DE ROL Y VALIDACIONES -->
@@ -2002,6 +2229,7 @@
 
       // Función para renderizar lista de features en Hero
       function renderHeroFeatures(features) {
+        if (!heroFeaturesList) return;
         heroFeaturesList.innerHTML = features.map(feat => `
           <div class="feature-item">
             <div class="feature-icon-box">
@@ -2039,11 +2267,11 @@
 
           // Actualizar Hero
           const config = roleHeroConfig.user;
-          heroBrandTagline.textContent = config.tagline;
-          heroTagText.textContent = config.tag;
-          heroTitle.innerHTML = config.title;
-          heroDescription.textContent = config.description;
-          heroFooterCopy.textContent = config.footerCopy;
+          if (heroBrandTagline) heroBrandTagline.textContent = config.tagline;
+          if (heroTagText) heroTagText.textContent = config.tag;
+          if (heroTitle) heroTitle.innerHTML = config.title;
+          if (heroDescription) heroDescription.textContent = config.description;
+          if (heroFooterCopy) heroFooterCopy.textContent = config.footerCopy;
           renderHeroFeatures(config.features);
 
           // Limpiar errores específicos de mecánico si existían
@@ -2074,11 +2302,11 @@
 
           // Actualizar Hero
           const config = roleHeroConfig.mechanic;
-          heroBrandTagline.textContent = config.tagline;
-          heroTagText.textContent = config.tag;
-          heroTitle.innerHTML = config.title;
-          heroDescription.textContent = config.description;
-          heroFooterCopy.textContent = config.footerCopy;
+          if (heroBrandTagline) heroBrandTagline.textContent = config.tagline;
+          if (heroTagText) heroTagText.textContent = config.tag;
+          if (heroTitle) heroTitle.innerHTML = config.title;
+          if (heroDescription) heroDescription.textContent = config.description;
+          if (heroFooterCopy) heroFooterCopy.textContent = config.footerCopy;
           renderHeroFeatures(config.features);
 
           history.replaceState(null, null, '#mecanico');
@@ -2122,9 +2350,10 @@
       const modalTitulo = document.getElementById('modal-titulo');
       const modalMensaje = document.getElementById('modal-mensaje');
 
-      // Toggle contraseñas
+      // Toggle contraseñas con respuesta táctil inmediata
       function setupPasswordToggle(btn, input) {
-        btn.addEventListener('click', () => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
           const isPassword = input.type === 'password';
           input.type = isPassword ? 'text' : 'password';
 
@@ -2135,10 +2364,11 @@
             </svg>
           ` : `
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path>
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
               <circle cx="12" cy="12" r="3"></circle>
             </svg>
           `;
+          input.focus();
         });
       }
 
@@ -2306,7 +2536,8 @@
           setError(errorGroupId, errorElId, false);
         }
 
-        btnRemove.addEventListener('click', () => {
+        btnRemove.addEventListener('click', (e) => {
+          e.preventDefault();
           input.value = '';
           previewCard.classList.remove('has-file');
           dropzone.style.display = 'flex';
@@ -2339,7 +2570,7 @@
       // VALIDACIONES Y ENVÍO DEL FORMULARIO
       // ======================================================================
       function validateEmail(email) {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        return /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email);
       }
 
       function setError(groupId, errorId, isError) {
@@ -2357,15 +2588,21 @@
       }
 
       nombreInput.addEventListener('blur', () => {
-        setError('group-nombre', 'error-nombre', nombreInput.value.trim().length < 3);
+        if (nombreInput.value.trim().length > 0) {
+          setError('group-nombre', 'error-nombre', nombreInput.value.trim().length < 3);
+        }
       });
 
       correoInput.addEventListener('blur', () => {
-        setError('group-email', 'error-correo', !validateEmail(correoInput.value.trim()));
+        if (correoInput.value.trim().length > 0) {
+          setError('group-email', 'error-correo', !validateEmail(correoInput.value.trim()));
+        }
       });
 
       passwordInput.addEventListener('blur', () => {
-        setError('group-password', 'error-contrasena', passwordInput.value.length < 8);
+        if (passwordInput.value.length > 0) {
+          setError('group-password', 'error-contrasena', passwordInput.value.length < 8);
+        }
       });
 
       telefonoInput.addEventListener('blur', () => {
@@ -2387,7 +2624,7 @@
       });
 
       numeroIdInput.addEventListener('blur', () => {
-        if (currentRole === 'mechanic') {
+        if (currentRole === 'mechanic' && numeroIdInput.value.trim().length > 0) {
           setError('group-id-number', 'error-numero-id', numeroIdInput.value.trim().length < 4);
         }
       });
@@ -2498,7 +2735,7 @@
             }
 
             modalExito.classList.add('show');
-          }, 1300);
+          }, 1200);
         } else {
           const primerError = document.querySelector('.has-error');
           if (primerError) {

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#fafaf9">
+  <meta name="description" content="Califica el servicio de tu mecánico AMARI.">
+  <title>Califica a tu mecánico | AMARI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+      --red: #e11d48;
+      --red-dark: #881337;
+      --red-soft: #fff1f2;
+      --ink: #0f172a;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --paper: #fff;
+      --canvas: #fafaf9;
+      --gold: #f59e0b;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: var(--ink);
+      background: var(--canvas);
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    button { font: inherit; }
+
+    body {
+      display: grid;
+      min-width: 320px;
+      min-height: 100vh;
+      min-height: 100dvh;
+      margin: 0;
+      padding: 24px;
+      place-items: center;
+      background:
+        radial-gradient(circle at 12% 18%, rgba(225, 29, 72, .07), transparent 28rem),
+        var(--canvas);
+    }
+
+    .review-card {
+      width: min(100%, 460px);
+      padding: clamp(24px, 6vw, 36px);
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      background: var(--paper);
+      box-shadow: 0 20px 50px rgba(15, 23, 42, .08);
+      text-align: center;
+    }
+
+    .brand {
+      margin: 0 0 26px;
+      color: var(--red-dark);
+      font-size: 1.05rem;
+      font-weight: 800;
+      letter-spacing: .12em;
+    }
+
+    .service-icon {
+      display: grid;
+      width: 62px;
+      height: 62px;
+      margin: 0 auto 18px;
+      place-items: center;
+      border-radius: 20px;
+      color: var(--red);
+      background: var(--red-soft);
+      font-size: 1.8rem;
+    }
+
+    h1 { margin: 0; font-size: clamp(1.45rem, 5vw, 1.8rem); letter-spacing: -.04em; }
+    .intro { margin: 10px 0 26px; color: var(--muted); font-size: .9rem; line-height: 1.65; }
+    fieldset { min-width: 0; margin: 0; padding: 0; border: 0; }
+    legend { width: 100%; margin-bottom: 16px; font-size: .88rem; font-weight: 800; }
+
+    .stars {
+      display: flex;
+      justify-content: center;
+      gap: clamp(3px, 2vw, 10px);
+    }
+
+    .star-option { position: relative; }
+    .star-option input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+    }
+
+    .star-option label {
+      display: grid;
+      width: clamp(42px, 12vw, 58px);
+      height: clamp(48px, 13vw, 64px);
+      place-items: center;
+      border-radius: 14px;
+      color: #cbd5e1;
+      font-size: clamp(1.8rem, 8vw, 2.45rem);
+      line-height: 1;
+      cursor: pointer;
+      transition: color .16s ease, background-color .16s ease, transform .16s ease;
+    }
+
+    .star-option label:hover { transform: translateY(-2px); }
+    .star-option label.is-filled { color: var(--gold); }
+    .star-option label.is-selected { background: #fffbeb; }
+    .star-option input:focus-visible + label { outline: 3px solid rgba(225, 29, 72, .3); outline-offset: 2px; }
+
+    .rating-value {
+      min-height: 25px;
+      margin: 12px 0 24px;
+      color: var(--red-dark);
+      font-size: .82rem;
+      font-weight: 700;
+    }
+
+    .submit-button {
+      width: 100%;
+      min-height: 49px;
+      border: 0;
+      border-radius: 13px;
+      color: white;
+      background: linear-gradient(105deg, var(--red), #be123c);
+      font-size: .86rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(225, 29, 72, .2);
+      transition: transform .16s ease, box-shadow .16s ease;
+    }
+
+    .submit-button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 11px 22px rgba(225, 29, 72, .25);
+    }
+
+    .submit-button:focus-visible {
+      outline: 3px solid rgba(225, 29, 72, .3);
+      outline-offset: 3px;
+    }
+
+    .thank-you { padding-top: 12px; }
+    .thank-you .service-icon { color: #047857; background: #ecfdf5; }
+    .thank-you p { margin: 12px 0 20px; color: var(--muted); font-size: .9rem; line-height: 1.65; }
+    .thank-you-rating { min-height: 40px; margin-bottom: 16px; color: var(--gold); font-size: 2rem; letter-spacing: .08em; }
+    .thank-you-rating.is-zero { color: var(--muted); font-size: .82rem; letter-spacing: 0; }
+
+    @media (max-width: 360px) {
+      body { padding: 14px; }
+      .stars { gap: 1px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="review-card">
+    <p class="brand">AMARI</p>
+
+    <section id="rating-view" aria-labelledby="review-title">
+      <div class="service-icon" aria-hidden="true">★</div>
+      <h1 id="review-title">Califica a tu mecánico</h1>
+      <p class="intro">¿Cómo estuvo tu servicio? Tu opinión ayuda a mejorar la asistencia de AMARI.</p>
+
+      <form id="review-form">
+        <fieldset>
+          <legend>Selecciona de 0 a 5 estrellas</legend>
+          <div class="stars" role="radiogroup" aria-label="Calificación del servicio">
+            <div class="star-option"><input id="rating-0" name="rating" type="radio" value="0" required><label for="rating-0" aria-label="0 estrellas">0</label></div>
+            <div class="star-option"><input id="rating-1" name="rating" type="radio" value="1"><label for="rating-1" aria-label="1 estrella">★</label></div>
+            <div class="star-option"><input id="rating-2" name="rating" type="radio" value="2"><label for="rating-2" aria-label="2 estrellas">★</label></div>
+            <div class="star-option"><input id="rating-3" name="rating" type="radio" value="3"><label for="rating-3" aria-label="3 estrellas">★</label></div>
+            <div class="star-option"><input id="rating-4" name="rating" type="radio" value="4"><label for="rating-4" aria-label="4 estrellas">★</label></div>
+            <div class="star-option"><input id="rating-5" name="rating" type="radio" value="5"><label for="rating-5" aria-label="5 estrellas">★</label></div>
+          </div>
+          <p class="rating-value" id="rating-value" aria-live="polite">Aún no has seleccionado una calificación</p>
+        </fieldset>
+        <button class="submit-button" type="submit">Enviar reseña</button>
+      </form>
+    </section>
+
+    <section class="thank-you" id="thank-you-view" aria-labelledby="thank-you-title" aria-live="polite" hidden>
+      <div class="service-icon" aria-hidden="true">✓</div>
+      <h1 id="thank-you-title" tabindex="-1">¡Gracias por tu reseña!</h1>
+      <p>Tu opinión ha sido recibida. Gracias por ayudar a la comunidad AMARI.</p>
+      <div class="thank-you-rating" id="thank-you-rating"></div>
+    </section>
+  </main>
+
+  <script>
+    const reviewForm = document.getElementById('review-form');
+    const ratingValue = document.getElementById('rating-value');
+    const ratingDescriptions = [
+      '0 estrellas',
+      '1 estrella',
+      '2 estrellas',
+      '3 estrellas',
+      '4 estrellas',
+      '5 estrellas'
+    ];
+
+    reviewForm.addEventListener('change', (event) => {
+      if (event.target.name !== 'rating') return;
+
+      const selectedRating = Number(event.target.value);
+      ratingValue.textContent = ratingDescriptions[selectedRating];
+      reviewForm.querySelectorAll('.star-option input').forEach((input) => {
+        const label = input.nextElementSibling;
+        const value = Number(input.value);
+        label.classList.toggle('is-filled', value > 0 && value <= selectedRating);
+        label.classList.toggle('is-selected', value === selectedRating);
+      });
+    });
+
+    reviewForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const selectedRating = reviewForm.querySelector('input[name="rating"]:checked');
+      if (!selectedRating) return;
+
+      const rating = Number(selectedRating.value);
+      const thankYouRating = document.getElementById('thank-you-rating');
+      thankYouRating.textContent = rating > 0 ? '★'.repeat(rating) : 'Calificación: 0 estrellas';
+      thankYouRating.classList.toggle('is-zero', rating === 0);
+      thankYouRating.setAttribute(
+        'aria-label',
+        rating === 0 ? 'Calificación de 0 estrellas' : `Calificación de ${rating} estrellas`
+      );
+      document.getElementById('rating-view').hidden = true;
+      document.getElementById('thank-you-view').hidden = false;
+      document.getElementById('thank-you-title').focus();
+    });
+  </script>
+</body>
+</html>
