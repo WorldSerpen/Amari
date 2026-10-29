@@ -28,7 +28,9 @@ No se incluye un proceso de compilación ni un gestor de dependencias del proyec
 3. Abre [http://localhost:8000](http://localhost:8000) en el navegador.
 4. La pantalla de bienvenida es `index.html`; las demás pantallas se encuentran también en esa carpeta y algunos flujos enlazan directamente entre ellas.
 
-Para depurar `map.html` en VS Code, abre **Run and Debug** y ejecuta **Depurar mapa de Amari** (o presiona F5). La configuración inicia un servidor local en el puerto 8080 y abre la página en Chrome; requiere Node.js y Google Chrome. Se necesita conexión a internet para cargar las fuentes y usar la búsqueda de direcciones.
+Para publicar el proyecto, configura GitHub Pages para servir la carpeta raíz del repositorio desde la rama `main`. Abre la URL de GitHub Pages para usar la aplicación; la vista de archivos de `github.com` muestra el código fuente y no ejecuta las páginas HTML. El proyecto no requiere compilación y sus rutas a imágenes y scripts son relativas para funcionar bajo la ruta del repositorio.
+
+Se necesita conexión a internet para cargar las fuentes y usar la búsqueda de direcciones.
 
 ## Tecnologías y servicios externos
 

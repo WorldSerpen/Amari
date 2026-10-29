@@ -796,11 +796,7 @@
 
   </script>
 
-  <script type="module">
-    import amariTheme from './assets/theme.js';
-
-    amariTheme.applyToDOM();
-
+  <script>
     const status = document.getElementById('location-status');
     const searchForm = document.getElementById('location-search-form');
     const searchInput = document.getElementById('location-search-input');
@@ -811,13 +807,17 @@
     const locationCardToggle = document.getElementById('location-card-toggle');
     const locationCardContent = document.getElementById('location-card-content');
 
+    function setLocationCardExpanded(isExpanded) {
+      locationCardToggle.setAttribute('aria-expanded', String(isExpanded));
+      locationCardToggle.setAttribute('aria-label', isExpanded ? 'Contraer búsqueda' : 'Expandir búsqueda');
+      locationCardToggle.title = isExpanded ? 'Contraer búsqueda' : 'Expandir búsqueda';
+      locationCardContent.hidden = !isExpanded;
+      locationCard.classList.toggle('is-collapsed', !isExpanded);
+    }
+
     locationCardToggle.addEventListener('click', () => {
       const isExpanded = locationCardToggle.getAttribute('aria-expanded') === 'true';
-      locationCardToggle.setAttribute('aria-expanded', String(!isExpanded));
-      locationCardToggle.setAttribute('aria-label', isExpanded ? 'Expandir búsqueda' : 'Contraer búsqueda');
-      locationCardToggle.title = isExpanded ? 'Expandir búsqueda' : 'Contraer búsqueda';
-      locationCardContent.hidden = isExpanded;
-      locationCard.classList.toggle('is-collapsed', isExpanded);
+      setLocationCardExpanded(!isExpanded);
     });
 
     function setStatus(message, state = 'default') {
@@ -848,11 +848,11 @@
         if (!response.ok) throw new Error(`La búsqueda respondió con el estado ${response.status}.`);
 
         const results = await response.json();
-        const places = results.filter((place) => {
+        const places = Array.isArray(results) ? results.filter((place) => {
           const latitude = Number(place.lat);
           const longitude = Number(place.lon);
           return Number.isFinite(latitude) && Number.isFinite(longitude) && place.display_name;
-        });
+        }) : [];
 
         if (places.length === 0) {
           setStatus('No encontramos lugares con esa búsqueda. Prueba con otra dirección.', 'error');
