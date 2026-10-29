@@ -7,7 +7,7 @@ Amari es un prototipo web de una plataforma de asistencia automotriz. Su interfa
 - **Bienvenida:** presentación del servicio y acceso al formulario de registro.
 - **Registro (`register.html`):** formulario para conductores y mecánicos. Incluye datos personales, identificación y, para especialistas, información de experiencia y documentos de acreditación.
 - **Reporte de fallas (`home.html`):** selección de categoría, síntomas y urgencia, además de un campo para describir el problema y controles para adjuntar evidencia.
-- **Ubicación (`map.html`):** mapa interactivo y solicitud de ubicación del dispositivo mediante el navegador.
+- **Ubicación (`map.html`):** imagen de referencia fija con búsqueda de direcciones y sugerencias de lugares; no utiliza un mapa en tiempo real ni la ubicación del dispositivo.
 - **Pago (`banking.html`):** formulario visual para agregar una tarjeta, con selección de tipo y vista previa.
 - **Confirmación (`confirmation.html`):** pantalla demostrativa del estado de una solicitud de asistencia.
 - **Tema visual:** paleta centralizada en rojo y blanco, definida en `assets/theme.js` y `assets/theme.json`.
@@ -28,13 +28,13 @@ No se incluye un proceso de compilación ni un gestor de dependencias del proyec
 3. Abre [http://localhost:8000](http://localhost:8000) en el navegador.
 4. La pantalla de bienvenida es `index.html`; las demás pantallas se encuentran también en esa carpeta y algunos flujos enlazan directamente entre ellas.
 
-La función de ubicación requiere permiso del usuario y normalmente un contexto seguro, como `localhost` o HTTPS. Se necesita conexión a internet para cargar las fuentes y bibliotecas externas.
+Para depurar `map.html` en VS Code, abre **Run and Debug** y ejecuta **Depurar mapa de Amari** (o presiona F5). La configuración inicia un servidor local en el puerto 8080 y abre la página en Chrome; requiere Node.js y Google Chrome. Se necesita conexión a internet para cargar las fuentes y usar la búsqueda de direcciones.
 
 ## Tecnologías y servicios externos
 
 - HTML, CSS y JavaScript (sin framework de aplicación).
 - [Tailwind CSS](https://tailwindcss.com/) y [Lucide](https://lucide.dev/) cargados desde CDN en la pantalla de reporte.
-- [Leaflet](https://leafletjs.com/) y mosaicos de [OpenStreetMap](https://www.openstreetmap.org/) para el mapa.
+- Búsqueda de direcciones mediante [Nominatim de OpenStreetMap](https://nominatim.org/).
 - Fuente Plus Jakarta Sans servida por Google Fonts.
 
 ## Estructura del proyecto
