@@ -835,6 +835,7 @@
       updateRequestCount();
       closeDialog(requestDialog);
       showToast('Solicitud aceptada: ' + serviceName + '.');
+      window.location.href = 'mapmech.html';
     });
 
     document.querySelectorAll('.nav-item[href^="#"]').forEach((link) => {
