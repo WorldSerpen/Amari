@@ -177,8 +177,11 @@
     .request-details span { display: inline-flex; align-items: center; gap: 5px; }
     .request-details svg { width: 13px; height: 13px; color: var(--faint); }
     .request-footer { justify-content: space-between; gap: 12px; margin: 0 13px 14px 61px; }
-    .request-price { color: var(--ink); font-size: 12px; font-weight: 800; }
-    .request-price small { margin-left: 3px; color: var(--muted); font-size: 9px; font-weight: 500; }
+    .request-price { display: grid; flex: 0 0 auto; gap: 5px; color: var(--muted); font-size: 9px; font-weight: 700; }
+    .request-price-input { display: inline-flex; align-items: center; gap: 4px; color: var(--ink); font-size: 12px; font-weight: 800; }
+    .request-price input { width: 82px; min-height: 31px; padding: 0 7px; border: 1px solid var(--line); border-radius: 8px; color: var(--ink); font: inherit; font-size: 12px; font-weight: 800; }
+    .request-price input:focus-visible { outline: 3px solid rgba(225, 29, 72, .25); outline-offset: 2px; border-color: var(--red); }
+    .request-price-currency { color: var(--muted); font-size: 9px; font-weight: 600; }
     .request-actions { display: flex; gap: 7px; }
     .button { display: inline-flex; min-height: 32px; align-items: center; justify-content: center; gap: 6px; padding: 0 11px; border: 1px solid transparent; border-radius: 9px; font-size: 9px; font-weight: 800; text-decoration: none; cursor: pointer; transition: background .16s ease, transform .16s ease; }
     .button:active { transform: scale(.97); }
@@ -393,7 +396,10 @@
                   <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>~15 min</span>
                 </div>
                 <div class="request-footer">
-                  <span class="request-price">$450 <small>MXN estimado</small></span>
+                  <label class="request-price">
+                    Monto estimado
+                    <span class="request-price-input">$<input type="number" min="1" step="1" value="450" required inputmode="numeric" aria-label="Monto estimado para Batería descargada, en pesos mexicanos"><span class="request-price-currency">MXN</span></span>
+                  </label>
                   <div class="request-actions">
                     <button class="button button-quiet dismiss-request" type="button">Ahora no</button>
                     <button class="button button-primary accept-request" type="button">Ver solicitud</button>
@@ -416,7 +422,10 @@
                   <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>~30 min</span>
                 </div>
                 <div class="request-footer">
-                  <span class="request-price">$780 <small>MXN estimado</small></span>
+                  <label class="request-price">
+                    Monto estimado
+                    <span class="request-price-input">$<input type="number" min="1" step="1" value="780" required inputmode="numeric" aria-label="Monto estimado para Revisión de motor, en pesos mexicanos"><span class="request-price-currency">MXN</span></span>
+                  </label>
                   <div class="request-actions">
                     <button class="button button-quiet dismiss-request" type="button">Ahora no</button>
                     <button class="button button-primary accept-request" type="button">Ver solicitud</button>
@@ -586,9 +595,19 @@
 
       if (button.classList.contains('accept-request')) {
         activeRequest = request;
+        const priceInput = request.querySelector('.request-price input');
+        if (!priceInput.checkValidity()) {
+          priceInput.reportValidity();
+          activeRequest = null;
+          return;
+        }
         const title = request.querySelector('.request-title strong').textContent;
         const details = request.querySelector('.request-details').innerText.replace(/\n/g, ' · ');
-        const price = request.querySelector('.request-price').innerText.replace(/\n/g, ' ');
+        const price = new Intl.NumberFormat('es-MX', {
+          style: 'currency',
+          currency: 'MXN',
+          maximumFractionDigits: 0
+        }).format(priceInput.valueAsNumber) + ' estimado';
         const detailBox = document.getElementById('requestDialogDetails');
         const service = document.createElement('strong');
         service.textContent = title;
@@ -602,6 +621,13 @@
 
     document.getElementById('confirmRequest').addEventListener('click', () => {
       if (!activeRequest || !requestList.contains(activeRequest)) return;
+      const priceInput = activeRequest.querySelector('.request-price input');
+      if (!priceInput.checkValidity()) {
+        closeDialog(requestDialog);
+        priceInput.reportValidity();
+        activeRequest = null;
+        return;
+      }
       const serviceName = activeRequest.querySelector('.request-title strong').textContent;
       activeRequest.remove();
       activeRequest = null;
