@@ -267,14 +267,35 @@
       </div>
 
       <p class="tip">Mientras llega, mantén la calma y enciende las luces intermitentes si estás en la vía.</p>
+
+      <div style="margin-top: 18px; display: grid; gap: 8px;">
+        <a href="review.html" id="btn-to-review" style="display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; min-height: 48px; border-radius: 14px; color: white; background: linear-gradient(105deg, var(--red), var(--red-hover)); font-size: .88rem; font-weight: 800; text-decoration: none; box-shadow: 0 6px 16px rgba(225, 29, 72, .24); transition: transform .18s ease;">
+          <span>Calificar atención del mecánico</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+        </a>
+        <p id="review-redirect-notice" style="margin: 0; text-align: center; color: var(--muted); font-size: .72rem;">Redirigiendo a calificación en <span id="review-countdown">4</span>s...</p>
+      </div>
     </section>
   </main>
   <script>
+    // 1. Simulación de aceptación del mecánico (3 segundos)
     window.setTimeout(() => {
       document.getElementById('searching').hidden = true;
       document.getElementById('confirmation').hidden = false;
       document.querySelector('.confirmation-card').setAttribute('aria-busy', 'false');
-    }, 5000);
+
+      // 2. Una vez que la confirmación sucede, llevar al usuario a review.html
+      let seconds = 4;
+      const countdownEl = document.getElementById('review-countdown');
+      const timer = setInterval(() => {
+        seconds -= 1;
+        if (countdownEl) countdownEl.textContent = seconds;
+        if (seconds <= 0) {
+          clearInterval(timer);
+          window.location.href = 'review.html';
+        }
+      }, 1000);
+    }, 3000);
   </script>
 </body>
 </html>

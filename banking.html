@@ -158,7 +158,8 @@
 		.receipt-notice { margin: 20px 0 0; padding: 13px 15px; border-left: 3px solid var(--red); color: var(--muted); background: #fff7f8; font-size: 10px; line-height: 1.6; }
 		.receipt-actions { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; margin-top: 22px; }
 		.receipt-actions button { min-height: 42px; padding: 0 15px; border: 1px solid var(--line); border-radius: 6px; color: var(--ink); background: white; font-size: 11px; font-weight: 700; cursor: pointer; }
-		.receipt-actions .print-button { border-color: var(--red); color: white; background: var(--red); }
+		.receipt-actions .print-button { border-color: var(--line); color: var(--ink); background: white; }
+		.receipt-actions .confirm-action-button { border: 0; color: white; background: linear-gradient(105deg, var(--red), var(--red-hover)); font-weight: 800; box-shadow: 0 4px 14px rgba(225, 29, 72, .22); }
 
 		.preview-column { display: grid; gap: 16px; animation: rise-in .6s .16s ease both; }
 		.preview-panel { overflow: hidden; padding: 25px; }
@@ -248,6 +249,7 @@
 		<nav class="breadcrumb" aria-label="Progreso">
 			<span>Cuenta</span><span aria-hidden="true">/</span><span id="breadcrumb-current">Método de pago</span>
 		</nav>
+
 		<nav class="workflow-steps" aria-label="Pasos de pago">
 			<span class="workflow-step" id="step-payment" aria-current="step"><span>1</span> Datos de tarjeta</span>
 			<span class="workflow-divider" aria-hidden="true"></span>
@@ -309,8 +311,8 @@
 						<span class="validation-symbol" id="validation-symbol" aria-hidden="true">×</span>
 						<span id="validation-copy">Completa correctamente todos los datos</span>
 					</div>
-					<button class="submit-button" type="submit">
-						Validar y continuar
+					<button class="submit-button" id="btn-submit-payment" type="submit">
+						Confirmar y procesar pago
 						<svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
 					</button>
 					<p class="form-status" id="form-status" role="status" aria-live="polite"></p>
@@ -378,7 +380,9 @@
 				<div class="receipt-actions">
 					<button type="button" id="back-to-payment">Volver al formulario</button>
 					<button class="print-button" type="button" id="print-receipt">Imprimir comprobante</button>
+					<button type="button" id="confirm-payment-final-btn" class="confirm-action-button">Confirmar y Ver Asistencia →</button>
 				</div>
+				<p id="payment-redirect-notice" style="margin: 14px 0 0; color: var(--green); font-size: 11px; font-weight: 700; text-align: right;">✓ Pago confirmado. Redirigiendo a tu asistencia en <span id="payment-countdown">3</span>s...</p>
 			</div>
 			</section>
 		</dialog>
@@ -399,7 +403,37 @@
 		const validationIndicator = document.getElementById('validation-indicator');
 		const validationCopy = document.getElementById('validation-copy');
 		const receiptDialog = document.getElementById('receipt-dialog');
+		const confirmPaymentFinalBtn = document.getElementById('confirm-payment-final-btn');
 		const cardFields = [cardholderInput, cardNumberInput, expiryInput, cvvInput];
+
+		let paymentRedirectTimer = null;
+		let paymentCountdownInterval = null;
+
+		function startPaymentRedirect() {
+			let seconds = 3;
+			const countdownEl = document.getElementById('payment-countdown');
+			if (countdownEl) countdownEl.textContent = seconds;
+
+			if (paymentCountdownInterval) clearInterval(paymentCountdownInterval);
+			if (paymentRedirectTimer) clearTimeout(paymentRedirectTimer);
+
+			paymentCountdownInterval = setInterval(() => {
+				seconds -= 1;
+				if (countdownEl) countdownEl.textContent = seconds;
+				if (seconds <= 0) {
+					clearInterval(paymentCountdownInterval);
+				}
+			}, 1000);
+
+			paymentRedirectTimer = setTimeout(() => {
+				window.location.href = 'confirmation.html';
+			}, 3000);
+		}
+
+		function cancelPaymentRedirect() {
+			if (paymentCountdownInterval) clearInterval(paymentCountdownInterval);
+			if (paymentRedirectTimer) clearTimeout(paymentRedirectTimer);
+		}
 
 		function isExpiryValid(value) {
 			const [monthText, yearText] = value.split('/');
@@ -498,6 +532,13 @@
 			document.getElementById('receipt-method').textContent = `Tarjeta de ${selectedMethod.toLowerCase()}`;
 			document.getElementById('receipt-card').textContent = `•••• •••• •••• ${digits.slice(-4)}`;
 			document.getElementById('receipt-holder').textContent = cardholderInput.value.trim();
+			
+			// Guardar estado del pago
+			try {
+				sessionStorage.setItem('amari_payment_reference', reference);
+				sessionStorage.setItem('amari_payment_status', 'paid');
+			} catch (e) {}
+
 			cardFields.forEach((field) => { field.value = ''; field.setCustomValidity(''); });
 			document.getElementById('cardholder-preview').textContent = 'Tu nombre';
 			document.getElementById('card-number-preview').textContent = '••••  ••••  ••••  ••••';
@@ -505,17 +546,28 @@
 			document.getElementById('card-network').textContent = 'AMARI';
 			statusMessage.textContent = '';
 			updateValidationIndicator();
+
 			receiptDialog.showModal();
 			document.getElementById('step-payment').removeAttribute('aria-current');
 			document.getElementById('step-receipt').setAttribute('aria-current', 'step');
 			document.getElementById('breadcrumb-current').textContent = 'Comprobante';
+
+			// Iniciar redirección automática tras confirmar el pago
+			startPaymentRedirect();
+		});
+
+		confirmPaymentFinalBtn.addEventListener('click', () => {
+			cancelPaymentRedirect();
+			window.location.href = 'confirmation.html';
 		});
 
 		document.getElementById('back-to-payment').addEventListener('click', () => {
+			cancelPaymentRedirect();
 			receiptDialog.close();
 		});
 
 		receiptDialog.addEventListener('close', () => {
+			cancelPaymentRedirect();
 			document.getElementById('step-receipt').removeAttribute('aria-current');
 			document.getElementById('step-payment').setAttribute('aria-current', 'step');
 			document.getElementById('breadcrumb-current').textContent = 'Método de pago';

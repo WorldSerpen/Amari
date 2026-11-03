@@ -776,6 +776,10 @@
 
     confirmMechanicButton.addEventListener('click', () => {
       mechanicConfirmation.close('confirmed');
+      try {
+        sessionStorage.setItem('amari_mechanic_confirmed', 'true');
+      } catch (e) {}
+      window.location.href = 'banking.html';
     });
 
     cancelMechanicButton.addEventListener('click', () => {
@@ -787,13 +791,14 @@
     });
 
     mechanicConfirmation.addEventListener('close', () => {
-      if (mechanicConfirmation.returnValue !== 'confirmed') {
-        selectedMechanic?.setAttribute('aria-pressed', 'false');
+      if (mechanicConfirmation.returnValue === 'confirmed') {
+        window.location.href = 'banking.html';
+        return;
       }
+      selectedMechanic?.setAttribute('aria-pressed', 'false');
       selectedMechanic?.focus();
       selectedMechanic = undefined;
     });
-
   </script>
 
   <script>
