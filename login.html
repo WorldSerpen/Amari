@@ -1691,6 +1691,19 @@
       const tabSpecialist = document.getElementById('tab-specialist');
       let currentRole = 'conductor';
 
+      function normalizeRole(role) {
+        return String(role || '')
+          .trim()
+          .toLowerCase()
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '');
+      }
+
+      function isSpecialistRole(role) {
+        return ['mecanico', 'mech', 'especialista', 'specialist', 'mechanic']
+          .includes(normalizeRole(role));
+      }
+
       // Modal de Recuperación de Contraseña
       const forgotPasswordBtn = document.getElementById('forgotPasswordBtn');
       const forgotModal = document.getElementById('forgotModal');
@@ -1717,8 +1730,8 @@
       // 1. Selector de Rol / Perfil de Cuenta
       // ----------------------------------------------------
       function setRole(role) {
-        currentRole = role;
-        if (role === 'conductor') {
+        currentRole = isSpecialistRole(role) ? 'mecanico' : 'conductor';
+        if (currentRole === 'conductor') {
           tabDriver.classList.add('active');
           tabDriver.setAttribute('aria-selected', 'true');
           tabSpecialist.classList.remove('active');
@@ -1745,29 +1758,31 @@
       });
 
       // Cargar credenciales recordadas y rol si existen en URL / localStorage
+      let savedRole = '';
       try {
         const savedEmail = localStorage.getItem('amari_remembered_email');
-        const savedRole = localStorage.getItem('amari_user_role');
+        savedRole = localStorage.getItem('amari_user_role') || '';
         if (savedEmail) {
           emailInput.value = savedEmail;
           rememberMeInput.checked = true;
         }
-
-        const hash = window.location.hash.toLowerCase();
-        const urlParams = new URLSearchParams(window.location.search);
-        const roleParam = (urlParams.get('role') || urlParams.get('tipo') || '').toLowerCase();
-
-        if (hash === '#mecanico' || hash === '#mech' || hash === '#especialista' || roleParam === 'mech' || roleParam === 'mecanico' || roleParam === 'especialista') {
-          setRole('mecanico');
-        } else if (hash === '#conductor' || hash === '#usuario' || hash === '#driver' || roleParam === 'conductor' || roleParam === 'usuario') {
-          setRole('conductor');
-        } else if (savedRole === 'mecanico') {
-          setRole('mecanico');
-        } else {
-          setRole('conductor');
-        }
       } catch (err) {
         console.warn('LocalStorage inaccesible:', err);
+      }
+
+      const hashRole = normalizeRole(window.location.hash.slice(1));
+      const urlParams = new URLSearchParams(window.location.search);
+      const roleParam = normalizeRole(urlParams.get('role') || urlParams.get('tipo'));
+
+      if (isSpecialistRole(hashRole) || isSpecialistRole(roleParam)) {
+        setRole('mecanico');
+      } else if (['conductor', 'usuario', 'driver'].includes(hashRole) ||
+                 ['conductor', 'usuario', 'driver'].includes(roleParam)) {
+        setRole('conductor');
+      } else if (isSpecialistRole(savedRole)) {
+        setRole('mecanico');
+      } else {
+        setRole('conductor');
       }
 
       // ----------------------------------------------------
@@ -1914,7 +1929,7 @@
           }
 
           // Redirección según rol: Conductor -> home.html | Mecánico -> mainmech.html
-          const isMechanic = currentRole === 'mecanico';
+          const isMechanic = isSpecialistRole(currentRole);
           const destination = isMechanic ? 'mainmech.html' : 'home.html';
           const destinationText = isMechanic ? 'tu panel de especialista (mainmech.html)...' : 'tu panel de conductor (home.html)...';
 
@@ -2036,4 +2051,3 @@
   </script>
 </body>
 </html>
-
