@@ -11,6 +11,7 @@ Amari es un prototipo web de una plataforma de asistencia automotriz. Su interfa
 - **Reseña (`review.html`):** pantalla para calificar la experiencia del servicio con votación por estrellas y confirmación visual.
 - **Reporte de fallas (`home.html`):** selección de categoría, síntomas y urgencia, además de un campo para describir el problema y controles para adjuntar evidencia.
 - **Ubicación (`map.html`):** imagen de referencia fija con búsqueda de direcciones y sugerencias de lugares; no utiliza un mapa en tiempo real ni la ubicación del dispositivo.
+- **Mapa mecánico (`mapmech.html`):** vista de referencia sin búsqueda manual ni marcadores de mecánicos superpuestos.
 - **Pago (`banking.html`):** formulario visual para agregar una tarjeta, con selección de tipo y vista previa.
 - **Confirmación (`confirmation.html`):** pantalla demostrativa del estado de una solicitud de asistencia.
 - **Tema visual:** paleta centralizada en rojo y blanco, definida en `assets/theme.js` y `assets/theme.json`, además de ajustes globales en `theme.js`.
@@ -33,7 +34,7 @@ No se incluye un proceso de compilación ni un gestor de dependencias del proyec
 
 Para publicar el proyecto, configura GitHub Pages para servir la carpeta raíz del repositorio desde la rama `main`. Abre la URL de GitHub Pages para usar la aplicación; la vista de archivos de `github.com` muestra el código fuente y no ejecuta las páginas HTML. El proyecto no requiere compilación y sus rutas a imágenes y scripts son relativas para funcionar bajo la ruta del repositorio.
 
-Se necesita conexión a internet para cargar las fuentes y usar la búsqueda de direcciones.
+Se necesita conexión a internet para cargar las fuentes y, en `map.html`, usar la búsqueda de direcciones.
 
 ## Tecnologías y servicios externos
 

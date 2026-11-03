@@ -76,7 +76,7 @@
 		.eyebrow { display: flex; align-items: center; gap: 9px; margin-bottom: 12px; color: var(--red); font-size: 11px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; }
 		.eyebrow::before { width: 22px; height: 2px; content: ''; background: var(--red); }
 		h1 { margin: 0; font-size: clamp(30px, 4vw, 42px); line-height: 1.15; letter-spacing: 0; }
-		.intro p { max-width: 540px; margin: 12px 0 0; color: var(--muted); font-size: 14px; line-height: 1.7; }
+		.intro p { max-width: 600px; margin: 12px 0 0; color: var(--muted); font-size: 14px; line-height: 1.7; }
 
 		.checkout-layout { display: grid; grid-template-columns: minmax(0, 1.04fr) minmax(340px, .96fr); gap: 24px; align-items: start; }
 		.form-panel, .preview-panel { border: 1px solid rgba(226, 232, 240, .9); border-radius: 8px; background: var(--paper); box-shadow: var(--shadow); }
@@ -259,7 +259,7 @@
 		<section class="intro" aria-labelledby="page-title">
 			<div class="eyebrow">Pago</div>
 			<h1 id="page-title">Agrega tu tarjeta</h1>
-			<p id="intro-copy">Elige el tipo de tarjeta e ingresa sus datos para continuar. Esta pantalla es una simulación: no se contacta a un banco ni se guarda la información.</p>
+			<p id="intro-copy">Elige el tipo de tarjeta e ingresa sus datos para continuar. Esta simulación no contacta a un banco ni guarda los datos de tu tarjeta; solo comparte el monto, la referencia y la fecha con el panel mecánico en este navegador.</p>
 		</section>
 
 		<div class="checkout-layout" id="checkout-view">
@@ -343,7 +343,7 @@
 				<div class="trust-strip" aria-label="Información de seguridad">
 					<div class="trust-item">
 						<span class="trust-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M7 10V7a5 5 0 0 1 10 0v3m-11 0h12a2 2 0 0 1 2 2v8H4v-8a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-						<span><strong>Datos privados</strong><span>Sin almacenamiento</span></span>
+						<span><strong>Datos privados</strong><span>Tarjeta no guardada</span></span>
 					</div>
 					<div class="trust-item">
 						<span class="trust-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 3 5 6v5c0 4.5 3 8 7 10 4-2 7-5.5 7-10V6l-7-3Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
@@ -375,7 +375,7 @@
 					<div class="receipt-line"><span>Tarjeta</span><strong id="receipt-card">•••• •••• •••• 0000</strong></div>
 					<div class="receipt-line"><span>Titular</span><strong id="receipt-holder">-</strong></div>
 				</div>
-				<div class="receipt-total"><span>Total de demostración</span><strong>$1,000.00 MXN</strong></div>
+				<div class="receipt-total"><span>Total de demostración</span><strong id="receipt-amount">$1,000.00 MXN</strong></div>
 				<p class="receipt-notice">Este recibo es únicamente una maqueta visual. No se realizó una autorización bancaria, no se procesó ningún pago y no es una factura fiscal.</p>
 				<div class="receipt-actions">
 					<button type="button" id="back-to-payment">Volver al formulario</button>
@@ -527,6 +527,31 @@
 			const now = new Date();
 			const reference = `AMA-${now.getTime().toString().slice(-8)}`;
 			const selectedMethod = document.querySelector('.method-option[aria-pressed="true"]').dataset.kind;
+			const amount = 1000;
+			const paymentNotification = {
+				id: reference,
+				amount,
+				currency: 'MXN',
+				reference,
+				date: now.toISOString(),
+				concept: 'Servicio Amari',
+				status: 'Simulación completada, sin cargo'
+			};
+			const notificationKey = 'amari:payment-notifications';
+
+			try {
+				const savedNotifications = localStorage.getItem(notificationKey);
+				const notifications = savedNotifications ? JSON.parse(savedNotifications) : [];
+				if (!Array.isArray(notifications)) {
+					throw new Error('El historial de avisos de pago tiene un formato inválido.');
+				}
+				localStorage.setItem(notificationKey, JSON.stringify([paymentNotification, ...notifications].slice(0, 20)));
+			} catch (error) {
+				console.error('No se pudo guardar el aviso de pago para el panel mecánico.', error);
+				statusMessage.textContent = 'No se pudo guardar el aviso de pago en este navegador. Revisa el almacenamiento del sitio e inténtalo de nuevo.';
+				return;
+			}
+
 			document.getElementById('receipt-reference').textContent = reference;
 			document.getElementById('receipt-date').textContent = new Intl.DateTimeFormat('es-MX', { dateStyle: 'medium', timeStyle: 'short' }).format(now);
 			document.getElementById('receipt-method').textContent = `Tarjeta de ${selectedMethod.toLowerCase()}`;
