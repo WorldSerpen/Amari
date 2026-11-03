@@ -724,10 +724,14 @@
       outline: none;
       transition: all var(--spring-fast);
       -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
     }
 
     .form-select {
       cursor: pointer;
+      -webkit-appearance: none;
+      -moz-appearance: none;
       appearance: none;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
       background-repeat: no-repeat;
@@ -1534,7 +1538,7 @@
           </svg>
           <span>Inicio</span>
         </a>
-        <a href="login.html" class="top-nav-login-link" aria-label="Iniciar sesión con cuenta existente">
+        <a href="login.html" class="top-nav-login-link" id="top-nav-login-link" aria-label="Iniciar sesión con cuenta existente">
           <span>¿Ya tienes cuenta? <strong>Inicia sesión</strong></span>
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="9 18 15 12 9 6"></polyline>
@@ -2243,6 +2247,14 @@
         `).join('');
       }
 
+      // Elementos del Modal y Navegación
+      const modalExito = document.getElementById('modal-exito');
+      const modalTitulo = document.getElementById('modal-titulo');
+      const modalMensaje = document.getElementById('modal-mensaje');
+      const modalContinueBtn = document.getElementById('modal-continue-btn');
+      const topNavLoginLink = document.getElementById('top-nav-login-link');
+      const linkLogin = document.getElementById('link-login');
+
       // Función para cambiar de rol (Usuario vs Mecánico)
       function setRole(role) {
         currentRole = role;
@@ -2264,6 +2276,16 @@
           telefonoStar.style.display = 'none';
           termsTextLabel.innerHTML = 'Acepto los <a href="#" class="terms-link">Términos de Servicio</a> y la <a href="#" class="terms-link">Política de Privacidad</a> de Amari.';
           submitBtnText.textContent = 'Crear Cuenta de Usuario';
+
+          // Actualizar destino de botón en modal de éxito
+          if (modalContinueBtn) {
+            modalContinueBtn.href = 'home.html';
+            modalContinueBtn.textContent = 'Continuar a Inicio';
+          }
+
+          // Enlaces a login para usuarios
+          if (topNavLoginLink) topNavLoginLink.href = 'login.html#conductor';
+          if (linkLogin) linkLogin.href = 'login.html#conductor';
 
           // Actualizar Hero
           const config = roleHeroConfig.user;
@@ -2299,6 +2321,16 @@
           telefonoStar.style.display = 'inline';
           termsTextLabel.innerHTML = 'Acepto los <a href="#" class="terms-link">Términos para Especialistas Mecánicos</a>, el <a href="#" class="terms-link">Código de Seguridad</a> y autorizo la verificación de mis documentos en Amari.';
           submitBtnText.textContent = 'Solicitar Registro de Mecánico';
+
+          // Actualizar destino de botón en modal de éxito
+          if (modalContinueBtn) {
+            modalContinueBtn.href = 'mainmech.html';
+            modalContinueBtn.textContent = 'Ir al Panel Mecánico';
+          }
+
+          // Enlaces a login para mecánicos
+          if (topNavLoginLink) topNavLoginLink.href = 'login.html#mecanico';
+          if (linkLogin) linkLogin.href = 'login.html#mecanico';
 
           // Actualizar Hero
           const config = roleHeroConfig.mechanic;
@@ -2346,9 +2378,14 @@
       const btnSpinner = document.getElementById('btn-spinner');
       const btnArrow = document.getElementById('btn-arrow');
 
-      const modalExito = document.getElementById('modal-exito');
-      const modalTitulo = document.getElementById('modal-titulo');
-      const modalMensaje = document.getElementById('modal-mensaje');
+      // Acción de botón en modal de confirmación
+      if (modalContinueBtn) {
+        modalContinueBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const targetUrl = currentRole === 'mechanic' ? 'mainmech.html' : 'home.html';
+          window.location.href = targetUrl;
+        });
+      }
 
       // Toggle contraseñas con respuesta táctil inmediata
       function setupPasswordToggle(btn, input) {
@@ -2710,13 +2747,20 @@
             btnSpinner.style.display = 'none';
             btnArrow.style.display = 'block';
 
-            if (currentRole === 'user') {
+            const isUser = currentRole === 'user';
+            const destinationUrl = isUser ? 'home.html' : 'mainmech.html';
+
+            if (isUser) {
               modalTitulo.textContent = '¡Bienvenido a Amari!';
               modalMensaje.innerHTML = `
-                ¡Felicidades <strong>${nombreInput.value.trim()}</strong>! Tu cuenta de usuario ha sido creada correctamente con el correo <strong>${correoInput.value.trim()}</strong>.<br><br>
-                Ya puedes acceder a todos nuestros servicios de auxilio vial y finanzas digitales.
+                ¡Felicidades <strong>${nombreInput.value.trim()}</strong>! Tu cuenta de conductor ha sido creada correctamente con el correo <strong>${correoInput.value.trim()}</strong>.<br><br>
+                Ya puedes acceder a todos nuestros servicios de auxilio vial y reporte de fallas.
               `;
               modalMechanicSteps.style.display = 'none';
+              if (modalContinueBtn) {
+                modalContinueBtn.href = 'home.html';
+                modalContinueBtn.textContent = 'Continuar a Inicio';
+              }
             } else {
               const selectedProofRadio = document.querySelector('input[name="tipo_acreditacion"]:checked');
               let proofTypeName = 'Certificación Técnica';
@@ -2732,6 +2776,23 @@
                 Registramos tu <strong>identificación oficial</strong> (${numeroIdInput.value.trim()}) y tu <strong>comprobante de ${proofTypeName}</strong>.
               `;
               modalMechanicSteps.style.display = 'flex';
+              if (modalContinueBtn) {
+                modalContinueBtn.href = 'mainmech.html';
+                modalContinueBtn.textContent = 'Ir al Panel Mecánico';
+              }
+            }
+
+            // Guardar sesión para el usuario recién registrado
+            try {
+              sessionStorage.setItem('amari_active_session', JSON.stringify({
+                nombre: nombreInput.value.trim(),
+                email: correoInput.value.trim(),
+                role: isUser ? 'conductor' : 'mecanico',
+                registeredAt: new Date().toISOString()
+              }));
+              localStorage.setItem('amari_user_role', isUser ? 'conductor' : 'mecanico');
+            } catch (err) {
+              console.warn('Storage error:', err);
             }
 
             modalExito.classList.add('show');

@@ -625,5 +625,22 @@
       });
     });
   </script>
+  <script>
+    // Cargar información de perfil desde la sesión activa de Amari
+    try {
+      const activeSession = JSON.parse(sessionStorage.getItem('amari_active_session') || '{}');
+      if (activeSession.nombre) {
+        const profileCopyStrong = document.querySelector('.profile-copy strong');
+        const avatarSpan = document.querySelector('.avatar');
+        if (profileCopyStrong) profileCopyStrong.textContent = activeSession.nombre;
+        if (avatarSpan) {
+          const initials = activeSession.nombre.split(' ').filter(Boolean).map(n => n[0].toUpperCase()).slice(0, 2).join('');
+          if (initials) avatarSpan.textContent = initials;
+        }
+      }
+    } catch (e) {
+      console.warn('Session parse error:', e);
+    }
+  </script>
 </body>
 </html>

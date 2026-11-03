@@ -688,11 +688,14 @@
       background-color: var(--off-white);
       border: 1.5px solid var(--border-medium);
       border-radius: var(--radius-md);
-      font-size: 0.95rem;
+      font-size: 16px; /* Evita auto-zoom en iOS Safari */
       font-family: inherit;
       color: var(--text-main);
       outline: none;
       transition: all var(--spring-fast);
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
     }
 
     .form-input:hover {
@@ -1546,7 +1549,7 @@
         <!-- Pie de Formulario: Registro -->
         <footer class="form-footer">
           <span>¿Aún no tienes una cuenta?</span>
-          <a href="register.html">Regístrate en Amari</a>
+          <a href="register.html" id="linkRegister">Regístrate en Amari</a>
         </footer>
 
       </section>
@@ -1705,23 +1708,10 @@
       const forgotSuccessMessage = document.getElementById('forgotSuccessMessage');
       const btnBackToLoginSuccess = document.getElementById('btnBackToLoginSuccess');
 
+      const linkRegister = document.getElementById('linkRegister');
+
       // Expresión regular para validación rigurosa de correo
       const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-
-      // Cargar credenciales recordadas si existen en localStorage
-      try {
-        const savedEmail = localStorage.getItem('amari_remembered_email');
-        const savedRole = localStorage.getItem('amari_user_role');
-        if (savedEmail) {
-          emailInput.value = savedEmail;
-          rememberMeInput.checked = true;
-        }
-        if (savedRole === 'mecanico') {
-          setRole('mecanico');
-        }
-      } catch (err) {
-        console.warn('LocalStorage inaccesible:', err);
-      }
 
       // ----------------------------------------------------
       // 1. Selector de Rol / Perfil de Cuenta
@@ -1734,17 +1724,51 @@
           tabSpecialist.classList.remove('active');
           tabSpecialist.setAttribute('aria-selected', 'false');
           submitBtnText.textContent = 'Iniciar Sesión como Conductor';
+          if (linkRegister) linkRegister.href = 'register.html#usuario';
         } else {
           tabSpecialist.classList.add('active');
           tabSpecialist.setAttribute('aria-selected', 'true');
           tabDriver.classList.remove('active');
           tabDriver.setAttribute('aria-selected', 'false');
           submitBtnText.textContent = 'Iniciar Sesión como Especialista';
+          if (linkRegister) linkRegister.href = 'register.html#mecanico';
         }
       }
 
-      tabDriver.addEventListener('click', () => setRole('conductor'));
-      tabSpecialist.addEventListener('click', () => setRole('mecanico'));
+      tabDriver.addEventListener('click', () => {
+        setRole('conductor');
+        history.replaceState(null, null, '#conductor');
+      });
+      tabSpecialist.addEventListener('click', () => {
+        setRole('mecanico');
+        history.replaceState(null, null, '#mecanico');
+      });
+
+      // Cargar credenciales recordadas y rol si existen en URL / localStorage
+      try {
+        const savedEmail = localStorage.getItem('amari_remembered_email');
+        const savedRole = localStorage.getItem('amari_user_role');
+        if (savedEmail) {
+          emailInput.value = savedEmail;
+          rememberMeInput.checked = true;
+        }
+
+        const hash = window.location.hash.toLowerCase();
+        const urlParams = new URLSearchParams(window.location.search);
+        const roleParam = (urlParams.get('role') || urlParams.get('tipo') || '').toLowerCase();
+
+        if (hash === '#mecanico' || hash === '#mech' || hash === '#especialista' || roleParam === 'mech' || roleParam === 'mecanico' || roleParam === 'especialista') {
+          setRole('mecanico');
+        } else if (hash === '#conductor' || hash === '#usuario' || hash === '#driver' || roleParam === 'conductor' || roleParam === 'usuario') {
+          setRole('conductor');
+        } else if (savedRole === 'mecanico') {
+          setRole('mecanico');
+        } else {
+          setRole('conductor');
+        }
+      } catch (err) {
+        console.warn('LocalStorage inaccesible:', err);
+      }
 
       // ----------------------------------------------------
       // 2. Alternar visibilidad de contraseña (Instant Response)
@@ -1831,11 +1855,19 @@
       // 4. Botón Demo para pruebas rápidas
       // ----------------------------------------------------
       demoFillBtn.addEventListener('click', () => {
-        emailInput.value = 'conductor@amari.com';
-        passwordInput.value = 'AmariSeguro2026';
-        clearFieldError(groupEmail);
-        clearFieldError(groupPassword);
-        showAlert('Credenciales de demostración cargadas. Puedes hacer clic en Iniciar Sesión.', 'success');
+        if (currentRole === 'mecanico') {
+          emailInput.value = 'mecanico@amari.com';
+          passwordInput.value = 'AmariPro2026';
+          clearFieldError(groupEmail);
+          clearFieldError(groupPassword);
+          showAlert('Credenciales demo de especialista mecánico cargadas. Puedes hacer clic en Iniciar Sesión.', 'success');
+        } else {
+          emailInput.value = 'conductor@amari.com';
+          passwordInput.value = 'AmariSeguro2026';
+          clearFieldError(groupEmail);
+          clearFieldError(groupPassword);
+          showAlert('Credenciales demo de conductor cargadas. Puedes hacer clic en Iniciar Sesión.', 'success');
+        }
       });
 
       // ----------------------------------------------------
@@ -1881,11 +1913,15 @@
             console.warn('Error en storage:', err);
           }
 
-          showAlert('¡Acceso verificado! Redirigiendo a tu panel de Amari...', 'success');
+          // Redirección según rol: Conductor -> home.html | Mecánico -> mainmech.html
+          const isMechanic = currentRole === 'mecanico';
+          const destination = isMechanic ? 'mainmech.html' : 'home.html';
+          const destinationText = isMechanic ? 'tu panel de especialista (mainmech.html)...' : 'tu panel de conductor (home.html)...';
 
-          // Redirección fluida a la aplicación (home.html)
+          showAlert(`¡Acceso verificado! Redirigiendo a ${destinationText}`, 'success');
+
           setTimeout(() => {
-            window.location.href = 'home.html';
+            window.location.href = destination;
           }, 800);
 
         }, 1100);
