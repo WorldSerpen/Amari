@@ -200,7 +200,7 @@
     .activity-copy span { display: block; margin-top: 4px; color: var(--muted); font-size: 9px; }
     .activity-time { margin-left: auto; align-self: flex-start; color: var(--faint); font-size: 8px; white-space: nowrap; }
     .mobile-nav { display: none; }
-    dialog { width: min(430px, calc(100% - 32px)); max-width: none; padding: 0; border: 1px solid var(--line); border-radius: 21px; background: var(--paper); box-shadow: 0 24px 80px rgba(15,23,42,.24); color: var(--ink); }
+    dialog { width: min(430px, calc(100% - 32px)); max-width: none; max-height: min(84vh, 720px); padding: 0; overflow-y: auto; border: 1px solid var(--line); border-radius: 21px; background: var(--paper); box-shadow: 0 24px 80px rgba(15,23,42,.24); color: var(--ink); }
     dialog::backdrop { background: rgba(15,23,42,.45); backdrop-filter: blur(3px); }
     .dialog-content { padding: 22px; }
     .dialog-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 15px; }
@@ -213,6 +213,13 @@
     .notification-row .activity-icon { width: 34px; height: 34px; }
     .notification-row p { margin: 0; font-size: 10px; line-height: 1.55; }
     .notification-row small { display: block; margin-top: 4px; color: var(--faint); font-size: 9px; }
+    .notification-empty { margin: 0; padding: 18px 0 7px; color: var(--muted); font-size: 10px; line-height: 1.6; }
+    .payment-confirmation { margin-top: 18px; padding: 18px; border: 1px solid #bbf7d0; border-radius: 15px; background: linear-gradient(140deg, #f0fdf4, white 75%); text-align: center; }
+    .payment-confirmation-icon { display: grid; width: 46px; height: 46px; margin: 0 auto 12px; place-items: center; border-radius: 15px; background: #dcfce7; color: #059669; font-size: 22px; font-weight: 800; }
+    .payment-confirmation-label { display: block; color: var(--muted); font-size: 10px; font-weight: 700; }
+    .payment-confirmation-amount { display: block; margin-top: 5px; color: #047857; font-size: 30px; font-weight: 800; letter-spacing: -1px; }
+    .payment-confirmation-reference { margin: 9px 0 0; color: var(--muted); font-size: 10px; line-height: 1.6; }
+    .payment-confirmation-note { margin: 14px 0 0; padding-top: 12px; border-top: 1px solid #d1fae5; color: #64748b; font-size: 9px; line-height: 1.6; }
     .dialog-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; }
     .toast {
       position: fixed; z-index: 10; right: 24px; bottom: 24px; display: flex; max-width: min(380px, calc(100vw - 32px));
@@ -444,7 +451,7 @@
                 </span>
                 <svg class="disclosure-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
               </summary>
-              <div class="activity-list">
+              <div class="activity-list" id="activityList">
                 <div class="activity-item">
                   <span class="activity-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg></span>
                   <div class="activity-copy"><strong>Servicio completado</strong><span>Cambio de llanta · $520</span></div><time class="activity-time">10:42</time>
@@ -477,11 +484,31 @@
           <div><h2 id="notificationsTitle">Notificaciones</h2><p>Lo más reciente de tu espacio de trabajo.</p></div>
           <button class="dialog-close" type="button" data-close-dialog aria-label="Cerrar notificaciones"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="m18 6-12 12M6 6l12 12"/></svg></button>
         </div>
-        <div style="margin-top:13px">
+        <div id="paymentNotifications" aria-live="polite" style="margin-top:13px">
           <div class="notification-row"><span class="activity-icon pending"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a5 5 0 0 0-6.4 6.4L3 18l3 3 5.3-5.3a5 5 0 0 0 6.4-6.4L14 13l-3-3z"/></svg></span><p><strong>Tienes nuevas solicitudes</strong><br>Hay servicios disponibles cerca de ti.<small>Hace unos minutos</small></p></div>
-          <div class="notification-row"><span class="activity-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg></span><p><strong>Pago procesado</strong><br>Tu servicio de hoy se registró correctamente.<small>Hoy, 10:45</small></p></div>
+          <p class="notification-empty" id="paymentNotificationsEmpty">Las confirmaciones de pago aparecerán aquí cuando se realice una simulación desde el formulario de pago.</p>
         </div>
         <div class="dialog-actions"><button class="button button-primary" type="button" data-close-dialog>Entendido</button></div>
+      </div>
+    </dialog>
+
+    <dialog id="paymentReceivedDialog" aria-labelledby="paymentReceivedTitle">
+      <div class="dialog-content">
+        <div class="dialog-header">
+          <div><h2 id="paymentReceivedTitle">Confirmación de pago</h2><p>El conductor completó la simulación.</p></div>
+          <button class="dialog-close" type="button" data-close-dialog aria-label="Cerrar confirmación de pago"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="m18 6-12 12M6 6l12 12"/></svg></button>
+        </div>
+        <div class="payment-confirmation" aria-live="polite">
+          <span class="payment-confirmation-icon" aria-hidden="true">✓</span>
+          <span class="payment-confirmation-label">Monto recibido (simulación)</span>
+          <strong class="payment-confirmation-amount" id="paymentReceivedAmount">$0.00</strong>
+          <p class="payment-confirmation-reference" id="paymentReceivedReference"></p>
+          <p class="payment-confirmation-note">Pago de demostración de Amari. No se realizó ningún cargo ni se recibió dinero real.</p>
+        </div>
+        <div class="dialog-actions">
+          <button class="button button-quiet" id="openPaymentNotifications" type="button">Ver avisos</button>
+          <button class="button button-primary" type="button" data-close-dialog>Entendido</button>
+        </div>
       </div>
     </dialog>
 
@@ -508,11 +535,17 @@
     document.getElementById('todayDate').textContent = dateFormatter.format(new Date());
 
     const notificationsDialog = document.getElementById('notificationsDialog');
+    const paymentReceivedDialog = document.getElementById('paymentReceivedDialog');
     const requestDialog = document.getElementById('requestDialog');
     const requestList = document.getElementById('requestList');
+    const activityList = document.getElementById('activityList');
+    const paymentNotifications = document.getElementById('paymentNotifications');
+    const paymentNotificationsKey = 'amari:payment-notifications';
+    const lastSeenPaymentKey = 'amari:mechanic:last-seen-payment';
     const toast = document.getElementById('toast');
     const toastMessage = document.getElementById('toastMessage');
     let activeRequest = null;
+    let activePaymentNotification = null;
     let toastTimer;
 
     function showToast(message) {
@@ -536,6 +569,157 @@
       } else {
         dialog.removeAttribute('open');
       }
+    }
+
+    function isPaymentNotification(payment) {
+      return payment
+        && typeof payment.id === 'string'
+        && typeof payment.reference === 'string'
+        && Number.isFinite(payment.amount)
+        && payment.amount >= 0
+        && payment.currency === 'MXN'
+        && typeof payment.date === 'string'
+        && Number.isFinite(Date.parse(payment.date));
+    }
+
+    function readPaymentNotifications() {
+      let serialized;
+      try {
+        serialized = localStorage.getItem(paymentNotificationsKey);
+      } catch (error) {
+        console.error('No se pudo acceder al historial local de avisos de pago.', error);
+        showToast('No se pudieron cargar los avisos de pago de este navegador.');
+        return [];
+      }
+
+      if (!serialized) return [];
+      try {
+        const payments = JSON.parse(serialized);
+        if (!Array.isArray(payments)) throw new Error('El historial de avisos de pago debe ser una lista.');
+        if (payments.some((payment) => !isPaymentNotification(payment))) {
+          console.error('Se omitieron avisos de pago locales con datos inválidos.');
+        }
+        return payments.filter(isPaymentNotification);
+      } catch (error) {
+        console.error('No se pudo leer el historial local de avisos de pago.', error);
+        showToast('El historial de pagos no tiene un formato válido.');
+        return [];
+      }
+    }
+
+    function formatPaymentAmount(payment) {
+      return new Intl.NumberFormat('es-MX', {
+        style: 'currency',
+        currency: payment.currency,
+        minimumFractionDigits: 2
+      }).format(payment.amount);
+    }
+
+    function formatPaymentDate(date) {
+      return new Intl.DateTimeFormat('es-MX', {
+        dateStyle: 'medium',
+        timeStyle: 'short'
+      }).format(new Date(date));
+    }
+
+    function createPaymentNotification(payment) {
+      const row = document.createElement('div');
+      row.className = 'notification-row';
+      row.dataset.paymentId = payment.id;
+
+      const icon = document.createElement('span');
+      icon.className = 'activity-icon';
+      icon.setAttribute('aria-hidden', 'true');
+      icon.textContent = '$';
+
+      const description = document.createElement('p');
+      const title = document.createElement('strong');
+      title.textContent = 'Pago confirmado (simulación) · ' + formatPaymentAmount(payment);
+      const details = document.createElement('span');
+      details.textContent = 'Pago de demostración, sin cargo real.';
+      const reference = document.createElement('small');
+      reference.textContent = payment.reference + ' · ' + formatPaymentDate(payment.date);
+      description.append(title, document.createElement('br'), details, reference);
+      row.append(icon, description);
+      return row;
+    }
+
+    function createPaymentActivity(payment) {
+      const item = document.createElement('div');
+      item.className = 'activity-item';
+      item.dataset.paymentId = payment.id;
+
+      const icon = document.createElement('span');
+      icon.className = 'activity-icon';
+      icon.setAttribute('aria-hidden', 'true');
+      icon.textContent = '$';
+
+      const description = document.createElement('div');
+      description.className = 'activity-copy';
+      const title = document.createElement('strong');
+      title.textContent = 'Pago confirmado (simulación)';
+      const details = document.createElement('span');
+      details.textContent = formatPaymentAmount(payment) + ' · ' + payment.reference;
+      description.append(title, details);
+
+      const time = document.createElement('time');
+      time.className = 'activity-time';
+      time.dateTime = payment.date;
+      time.textContent = new Intl.DateTimeFormat('es-MX', {
+        hour: '2-digit',
+        minute: '2-digit'
+      }).format(new Date(payment.date));
+
+      item.append(icon, description, time);
+      return item;
+    }
+
+    function renderPaymentNotifications(payments) {
+      paymentNotifications.querySelectorAll('[data-payment-id]').forEach((row) => row.remove());
+      payments.forEach((payment) => {
+        paymentNotifications.append(createPaymentNotification(payment));
+      });
+      document.getElementById('paymentNotificationsEmpty').hidden = payments.length > 0;
+
+      activityList.querySelectorAll('[data-payment-id]').forEach((item) => item.remove());
+      payments.slice(0, 5).reverse().forEach((payment) => {
+        activityList.prepend(createPaymentActivity(payment));
+      });
+    }
+
+    function markPaymentAsSeen(paymentId) {
+      if (!paymentId) return;
+      try {
+        localStorage.setItem(lastSeenPaymentKey, paymentId);
+      } catch (error) {
+        console.error('No se pudo guardar el estado del aviso de pago.', error);
+        showToast('No se pudo actualizar el estado de lectura del aviso.');
+      }
+    }
+
+    function showPaymentConfirmation(payment) {
+      activePaymentNotification = payment;
+      document.getElementById('paymentReceivedAmount').textContent = formatPaymentAmount(payment);
+      document.getElementById('paymentReceivedReference').textContent =
+        payment.reference + ' · ' + formatPaymentDate(payment.date);
+      if (!paymentReceivedDialog.open) openDialog(paymentReceivedDialog);
+    }
+
+    function syncPaymentNotifications(showLatestPopup) {
+      const payments = readPaymentNotifications();
+      renderPaymentNotifications(payments);
+      if (!showLatestPopup || payments.length === 0) return;
+
+      const latestPayment = payments[0];
+      let lastSeenPayment;
+      try {
+        lastSeenPayment = localStorage.getItem(lastSeenPaymentKey);
+      } catch (error) {
+        console.error('No se pudo comprobar si el aviso de pago ya fue leído.', error);
+        showToast('No se pudo comprobar el estado de lectura del aviso.');
+        return;
+      }
+      if (latestPayment.id !== lastSeenPayment) showPaymentConfirmation(latestPayment);
     }
 
     function updateRequestCount() {
@@ -565,6 +749,23 @@
         if (event.target === dialog) closeDialog(dialog);
       });
     });
+
+    paymentReceivedDialog.addEventListener('close', () => {
+      if (!activePaymentNotification) return;
+      markPaymentAsSeen(activePaymentNotification.id);
+      activePaymentNotification = null;
+    });
+
+    document.getElementById('openPaymentNotifications').addEventListener('click', () => {
+      closeDialog(paymentReceivedDialog);
+      window.setTimeout(() => openDialog(notificationsDialog), 0);
+    });
+
+    window.addEventListener('storage', (event) => {
+      if (event.key === paymentNotificationsKey) syncPaymentNotifications(true);
+    });
+
+    syncPaymentNotifications(true);
 
     document.getElementById('availabilitySwitch').addEventListener('click', (event) => {
       const control = event.currentTarget;
@@ -650,6 +851,23 @@
         });
       });
     });
+  </script>
+  <script>
+    // Cargar información de perfil desde la sesión activa de Amari
+    try {
+      const activeSession = JSON.parse(sessionStorage.getItem('amari_active_session') || '{}');
+      if (activeSession.nombre) {
+        const profileCopyStrong = document.querySelector('.profile-copy strong');
+        const avatarSpan = document.querySelector('.avatar');
+        if (profileCopyStrong) profileCopyStrong.textContent = activeSession.nombre;
+        if (avatarSpan) {
+          const initials = activeSession.nombre.split(' ').filter(Boolean).map(n => n[0].toUpperCase()).slice(0, 2).join('');
+          if (initials) avatarSpan.textContent = initials;
+        }
+      }
+    } catch (e) {
+      console.warn('Session parse error:', e);
+    }
   </script>
 </body>
 </html>
